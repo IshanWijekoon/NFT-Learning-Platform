@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course: JavaScript Fundamentals - EduPlatform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .user-toggle:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            min-width: 150px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 0.8rem 1rem;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .dropdown a:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            min-height: calc(100vh - 70px);
+        }
+
+        /* Video Section */
+        .video-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .video-container {
+            position: relative;
+            background: #000;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-placeholder {
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .video-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .video-placeholder h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-placeholder p {
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+
+        .video-controls {
+            padding: 1.5rem;
+            background: white;
+        }
+
+        .course-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .lesson-title {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .progress-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .progress-percentage {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.secondary {
+            background: #6c757d;
+        }
+
+        .action-btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        /* Course Content Sidebar */
+        .course-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .content-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .content-title {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .completion-stats {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .sections-list {
+            list-style: none;
+        }
+
+        .section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-header:hover {
+            background: #e9ecef;
+        }
+
+        .section-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .section-toggle {
+            font-size: 0.8rem;
+            color: #666;
+            transition: transform 0.3s ease;
+        }
+
+        .section.expanded .section-toggle {
+            transform: rotate(180deg);
+        }
+
+        .lessons-list {
+            list-style: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .section.expanded .lessons-list {
+            max-height: 500px;
+        }
+
+        .lesson {
+            padding: 0.8rem 1rem;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .lesson:hover {
+            background: #f8f9fa;
+            border-left-color: #667eea;
+        }
+
+        .lesson.current {
+            background: #e8f2ff;
+            border-left-color: #667eea;
+        }
+
+        .lesson.completed {
+            background: #e8f5e8;
+            border-left-color: #28a745;
+        }
+
+        .lesson-status {
+            font-size: 0.8rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .lesson-status.completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .lesson-status.current {
+            background: #cce7ff;
+            color: #004085;
+        }
+
+        .lesson-status.locked {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .lesson-info {
+            flex: 1;
+        }
+
+        .lesson-name {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+
+        .lesson-duration {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Back Button */
+        .back-section {
+            margin-bottom: 2rem;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .main-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .course-content {
+                order: -1;
+            }
+
+            .video-controls {
+                padding: 1rem;
+            }
+
+            .course-title {
+                font-size: 1.4rem;
+            }
+
+            .video-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .action-btn {
+                text-align: center;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0 1rem;
+            }
+
+            .main-container {
+                padding: 0.5rem;
+            }
+
+            .video-placeholder h3 {
+                font-size: 1.2rem;
+            }
+
+            .video-placeholder i {
+                font-size: 3rem;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        button:focus,
+        a:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        /* Smooth transitions */
+        * {
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="#" class="logo" aria-label="EduPlatform Home">EduPlatform</a>
+            
+            <ul class="nav-links">
+                <li><a href="home-learner.html">Dashboard</a></li>
+                <li><a href="course-browser.html">Courses</a></li>
+                <li><a href="#" aria-current="page">My Learning</a></li>
+                <li><a href="#">Progress</a></li>
+            </ul>
+
+            <div class="user-menu">
+                <button class="user-toggle" aria-expanded="false" aria-haspopup="true">
+                    👤 John Doe ▼
+                </button>
+                <div class="dropdown" role="menu">
+                    <a href="#" role="menuitem">Profile</a>
+                    <a href="#" role="menuitem">Settings</a>
+                    <a href="#" role="menuitem">Help</a>
+                    <a href="login.html" role="menuitem">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Video Section -->
+        <section class="video-section" aria-labelledby="video-title">
+            <div class="back-section">
+                <a href="course-info.html" class="back-btn" aria-label="Go back to course information">
+                    ← Back to Course Info
+                </a>
+            </div>
+
+            <div class="video-container" role="img" aria-label="Video player for JavaScript Variables and Data Types">
+                <div class="video-placeholder">
+                    <span aria-hidden="true">▶️</span>
+                    <h3 id="video-title">Video Player</h3>
+                    <p>JavaScript Variables and Data Types</p>
+                    <p><small>Click to start video (placeholder)</small></p>
+                </div>
+            </div>
+
+            <div class="video-controls">
+                <h1 class="course-title">JavaScript Fundamentals</h1>
+                <h2 class="lesson-title">Lesson 2: Variables and Data Types</h2>
+
+                <div class="progress-section" aria-labelledby="progress-heading">
+                    <h3 id="progress-heading" class="sr-only">Course Progress</h3>
+                    <div class="progress-info">
+                        <span class="progress-text">Course Progress</span>
+                        <span class="progress-percentage" id="progressPercent">25%</span>
+                    </div>
+                    <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" aria-label="Course completion progress">
+                        <div class="progress-fill" id="progressFill" style="width: 25%"></div>
+                    </div>
+                </div>
+
+                <div class="video-actions">
+                    <button class="action-btn" id="markCompleteBtn" aria-describedby="complete-help">
+                        ✓ Mark as Complete
+                    </button>
+                    <button class="action-btn secondary" id="nextLessonBtn" aria-describedby="next-help">
+                        Next Lesson →
+                    </button>
+                    <span id="complete-help" class="sr-only">Mark this lesson as completed to track your progress</span>
+                    <span id="next-help" class="sr-only">Proceed to the next lesson in the course</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Content Sidebar -->
+        <aside class="course-content" aria-labelledby="content-heading">
+            <div class="content-header">
+                <h2 id="content-heading" class="content-title">Course Content</h2>
+                <div class="completion-stats">
+                    <span id="completedLessons">3</span> of <span id="totalLessons">12</span> lessons completed
+                </div>
+            </div>
+
+            <ul class="sections-list" role="list">
+                <li class="section expanded" data-section="1">
+                    <div class="section-header" role="button" tabindex="0" aria-expanded="true" aria-controls="section-1-content">
+                        <span class="section-title">1. Introduction to JavaScript</span>
+                        <span class="section-toggle" aria-hidden="true">▼</span>
+                    </div>
+                    <ul class="lessons-list" id="section-1-content" role="list">
+                        <li class="lesson completed" data-lesson="1" role="listitem">
+                            <span class="lesson-status completed" aria-label="Completed">✓</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">What is JavaScript?</div>
+                                <div class="lesson-duration">8 min</div>
+                            </div>
+                        </li>
+                        <li class="lesson current" data-lesson="2" role="listitem">
+                            <span class="lesson-status current" aria-label="Currently watching">▶</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">Variables and Data Types</div>
+                                <div class="lesson-duration">12 min</div>
+                            </div>
+                        </li>
+                        <li class="lesson" data-lesson="3" role="listitem">
+                            <span class="lesson-status" aria-label="Not started">○</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">Working with Numbers</div>
+                                <div class="lesson-duration">10 min</div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="section" data-section="2">
+                    <div class="section-header" role="button" tabindex="0" aria-expanded="false" aria-controls="section-2-content">
+                        <span class="section-title">2. Control Structures</span>
+                        <span class="section-toggle" aria-hidden="true">▼</span>
+                    </div>
+                    <ul class="lessons-list" id="section-2-content" role="list">
+                        <li class="lesson" data-lesson="4" role="listitem">
+                            <span class="lesson-status" aria-label="Not started">○</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">If Statements</div>
+                                <div class="lesson-duration">15 min</div>
+                            </div>
+                        </li>
+                        <li class="lesson" data-lesson="5" role="listitem">
+                            <span class="lesson-status" aria-label="Not started">○</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">Loops</div>
+                                <div class="lesson-duration">18 min</div>
+                            </div>
+                        </li>
+                        <li class="lesson" data-lesson="6" role="listitem">
+                            <span class="lesson-status" aria-label="Not started">○</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">Switch Statements</div>
+                                <div class="lesson-duration">12 min</div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="section" data-section="3">
+                    <div class="section-header" role="button" tabindex="0" aria-expanded="false" aria-controls="section-3-content">
+                        <span class="section-title">3. Functions</span>
+                        <span class="section-toggle" aria-hidden="true">▼</span>
+                    </div>
+                    <ul class="lessons-list" id="section-3-content" role="list">
+                        <li class="lesson" data-lesson="7" role="listitem">
+                            <span class="lesson-status" aria-label="Not started">○</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">Function Basics</div>
+                                <div class="lesson-duration">14 min</div>
+                            </div>
+                        </li>
+                        <li class="lesson" data-lesson="8" role="listitem">
+                            <span class="lesson-status" aria-label="Not started">○</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">Arrow Functions</div>
+                                <div class="lesson-duration">11 min</div>
+                            </div>
+                        </li>
+                        <li class="lesson" data-lesson="9" role="listitem">
+                            <span class="lesson-status" aria-label="Not started">○</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">Function Parameters</div>
+                                <div class="lesson-duration">16 min</div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="section" data-section="4">
+                    <div class="section-header" role="button" tabindex="0" aria-expanded="false" aria-controls="section-4-content">
+                        <span class="section-title">4. Advanced Topics</span>
+                        <span class="section-toggle" aria-hidden="true">▼</span>
+                    </div>
+                    <ul class="lessons-list" id="section-4-content" role="list">
+                        <li class="lesson" data-lesson="10" role="listitem">
+                            <span class="lesson-status" aria-label="Not started">○</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">Objects and Arrays</div>
+                                <div class="lesson-duration">20 min</div>
+                            </div>
+                        </li>
+                        <li class="lesson" data-lesson="11" role="listitem">
+                            <span class="lesson-status" aria-label="Not started">○</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">DOM Manipulation</div>
+                                <div class="lesson-duration">25 min</div>
+                            </div>
+                        </li>
+                        <li class="lesson" data-lesson="12" role="listitem">
+                            <span class="lesson-status" aria-label="Not started">○</span>
+                            <div class="lesson-info">
+                                <div class="lesson-name">Final Project</div>
+                                <div class="lesson-duration">30 min</div>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+    </main>
+
+    <script>
+        // Course watching functionality
+        class CourseWatcher {
+            constructor() {
+                this.currentLesson = 2;
+                this.totalLessons = 12;
+                this.completedLessons = new Set([1]);
+                this.currentSection = 1;
+                this.init();
+            }
+
+            init() {
+                this.loadProgress();
+                this.setupEventListeners();
+                this.updateProgress();
+                this.expandCurrentSection();
+            }
+
+            setupEventListeners() {
+                // User menu toggle
+                const userToggle = document.querySelector('.user-toggle');
+                const dropdown = document.querySelector('.dropdown');
+                
+                userToggle.addEventListener('click', () => {
+                    const isOpen = dropdown.classList.contains('active');
+                    dropdown.classList.toggle('active');
+                    userToggle.setAttribute('aria-expanded', !isOpen);
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!userToggle.contains(e.target) && !dropdown.contains(e.target)) {
+                        dropdown.classList.remove('active');
+                        userToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                // Section toggle functionality
+                document.querySelectorAll('.section-header').forEach(header => {
+                    header.addEventListener('click', () => {
+                        this.toggleSection(header.parentElement);
+                    });
+
+                    // Keyboard accessibility
+                    header.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            this.toggleSection(header.parentElement);
+                        }
+                    });
+                });
+
+                // Lesson click functionality
+                document.querySelectorAll('.lesson').forEach(lesson => {
+                    lesson.addEventListener('click', () => {
+                        const lessonNumber = parseInt(lesson.dataset.lesson);
+                        this.selectLesson(lessonNumber);
+                    });
+                });
+
+                // Mark complete button
+                document.getElementById('markCompleteBtn').addEventListener('click', () => {
+                    this.markCurrentLessonComplete();
+                });
+
+                // Next lesson button
+                document.getElementById('nextLessonBtn').addEventListener('click', () => {
+                    this.goToNextLesson();
+                });
+
+                // Video placeholder click (simulate play)
+                document.querySelector('.video-placeholder').addEventListener('click', () => {
+                    this.simulateVideoPlay();
+                });
+            }
+
+            toggleSection(section) {
+                const isExpanded = section.classList.contains('expanded');
+                const header = section.querySelector('.section-header');
+                
+                section.classList.toggle('expanded');
+                header.setAttribute('aria-expanded', !isExpanded);
+                
+                // Smooth animation
+                const lessonsList = section.querySelector('.lessons-list');
+                if (section.classList.contains('expanded')) {
+                    lessonsList.style.maxHeight = lessonsList.scrollHeight + 'px';
+                } else {
+                    lessonsList.style.maxHeight = '0px';
+                }
+            }
+
+            expandCurrentSection() {
+                const currentSection = document.querySelector(`[data-section="${this.currentSection}"]`);
+                if (currentSection && !currentSection.classList.contains('expanded')) {
+                    this.toggleSection(currentSection);
+                }
+            }
+
+            selectLesson(lessonNumber) {
+                // Remove current class from all lessons
+                document.querySelectorAll('.lesson').forEach(lesson => {
+                    lesson.classList.remove('current');
+                    const status = lesson.querySelector('.lesson-status');
+                    if (!this.completedLessons.has(parseInt(lesson.dataset.lesson))) {
+                        status.textContent = '○';
+                        status.className = 'lesson-status';
+                        status.setAttribute('aria-label', 'Not started');
+                    }
+                });
+
+                // Add current class to selected lesson
+                const selectedLesson = document.querySelector(`[data-lesson="${lessonNumber}"]`);
+                if (selectedLesson && !this.completedLessons.has(lessonNumber)) {
+                    selectedLesson.classList.add('current');
+                    const status = selectedLesson.querySelector('.lesson-status');
+                    status.textContent = '▶';
+                    status.className = 'lesson-status current';
+                    status.setAttribute('aria-label', 'Currently watching');
+                }
+
+                this.currentLesson = lessonNumber;
+                this.updateVideoInfo(lessonNumber);
+                this.saveProgress();
+            }
+
+            updateVideoInfo(lessonNumber) {
+                const lessons = {
+                    1: { title: 'What is JavaScript?', section: 'Introduction to JavaScript' },
+                    2: { title: 'Variables and Data Types', section: 'Introduction to JavaScript' },
+                    3: { title: 'Working with Numbers', section: 'Introduction to JavaScript' },
+                    4: { title: 'If Statements', section: 'Control Structures' },
+                    5: { title: 'Loops', section: 'Control Structures' },
+                    6: { title: 'Switch Statements', section: 'Control Structures' },
+                    7: { title: 'Function Basics', section: 'Functions' },
+                    8: { title: 'Arrow Functions', section: 'Functions' },
+                    9: { title: 'Function Parameters', section: 'Functions' },
+                    10: { title: 'Objects and Arrays', section: 'Advanced Topics' },
+                    11: { title: 'DOM Manipulation', section: 'Advanced Topics' },
+                    12: { title: 'Final Project', section: 'Advanced Topics' }
+                };
+
+                const lesson = lessons[lessonNumber];
+                if (lesson) {
+                    document.querySelector('.lesson-title').textContent = `Lesson ${lessonNumber}: ${lesson.title}`;
+                    document.querySelector('.video-placeholder p').textContent = lesson.title;
+                }
+            }
+
+            markCurrentLessonComplete() {
+                this.completedLessons.add(this.currentLesson);
+                
+                // Update UI
+                const currentLessonElement = document.querySelector(`[data-lesson="${this.currentLesson}"]`);
+                if (currentLessonElement) {
+                    currentLessonElement.classList.remove('current');
+                    currentLessonElement.classList.add('completed');
+                    
+                    const status = currentLessonElement.querySelector('.lesson-status');
+                    status.textContent = '✓';
+                    status.className = 'lesson-status completed';
+                    status.setAttribute('aria-label', 'Completed');
+                }
+
+                this.updateProgress();
+                this.saveProgress();
+
+                // Auto advance to next lesson
+                setTimeout(() => {
+                    this.goToNextLesson();
+                }, 1000);
+            }
+
+            goToNextLesson() {
+                if (this.currentLesson < this.totalLessons) {
+                    this.selectLesson(this.currentLesson + 1);
+                    
+                    // Update section if needed
+                    const lessonSectionMap = {
+                        1: 1, 2: 1, 3: 1,
+                        4: 2, 5: 2, 6: 2,
+                        7: 3, 8: 3, 9: 3,
+                        10: 4, 11: 4, 12: 4
+                    };
+                    
+                    const newSection = lessonSectionMap[this.currentLesson];
+                    if (newSection !== this.currentSection) {
+                        this.currentSection = newSection;
+                        this.expandCurrentSection();
+                    }
+                } else {
+                    alert('Congratulations! You have completed the course!');
+                }
+            }
+
+            updateProgress() {
+                const completed = this.completedLessons.size;
+                const percentage = Math.round((completed / this.totalLessons) * 100);
+                
+                document.getElementById('progressPercent').textContent = `${percentage}%`;
+                document.getElementById('progressFill').style.width = `${percentage}%`;
+                document.getElementById('completedLessons').textContent = completed;
+                
+                // Update progress bar ARIA attributes
+                const progressBar = document.querySelector('.progress-bar');
+                progressBar.setAttribute('aria-valuenow', percentage);
+            }
+
+            simulateVideoPlay() {
+                const placeholder = document.querySelector('.video-placeholder');
+                const originalContent = placeholder.innerHTML;
+                
+                placeholder.innerHTML = `
+                    <span aria-hidden="true">⏸️</span>
+                    <h3>Playing Video...</h3>
+                    <p>JavaScript Variables and Data Types</p>
+                    <p><small>Video is now playing (simulated)</small></p>
+                `;
+                
+                setTimeout(() => {
+                    placeholder.innerHTML = originalContent;
+                }, 3000);
+            }
+
+            saveProgress() {
+                const progressData = {
+                    currentLesson: this.currentLesson,
+                    completedLessons: Array.from(this.completedLessons),
+                    currentSection: this.currentSection,
+                    lastUpdated: new Date().toISOString()
+                };
+                
+                localStorage.setItem('courseProgress_js_fundamentals', JSON.stringify(progressData));
+            }
+
+            loadProgress() {
+                const saved = localStorage.getItem('courseProgress_js_fundamentals');
+                if (saved) {
+                    try {
+                        const data = JSON.parse(saved);
+                        this.currentLesson = data.currentLesson || 2;
+                        this.completedLessons = new Set(data.completedLessons || [1]);
+                        this.currentSection = data.currentSection || 1;
+                        
+                        // Update UI based on loaded progress
+                        this.completedLessons.forEach(lessonNumber => {
+                            const lesson = document.querySelector(`[data-lesson="${lessonNumber}"]`);
+                            if (lesson) {
+                                lesson.classList.add('completed');
+                                const status = lesson.querySelector('.lesson-status');
+                                status.textContent = '✓';
+                                status.className = 'lesson-status completed';
+                                status.setAttribute('aria-label', 'Completed');
+                            }
+                        });
+                        
+                        // Set current lesson
+                        this.selectLesson(this.currentLesson);
+                    } catch (e) {
+                        console.warn('Could not load saved progress:', e);
+                    }
+                }
+            }
+        }
+
+        // Initialize course watcher when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new CourseWatcher();
+        });
+
+        // Accessibility: Handle keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            // ESC key closes dropdown
+            if (e.key === 'Escape') {
+                const dropdown = document.querySelector('.dropdown');
+                const userToggle = document.querySelector('.user-toggle');
+                dropdown.classList.remove('active');
+                userToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Handle focus management for accessibility
+        document.querySelectorAll('button, a, [tabindex]').forEach(element => {
+            element.addEventListener('focus', function() {
+                this.style.outline = '2px solid #667eea';
+                this.style.outlineOffset = '2px';
+            });
+            
+            element.addEventListener('blur', function() {
+                this.style.outline = '';
+                this.style.outlineOffset = '';
+            });
+        });
+    </script>
+</body>
+</html>
