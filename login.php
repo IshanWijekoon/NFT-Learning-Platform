@@ -1,8 +1,8 @@
 <?php
 
 // login.php - checks admins, learners, creators tables and returns JSON
-require_once __DIR__ . '/db.php';
 session_start();
+require_once __DIR__ . '/db.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -66,9 +66,9 @@ $_SESSION['role'] = $role;
 $_SESSION['full_name'] = $user['full_name'] ?? '';
 
 $redirect = '/';
-if ($role === 'admin') $redirect = 'home-creater.html';
+if ($role === 'admin') $redirect = 'home-admin.html';
 elseif ($role === 'learner') $redirect = 'home-learner.html';
-elseif ($role === 'creator') $redirect = 'home-creater.html';
+elseif ($role === 'creator') $redirect = 'home-creator.php';
 
 echo json_encode(['success' => true, 'redirect' => $redirect]);
 exit;

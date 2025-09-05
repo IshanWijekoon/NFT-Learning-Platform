@@ -1,6 +1,6 @@
 <?php
-
-require_once __DIR__ . '/db.php';
+session_start();
+include 'db.php';
 
 function bad($msg) {
     // simple error response; you can redirect with query string in real app
