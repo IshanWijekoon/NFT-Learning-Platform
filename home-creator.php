@@ -1,80 +1,9 @@
-<?php
-session_start();
-include 'db.php';
-
-// Check if user is logged in as creator
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'creator') {
-    header('Location: login.html');
-    exit();
-}
-
-// Get creator data
-$user_id = $_SESSION['user_id'];
-$creator_query = "SELECT * FROM creators WHERE id = '$user_id'";
-$creator_result = mysqli_query($conn, $creator_query);
-
-if ($creator_result && mysqli_num_rows($creator_result) > 0) {
-    $creator = mysqli_fetch_assoc($creator_result);
-} else {
-    echo "<script>alert('Creator not found'); window.location.href='login.html';</script>";
-    exit();
-}
-
-// Get creator's courses (if courses table exists)
-$courses_query = "SELECT * FROM courses WHERE creator_id = '$user_id' ORDER BY created_at DESC";
-$courses_result = mysqli_query($conn, $courses_query);
-
-// Calculate total students from all courses
-$total_students = 0;
-if ($courses_result) {
-    $total_students_query = "SELECT SUM(students_enrolled) as total_students FROM courses WHERE creator_id = '$user_id'";
-    $total_students_result = mysqli_query($conn, $total_students_query);
-    if ($total_students_result) {
-        $total_students_row = mysqli_fetch_assoc($total_students_result);
-        $total_students = $total_students_row['total_students'] ?? 0;
-    }
-}
-
-// Count total courses
-$course_count_query = "SELECT COUNT(*) as course_count FROM courses WHERE creator_id = '$user_id'";
-$course_count_result = mysqli_query($conn, $course_count_query);
-$total_courses = 0;
-if ($course_count_result) {
-    $course_count_row = mysqli_fetch_assoc($course_count_result);
-    $total_courses = $course_count_row['course_count'] ?? 0;
-}
-
-// Check if columns exist before updating
-$check_columns = "SHOW COLUMNS FROM creators LIKE 'total_courses'";
-$column_exists = mysqli_query($conn, $check_columns);
-
-if (mysqli_num_rows($column_exists) > 0) {
-    // Update creator stats only if columns exist
-    $update_stats = "UPDATE creators SET 
-                     total_courses = '$total_courses',
-                     total_students = '$total_students'
-                     WHERE id = '$user_id'";
-    mysqli_query($conn, $update_stats);
-    
-    // Refresh creator data
-    $creator_result = mysqli_query($conn, $creator_query);
-    $creator = mysqli_fetch_assoc($creator_result);
-} else {
-    // Use calculated values if columns don't exist
-    $creator['total_courses'] = $total_courses;
-    $creator['total_students'] = $total_students;
-    $creator['total_revenue'] = 0.00;
-    $creator['rating'] = 0.00;
-    $creator['total_reviews'] = 0;
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creator Dashboard - NFT Learning Platform</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>EduChain - Become an Instructor</title>
     <style>
         * {
             margin: 0;
@@ -84,17 +13,22 @@ if (mysqli_num_rows($column_exists) > 0) {
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
         }
 
+        /* Navigation Bar */
         .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
+            position: fixed;
             top: 0;
-            z-index: 100;
+            left: 0;
+            right: 0;
+            background                    <a href="course-management.php" class="cta-btn-primary">Start Teaching Today</a> white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 0 20px;
+            transition: all 0.3s ease;
         }
 
         .nav-container {
@@ -103,363 +37,767 @@ if (mysqli_num_rows($column_exists) > 0) {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 2rem;
+            height: 70px;
         }
 
         .logo {
             font-size: 1.8rem;
-            font-weight: bold;
-            color: #333;
+            font-weight: 700;
+            color: #2c5aa0;
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
 
-        .nav-links {
+        .logo:hover {
+            color: #1e3f73;
+        }
+
+        .nav-menu {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 30px;
+            align-items: center;
         }
 
-        .nav-links a {
+        .nav-link {
             text-decoration: none;
             color: #333;
             font-weight: 500;
-            transition: color 0.3s;
+            position: relative;
+            transition: color 0.3s ease;
+            padding: 8px 0;
         }
 
-        .nav-links a:hover {
-            color: #667eea;
+        .nav-link:hover {
+            color: #2c5aa0;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #2c5aa0;
+            transition: width 0.3s ease;
         }
 
-        .welcome-section {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+            color: white !important;
+        }
+
+        .logout-btn::after {
+            display: none;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        /* Main Content */
+        main {
+            margin-top: 70px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 20px;
+            min-height: 90vh;
             display: flex;
             align-items: center;
-            gap: 2rem;
         }
 
-        .creator-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 18px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.4);
+            background: linear-gradient(135deg, #f7931e 0%, #ff6b35 100%);
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-illustration {
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
-            color: white;
+            font-size: 6rem;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .hero-illustration:hover {
+            transform: scale(1.05);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 20px;
+            background: white;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 600;
+            color: #1e3f73;
+            margin-bottom: 20px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
             overflow: hidden;
         }
 
-        .creator-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #2c5aa0 0%, #1e3f73 100%);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            border-color: #2c5aa0;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #2c5aa0 0%, #1e3f73 100%);
             border-radius: 50%;
-        }
-
-        .welcome-text h1 {
-            font-size: 2rem;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .welcome-text p {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1rem;
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        .stat-number {
             font-size: 2.5rem;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 1rem;
-        }
-
-        .quick-actions {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-        }
-
-        .quick-actions h2 {
-            color: #333;
-            margin-bottom: 1.5rem;
-        }
-
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .action-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 10px;
-            text-decoration: none;
-            text-align: center;
-            font-weight: bold;
             transition: transform 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
         }
 
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
         }
 
-        .recent-courses {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        .feature-card h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1e3f73;
         }
 
-        .recent-courses h2 {
-            color: #333;
-            margin-bottom: 1.5rem;
+        .feature-card p {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 25px;
         }
 
-        .course-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            border: 1px solid #eee;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            transition: background 0.3s ease;
-        }
-
-        .course-item:hover {
-            background: #f8f9fa;
-        }
-
-        .course-thumbnail {
-            width: 60px;
-            height: 60px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .feature-button {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             color: white;
-            font-size: 1.2rem;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .course-info {
-            flex: 1;
+        .feature-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+            background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
         }
 
-        .course-title {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 0.2rem;
-        }
-
-        .course-stats {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .no-courses {
+        /* Call to Action Section */
+        .cta-section {
+            background: linear-gradient(135deg, #1e3f73 0%, #2c5aa0 100%);
+            color: white;
+            padding: 80px 20px;
             text-align: center;
-            color: #666;
-            padding: 2rem;
-            font-style: italic;
         }
 
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn-primary {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-btn-secondary {
+            background: transparent;
+            color: white;
+            padding: 15px 35px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .cta-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .cta-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            background: #1e3f73;
+            color: white;
+            padding: 50px 20px 30px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .welcome-section {
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: white;
                 flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 30px;
+                padding-top: 50px;
+                transition: left 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
                 text-align: center;
             }
-            
-            .stats-grid {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+            .hero-content h1 {
+                font-size: 2.5rem;
             }
-            
-            .container {
-                padding: 0 1rem;
+
+            .hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .hero-illustration {
+                height: 300px;
+                font-size: 4rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .feature-card {
+                padding: 30px;
+            }
+
+            .cta-section h2 {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 20px;
             }
         }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 60px 15px;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .features,
+            .cta-section {
+                padding: 60px 15px;
+            }
+
+            .feature-card {
+                padding: 25px;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .nav-container {
+                padding: 0 15px;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Loading animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-card {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
     </style>
 </head>
 <body>
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">🎓 NFT Learning - Creator</div>
-            <ul class="nav-links">
-                <li><a href="home-creator.php"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="course-management.html"><i class="fas fa-plus"></i> Create Course</a></li>
-                <li><a href="course-browser-creator.html"><i class="fas fa-book"></i> My Courses</a></li>
-                <li><a href="creator-profile.php"><i class="fas fa-user"></i> Profile</a></li>
-                <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <a href="#" class="logo">EduChain</a>
+            
+            <ul class="nav-menu" id="navMenu">
+                 <li><a href="home-creater.html" class="nav-link">Home</a></li>
+                <li><a href="course-browser-creator.php" class="nav-link">Courses</a></li>
+                <li><a href="course-management.php" class="nav-link">Course Management</a></li>
+                <li><a href="creator-profile.php" class="nav-link">Profile</a></li>
+                <li><a href="#" class="nav-link">Search NFT</a></li>
+                <li><a href="login.html" class="nav-link logout-btn">Logout</a></li>
             </ul>
+
+            <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
-    <div class="container">
-        <!-- Welcome Section -->
-        <div class="welcome-section">
-            <div class="creator-avatar">
-                <?php if (!empty($creator['profile_picture']) && file_exists($creator['profile_picture'])): ?>
-                    <img src="<?php echo htmlspecialchars($creator['profile_picture']); ?>" alt="Profile Picture">
-                <?php else: ?>
-                    <i class="fas fa-user"></i>
-                <?php endif; ?>
-            </div>
-            <div class="welcome-text">
-                <h1>Welcome back, <?php echo htmlspecialchars($creator['full_name']); ?>!</h1>
-                <p>Ready to inspire and educate? Let's check your teaching impact.</p>
-                <?php if (!empty($creator['expertise'])): ?>
-                    <p style="margin-top: 0.5rem;"><strong>Expertise:</strong> <?php echo htmlspecialchars($creator['expertise']); ?></p>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <!-- Statistics Grid -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-book"></i>
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1>Share Your Knowledge, Shape the Future</h1>
+                    <p>Join thousands of instructors creating impactful courses on EduChain. Build your reputation, earn blockchain-verified credentials, and monetize your expertise in our innovative learning ecosystem.</p>
+                    <a href="course-management.php" class="cta-button">Create Your First Course</a>
                 </div>
-                <div class="stat-number"><?php echo $creator['total_courses']; ?></div>
-                <div class="stat-label">Total Courses</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-users"></i>
+                <div class="hero-image">
+                    <div class="hero-illustration">🎓</div>
                 </div>
-                <div class="stat-number"><?php echo $creator['total_students']; ?></div>
-                <div class="stat-label">Total Students</div>
             </div>
+        </section>
 
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-dollar-sign"></i>
-                </div>
-                <div class="stat-number">$<?php echo number_format($creator['total_revenue'], 2); ?></div>
-                <div class="stat-label">Total Revenue</div>
-            </div>
-
-            <div class="stat-card">
-                <div class="stat-icon">
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="stat-number"><?php echo number_format($creator['rating'], 1); ?></div>
-                <div class="stat-label">Average Rating</div>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <h2>Quick Actions</h2>
-            <div class="action-buttons">
-                <a href="course-management.html" class="action-btn">
-                    <i class="fas fa-plus"></i>
-                    Create New Course
-                </a>
-                <a href="course-browser-creator.html" class="action-btn">
-                    <i class="fas fa-edit"></i>
-                    Manage Courses
-                </a>
-                <a href="creator-profile.php" class="action-btn">
-                    <i class="fas fa-user-edit"></i>
-                    Edit Profile
-                </a>
-                <a href="#" class="action-btn">
-                    <i class="fas fa-chart-line"></i>
-                    View Analytics
-                </a>
-            </div>
-        </div>
-
-        <!-- Recent Courses -->
-        <div class="recent-courses">
-            <h2>Your Recent Courses</h2>
-            <?php if ($courses_result && mysqli_num_rows($courses_result) > 0): ?>
-                <?php while ($course = mysqli_fetch_assoc($courses_result)): ?>
-                    <div class="course-item">
-                        <div class="course-thumbnail">
-                            <i class="fas fa-play"></i>
-                        </div>
-                        <div class="course-info">
-                            <div class="course-title"><?php echo htmlspecialchars($course['title']); ?></div>
-                            <div class="course-stats">
-                                <?php echo $course['students_enrolled']; ?> students • 
-                                Rating: <?php echo number_format($course['rating'], 1); ?>/5 • 
-                                Created: <?php echo date('M j, Y', strtotime($course['created_at'])); ?>
-                            </div>
-                        </div>
+        <!-- Features Section -->
+        <section class="features">
+            <div class="features-container">
+                <h2 class="section-title">Empower Your Teaching Journey</h2>
+                <p class="section-subtitle">Everything you need to create, manage, and grow your online teaching business with blockchain-powered innovation.</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📚</div>
+                        <h3>Manage Your Courses</h3>
+                        <p>Create engaging content with our intuitive course builder. Upload videos, documents, and interactive materials. Track student progress and engagement with detailed analytics.</p>
+                        <a href="#" class="feature-button" onclick="alert('Course management functionality would open here')">Get Started</a>
                     </div>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <div class="no-courses">
-                    <i class="fas fa-book" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
-                    <p>You haven't created any courses yet. Start your teaching journey!</p>
-                    <a href="course-management.html" class="action-btn" style="margin-top: 1rem; display: inline-flex;">
-                        <i class="fas fa-plus"></i>
-                        Create Your First Course
-                    </a>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3>Track Your Earnings & Students</h3>
+                        <p>Monitor your revenue growth, student enrollments, and course performance with comprehensive dashboards. Get insights to optimize your teaching strategy and maximize earnings.</p>
+                        <a href="#" class="feature-button" onclick="alert('Analytics dashboard would open here')">View Analytics</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">🏆</div>
+                        <h3>Get Certified with NFT Badges</h3>
+                        <p>Issue blockchain-verified NFT certificates to your students upon course completion. These tamper-proof credentials enhance your courses' value and students' career prospects.</p>
+                        <a href="#" class="feature-button" onclick="alert('NFT certification info would open here')">Learn More</a>
+                    </div>
                 </div>
-            <?php endif; ?>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="cta-section">
+            <div class="cta-container">
+                <h2>Ready to Transform Lives Through Teaching?</h2>
+                <p>Join our community of passionate educators and start building your teaching empire today. Your expertise can change the world, one student at a time.</p>
+                <div class="cta-buttons">
+                    <a href="course-management.php" class="cta-btn-primary">Start Teaching Today</a>
+                    <a href="#" class="cta-btn-secondary" onclick="alert('Instructor guide would open here')">Learn How It Works</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <a href="#">Help Center</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Instructor Guidelines</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="currentYear"></span> EduChain. All rights reserved. Empowering education through blockchain technology.</p>
+            </div>
         </div>
-    </div>
+    </footer>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 70;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 10) {
+                navbar.style.boxShadow = '0 2px 25px rgba(0, 0, 0, 0.15)';
+            } else {
+                navbar.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.1)';
+            }
+        });
+
+        // Enhanced button interactions
+        document.querySelectorAll('.cta-button, .feature-button, .cta-btn-primary, .cta-btn-secondary').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        // Observe feature cards for animations
+        document.querySelectorAll('.feature-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Add keyboard navigation support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+
+        // Performance optimization: Debounce scroll events
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Apply debounced scroll handler
+        const debouncedScrollHandler = debounce(() => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 10) {
+                navbar.style.boxShadow = '0 2px 25px rgba(0, 0, 0, 0.15)';
+            } else {
+                navbar.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.1)';
+            }
+        }, 10);
+
+        window.addEventListener('scroll', debouncedScrollHandler);
+    </script>
 </body>
 </html>

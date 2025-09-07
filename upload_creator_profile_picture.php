@@ -1,6 +1,4 @@
 <?php
--- filepath: upload_creator_profile_picture.php
-<?php
 session_start();
 include 'db.php';
 

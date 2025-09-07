@@ -301,8 +301,8 @@ if ($result && mysqli_num_rows($result) > 0) {
         <div class="nav-container">
             <div class="logo">🎓 NFT Learning</div>
             <ul class="nav-links">
-                <li><a href="home-learner.html"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="course-browser.html"><i class="fas fa-book"></i> Courses</a></li>
+                <li><a href="home-learner.php"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="course-browser.php"><i class="fas fa-book"></i> Courses</a></li>
                 <li><a href="learner-profile.php"><i class="fas fa-user"></i> Profile</a></li>
                 <li><a href="nft-search.html"><i class="fas fa-certificate"></i> My NFTs</a></li>
                 <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>

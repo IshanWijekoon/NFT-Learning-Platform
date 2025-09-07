@@ -66,8 +66,8 @@ $_SESSION['role'] = $role;
 $_SESSION['full_name'] = $user['full_name'] ?? '';
 
 $redirect = '/';
-if ($role === 'admin') $redirect = 'home-admin.html';
-elseif ($role === 'learner') $redirect = 'home-learner.html';
+if ($role === 'admin') $redirect = 'admin.php';
+elseif ($role === 'learner') $redirect = 'home-learner.php';
 elseif ($role === 'creator') $redirect = 'home-creator.php';
 
 echo json_encode(['success' => true, 'redirect' => $redirect]);
