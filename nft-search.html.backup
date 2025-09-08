@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFT Certificate Search - EduPlatform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+       
+        /* Navigation Bar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 0 20px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2c5aa0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover {
+            color: #1e3f73;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+            padding: 5px 0;
+        }
+
+        .nav-link:hover {
+            color: #2c5aa0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #2c5aa0;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .logout-btn::after {
+            display: none;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 7rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-group {
+            position: relative;
+        }
+
+        .search-group label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #999;
+        }
+
+        .search-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .search-btn,
+        .reset-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-width: 140px;
+        }
+
+        .search-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .reset-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
+        }
+
+        .spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        .results-section {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            display: none;
+        }
+
+        .results-section.show {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        .results-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 2px solid #f1f3f4;
+        }
+
+        .results-header h2 {
+            color: #333;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .certificate-details {
+            padding: 2rem;
+        }
+
+        .detail-item {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f3f4;
+            align-items: center;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            color: #555;
+            word-break: break-all;
+        }
+
+        .wallet-address {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #e1e5e9;
+            font-size: 0.95rem;
+        }
+
+        .verification-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .status-verified {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status-not-found {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        /* No Results Section */
+        .no-results {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .no-results h3 {
+            color: #dc3545;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .no-results p {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Certificate Badge */
+        .certificate-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .certificate-badge h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .certificate-badge p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 1rem;
+                margin: 1rem auto;
+            }
+
+            .page-header,
+            .search-section {
+                padding: 2rem 1.5rem;
+                border-radius: 15px;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .search-buttons {
+                flex-direction: column;
+            }
+
+            .search-btn,
+            .reset-btn {
+                width: 100%;
+            }
+
+            .detail-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+                text-align: left;
+            }
+
+            .detail-label {
+                font-size: 1rem;
+            }
+
+            .detail-value {
+                font-size: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 1.6rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+            }
+
+            .search-input {
+                padding: 0.8rem 1rem;
+                font-size: 1rem;
+            }
+
+            .search-btn,
+            .reset-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .results-header h2 {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        button:focus,
+        input:focus,
+        a:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        /* Smooth transitions */
+        * {
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+
+        /* Loading state */
+        .search-form.loading .search-input {
+            pointer-events: none;
+        }
+
+        /* Certificate icon styles */
+        .cert-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Success animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results-section.show {
+            animation: fadeInUp 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+     <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">EduChain</a>
+            
+            <ul class="nav-menu" id="navMenu">
+                 <li><a href="home-learner.php" class="nav-link">Home</a></li>
+                <li><a href="course-browser.html" class="nav-link">Courses</a></li>
+                <li><a href="nft-search.html" class="nav-link">Search NFT</a></li>
+                <li><a href="learner-profile.html" class="nav-link">Profile</a></li>
+                <li><a href="login.html" class="nav-link logout-btn">Logout</a></li>
+            </ul>
+
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Page Header -->
+        <header class="page-header">
+            <h1>
+                🔍 NFT Certificate Search
+            </h1>
+            <p>
+                Verify and search for blockchain-verified educational certificates. 
+                Enter an NFT Certificate ID to view detailed certificate information and verification status.
+            </p>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section" aria-labelledby="search-heading">
+            <h2 id="search-heading" class="sr-only">Search for NFT Certificate</h2>
+            
+            <form class="search-form" id="searchForm" role="search">
+                <div class="search-group">
+                    <label for="certificateId">Enter NFT Certificate ID</label>
+                    <input 
+                        type="text" 
+                        id="certificateId" 
+                        name="certificateId"
+                        class="search-input" 
+                        placeholder="e.g., CERT-2024-001, CERT-2024-002..."
+                        required
+                        autocomplete="off"
+                        aria-describedby="search-help">
+                    <div id="search-help" class="sr-only">Enter the unique NFT certificate identifier to search for verification details</div>
+                </div>
+
+                <div class="search-buttons">
+                    <button type="submit" class="search-btn" id="searchBtn" aria-describedby="search-btn-help">
+                        <span class="spinner" id="searchSpinner"></span>
+                        <span id="searchBtnText">🔍 Search Certificate</span>
+                    </button>
+                    <button type="button" class="reset-btn" id="resetBtn" aria-label="Clear search and results">
+                        🔄 Reset
+                    </button>
+                    <div id="search-btn-help" class="sr-only">Search for the entered certificate ID</div>
+                </div>
+            </form>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section" id="resultsSection" aria-labelledby="results-heading" aria-live="polite">
+            <div class="results-header">
+                <h2 id="results-heading">
+                    <span class="cert-icon">🏆</span>
+                    Certificate Details
+                </h2>
+            </div>
+
+            <div class="certificate-details" id="certificateDetails">
+                <!-- Certificate details will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- No Results Section -->
+        <section class="results-section" id="noResultsSection" aria-labelledby="no-results-heading">
+            <div class="no-results">
+                <h3 id="no-results-heading">❌ Certificate Not Found</h3>
+                <p>The entered NFT Certificate ID could not be found in our blockchain records. Please verify the ID and try again.</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // NFT Certificate Search functionality
+        class NFTCertificateSearch {
+            constructor() {
+                this.certificates = this.initializeCertificates();
+                this.init();
+            }
+
+            initializeCertificates() {
+                // Simulated NFT certificate data
+                return [
+                    {
+                        id: 'CERT-2024-001',
+                        title: 'JavaScript Fundamentals Certification',
+                        courseName: 'Complete JavaScript Bootcamp',
+                        ownerName: 'John Doe',
+                        walletAddress: '0x742d35Cc6484B5A8E1b3A6F1234567890AbCdEf123',
+                        dateIssued: '2024-03-15',
+                        verificationStatus: 'verified',
+                        issuer: 'EduPlatform Academy',
+                        grade: 'A+',
+                        creditsEarned: 40
+                    },
+                    {
+                        id: 'CERT-2024-002',
+                        title: 'React Development Professional',
+                        courseName: 'Advanced React & Redux Course',
+                        ownerName: 'Sarah Johnson',
+                        walletAddress: '0x9f8E7D6C5B4A3928F1234567890AbCdEf987654321',
+                        dateIssued: '2024-02-28',
+                        verificationStatus: 'verified',
+                        issuer: 'EduPlatform Academy',
+                        grade: 'A',
+                        creditsEarned: 60
+                    },
+                    {
+                        id: 'CERT-2024-003',
+                        title: 'Python Data Science Specialist',
+                        courseName: 'Python for Data Science & Machine Learning',
+                        ownerName: 'Michael Chen',
+                        walletAddress: '0x1a2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P7q8R9s0T',
+                        dateIssued: '2024-01-20',
+                        verificationStatus: 'verified',
+                        issuer: 'EduPlatform Academy',
+                        grade: 'A-',
+                        creditsEarned: 50
+                    },
+                    {
+                        id: 'CERT-2024-004',
+                        title: 'Blockchain Development Certificate',
+                        courseName: 'Ethereum Smart Contract Development',
+                        ownerName: 'Emily Rodriguez',
+                        walletAddress: '0xaB1cD2eF3g4H5i6J7k8L9m0N1o2P3q4R5s6T7u8V',
+                        dateIssued: '2024-04-10',
+                        verificationStatus: 'pending',
+                        issuer: 'EduPlatform Academy',
+                        grade: 'B+',
+                        creditsEarned: 45
+                    },
+                    {
+                        id: 'CERT-2024-005',
+                        title: 'UI/UX Design Professional',
+                        courseName: 'Complete UI/UX Design Masterclass',
+                        ownerName: 'David Wilson',
+                        walletAddress: '0x2B3c4D5e6F7g8H9i0J1k2L3m4N5o6P7q8R9s0T1u',
+                        dateIssued: '2024-03-05',
+                        verificationStatus: 'verified',
+                        issuer: 'EduPlatform Academy',
+                        grade: 'A',
+                        creditsEarned: 35
+                    }
+                ];
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadSearchHistory();
+            }
+
+            setupEventListeners() {
+                const searchForm = document.getElementById('searchForm');
+                const searchBtn = document.getElementById('searchBtn');
+                const resetBtn = document.getElementById('resetBtn');
+                const searchInput = document.getElementById('certificateId');
+
+                // Form submission
+                searchForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.performSearch();
+                });
+
+                // Reset button
+                resetBtn.addEventListener('click', () => {
+                    this.resetSearch();
+                });
+
+                // Real-time input validation
+                searchInput.addEventListener('input', () => {
+                    this.validateInput();
+                });
+
+                // Enter key support
+                searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.performSearch();
+                    }
+                });
+            }
+
+            validateInput() {
+                const searchInput = document.getElementById('certificateId');
+                const searchBtn = document.getElementById('searchBtn');
+                const value = searchInput.value.trim();
+
+                searchBtn.disabled = value.length < 3;
+            }
+
+            async performSearch() {
+                const searchInput = document.getElementById('certificateId');
+                const certificateId = searchInput.value.trim().toUpperCase();
+
+                if (!certificateId) {
+                    this.showError('Please enter a certificate ID');
+                    return;
+                }
+
+                this.showLoadingState(true);
+
+                try {
+                    // Simulate API call delay
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    const certificate = this.findCertificate(certificateId);
+
+                    if (certificate) {
+                        this.displayCertificate(certificate);
+                        this.saveToHistory(certificateId);
+                    } else {
+                        this.showNoResults();
+                    }
+
+                } catch (error) {
+                    console.error('Search error:', error);
+                    this.showError('An error occurred while searching. Please try again.');
+                } finally {
+                    this.showLoadingState(false);
+                }
+            }
+
+            findCertificate(certificateId) {
+                return this.certificates.find(cert => 
+                    cert.id.toUpperCase() === certificateId.toUpperCase()
+                );
+            }
+
+            displayCertificate(certificate) {
+                const resultsSection = document.getElementById('resultsSection');
+                const noResultsSection = document.getElementById('noResultsSection');
+                const certificateDetails = document.getElementById('certificateDetails');
+
+                // Hide no results section
+                noResultsSection.classList.remove('show');
+
+                // Create certificate badge
+                const badge = this.createCertificateBadge(certificate);
+
+                // Create certificate details
+                const details = this.createCertificateDetails(certificate);
+
+                // Update content
+                certificateDetails.innerHTML = badge + details;
+
+                // Show results with animation
+                setTimeout(() => {
+                    resultsSection.classList.add('show');
+                }, 100);
+
+                // Scroll to results
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            createCertificateBadge(certificate) {
+                return `
+                    <div class="certificate-badge">
+                        <h3>🎓 ${certificate.title}</h3>
+                        <p>Issued by ${certificate.issuer}</p>
+                    </div>
+                `;
+            }
+
+            createCertificateDetails(certificate) {
+                const formattedDate = this.formatDate(certificate.dateIssued);
+                const statusBadge = this.createStatusBadge(certificate.verificationStatus);
+
+                return `
+                    <div class="detail-item">
+                        <div class="detail-label">Certificate ID:</div>
+                        <div class="detail-value"><strong>${certificate.id}</strong></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Course Name:</div>
+                        <div class="detail-value">${certificate.courseName}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Certificate Holder:</div>
+                        <div class="detail-value">${certificate.ownerName}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Wallet Address:</div>
+                        <div class="detail-value">
+                            <div class="wallet-address">${certificate.walletAddress}</div>
+                        </div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Date Issued:</div>
+                        <div class="detail-value">${formattedDate}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Grade Achieved:</div>
+                        <div class="detail-value"><strong>${certificate.grade}</strong></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Credits Earned:</div>
+                        <div class="detail-value">${certificate.creditsEarned} credits</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Verification Status:</div>
+                        <div class="detail-value">${statusBadge}</div>
+                    </div>
+                `;
+            }
+
+            createStatusBadge(status) {
+                const statusConfig = {
+                    verified: {
+                        class: 'status-verified',
+                        icon: '✅',
+                        text: 'Verified'
+                    },
+                    pending: {
+                        class: 'status-pending',
+                        icon: '⏳',
+                        text: 'Pending Verification'
+                    },
+                    not_found: {
+                        class: 'status-not-found',
+                        icon: '❌',
+                        text: 'Not Found'
+                    }
+                };
+
+                const config = statusConfig[status] || statusConfig.not_found;
+                
+                return `
+                    <span class="verification-status ${config.class}" role="status" aria-label="Certificate ${config.text}">
+                        ${config.icon} ${config.text}
+                    </span>
+                `;
+            }
+
+            showNoResults() {
+                const resultsSection = document.getElementById('resultsSection');
+                const noResultsSection = document.getElementById('noResultsSection');
+
+                // Hide results section
+                resultsSection.classList.remove('show');
+
+                // Show no results with animation
+                setTimeout(() => {
+                    noResultsSection.classList.add('show');
+                }, 100);
+
+                // Scroll to no results
+                noResultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            showLoadingState(isLoading) {
+                const searchForm = document.getElementById('searchForm');
+                const searchBtn = document.getElementById('searchBtn');
+                const spinner = document.getElementById('searchSpinner');
+                const btnText = document.getElementById('searchBtnText');
+
+                if (isLoading) {
+                    searchForm.classList.add('loading');
+                    searchBtn.disabled = true;
+                    spinner.style.display = 'inline-block';
+                    btnText.textContent = 'Searching...';
+                } else {
+                    searchForm.classList.remove('loading');
+                    searchBtn.disabled = false;
+                    spinner.style.display = 'none';
+                    btnText.textContent = '🔍 Search Certificate';
+                }
+            }
+
+            resetSearch() {
+                const searchInput = document.getElementById('certificateId');
+                const resultsSection = document.getElementById('resultsSection');
+                const noResultsSection = document.getElementById('noResultsSection');
+
+                // Clear input
+                searchInput.value = '';
+                searchInput.focus();
+
+                // Hide results
+                resultsSection.classList.remove('show');
+                noResultsSection.classList.remove('show');
+
+                // Reset validation
+                this.validateInput();
+
+                // Clear any error states
+                searchInput.classList.remove('error');
+            }
+
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                const options = { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                };
+                return date.toLocaleDateString('en-US', options);
+            }
+
+            showError(message) {
+                alert(message); // In a real app, you'd show a proper error message
+            }
+
+            saveToHistory(certificateId) {
+                let history = JSON.parse(localStorage.getItem('nftSearchHistory') || '[]');
+                history = [certificateId, ...history.filter(id => id !== certificateId)].slice(0, 10);
+                localStorage.setItem('nftSearchHistory', JSON.stringify(history));
+            }
+
+            loadSearchHistory() {
+                // This could be used to show recent searches
+                const history = JSON.parse(localStorage.getItem('nftSearchHistory') || '[]');
+                console.log('Search history:', history);
+            }
+        }
+
+        // Initialize search functionality when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new NFTCertificateSearch();
+        });
+
+        // Accessibility: Handle keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            // ESC key to reset search
+            if (e.key === 'Escape') {
+                const resetBtn = document.getElementById('resetBtn');
+                resetBtn.click();
+            }
+        });
+
+        // Handle focus management for accessibility
+        document.querySelectorAll('input, button, a').forEach(element => {
+            element.addEventListener('focus', function() {
+                this.style.outline = '2px solid #667eea';
+                this.style.outlineOffset = '2px';
+            });
+            
+            element.addEventListener('blur', function() {
+                this.style.outline = '';
+                this.style.outlineOffset = '';
+            });
+        });
+    </script>
+</body>
+</html>

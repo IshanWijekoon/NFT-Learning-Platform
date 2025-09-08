@@ -580,6 +580,26 @@ $creator = $creator_result->fetch_assoc();
                         <div class="progress-text" id="progressText">Uploading...</div>
                     </div>
                 </div>
+
+                <!-- NFT Certificate Image Upload Section -->
+                <div class="form-group full-width">
+                    <label for="nftCertificate">NFT Certificate Template *</label>
+                    <div class="file-upload-area" onclick="document.getElementById('nftCertificate').click()">
+                        <div class="file-upload-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="file-upload-text">Click to upload certificate template or drag and drop</div>
+                        <div class="file-upload-subtext">Supported formats: PNG, JPG (Max: 10MB, Recommended: 1200x800)</div>
+                    </div>
+                    <input type="file" id="nftCertificate" name="nftCertificate" accept="image/*" style="display: none;" required>
+                    <div class="error">Please select an NFT certificate template</div>
+                    
+                    <!-- Certificate Preview -->
+                    <div class="certificate-preview" id="certificatePreview" style="display: none;">
+                        <img id="certificateImg" src="" alt="Certificate Template Preview" style="max-width: 400px; max-height: 300px; border-radius: 8px; margin-top: 1rem; border: 2px solid #ddd;">
+                        <p style="color: #666; margin-top: 0.5rem;">Certificate Template Preview - This will be awarded as NFT when learners complete the course</p>
+                    </div>
+                </div>
                 
                 <button type="submit" class="submit-btn" id="submitBtn">
                     <i class="fas fa-save"></i> Create Course
@@ -602,11 +622,13 @@ $creator = $creator_result->fetch_assoc();
         // Global variables
         let selectedFile = null;
         let selectedThumbnail = null;
+        let selectedCertificate = null;
 
         // Initialize event listeners when page loads
         document.addEventListener('DOMContentLoaded', function() {
             initializeFileUpload();
             initializeThumbnailUpload();
+            initializeCertificateUpload();
             loadCourses();
         });
 
@@ -684,6 +706,81 @@ $creator = $creator_result->fetch_assoc();
 
             // Clear any previous errors
             const formGroup = document.getElementById('courseThumbnail').closest('.form-group');
+            formGroup.classList.remove('has-error');
+        }
+
+        /**
+         * Initialize NFT certificate upload functionality
+         */
+        function initializeCertificateUpload() {
+            const certificateInput = document.getElementById('nftCertificate');
+            const certificateUploadAreas = document.querySelectorAll('.file-upload-area');
+            const certificateArea = certificateUploadAreas[2]; // Third upload area is for certificate
+            const certificatePreview = document.getElementById('certificatePreview');
+            const certificateImg = document.getElementById('certificateImg');
+
+            // Certificate input change event
+            certificateInput.addEventListener('change', function(e) {
+                handleCertificateSelect(e.target.files[0]);
+            });
+
+            // Drag and drop events for certificate
+            certificateArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                certificateArea.classList.add('dragover');
+            });
+
+            certificateArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                certificateArea.classList.remove('dragover');
+            });
+
+            certificateArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                certificateArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleCertificateSelect(files[0]);
+                }
+            });
+        }
+
+        /**
+         * Handle certificate template selection and validation
+         */
+        function handleCertificateSelect(file) {
+            if (!file) return;
+
+            // Validate file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (!allowedTypes.includes(file.type)) {
+                showFieldError(document.getElementById('nftCertificate'), 'Please select a valid image file (JPG, PNG)');
+                return;
+            }
+
+            // Validate file size (10MB max)
+            const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+            if (file.size > maxSize) {
+                showFieldError(document.getElementById('nftCertificate'), 'Certificate image size must be less than 10MB');
+                return;
+            }
+
+            // Store selected certificate
+            selectedCertificate = file;
+
+            // Display certificate preview
+            const certificatePreview = document.getElementById('certificatePreview');
+            const certificateImg = document.getElementById('certificateImg');
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                certificateImg.src = e.target.result;
+                certificatePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+
+            // Clear any previous errors
+            const formGroup = document.getElementById('nftCertificate').closest('.form-group');
             formGroup.classList.remove('has-error');
         }
 
@@ -844,6 +941,13 @@ $creator = $creator_result->fetch_assoc();
                 showFieldError(videoInput, 'Please select a video file');
                 isValid = false;
             }
+
+            // Certificate validation
+            const certificateInput = document.getElementById('nftCertificate');
+            if (!selectedCertificate && !certificateInput.files[0]) {
+                showFieldError(certificateInput, 'Please select an NFT certificate template');
+                isValid = false;
+            }
             
             return isValid;
         }
@@ -889,6 +993,10 @@ $creator = $creator_result->fetch_assoc();
             const videoFile = selectedFile || document.getElementById('courseVideo').files[0];
             formData.append('courseVideo', videoFile);
 
+            // Add certificate file
+            const certificateFile = selectedCertificate || document.getElementById('nftCertificate').files[0];
+            formData.append('nftCertificate', certificateFile);
+
             // Create XMLHttpRequest for upload progress tracking
             const xhr = new XMLHttpRequest();
 
@@ -932,7 +1040,7 @@ $creator = $creator_result->fetch_assoc();
             });
 
             // Send request
-            xhr.open('POST', 'save_course.php', true);
+            xhr.open('POST', 'save_course_with_nft.php', true);
             xhr.send(formData);
 
             function resetUI() {
@@ -950,8 +1058,10 @@ $creator = $creator_result->fetch_assoc();
             document.getElementById('courseForm').reset();
             selectedFile = null;
             selectedThumbnail = null;
+            selectedCertificate = null;
             document.getElementById('fileInfo').classList.remove('show');
             document.getElementById('thumbnailPreview').style.display = 'none';
+            document.getElementById('certificatePreview').style.display = 'none';
             
             // Clear all error states
             const formGroups = document.querySelectorAll('.form-group');

@@ -477,7 +477,7 @@ if ($learner) {
             <ul class="nav-menu" id="navMenu">
                 <li><a href="home-learner.php" class="nav-link">Home</a></li>
                 <li><a href="course-browser.php" class="nav-link">Courses</a></li>
-                <li><a href="nft-search.html" class="nav-link">Search NFT</a></li>
+                <li><a href="my_certificates.php" class="nav-link">My Certificates</a></li>
                 <li><a href="learner-profile.php" class="nav-link">Profile</a></li>
                 <li><a href="login.html" class="nav-link logout-btn">Logout</a></li>
             </ul>

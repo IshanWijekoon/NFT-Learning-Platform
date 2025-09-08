@@ -379,7 +379,7 @@ if ($is_logged_in) {
                     <li><a href="home-learner.php"><i class="fas fa-home"></i> Home</a></li>
                     <li><a href="course-browser.php"><i class="fas fa-book"></i> Courses</a></li>
                     <li><a href="learner-profile.php"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="nft-search.html"><i class="fas fa-certificate"></i> Search NFT</a></li>
+                    <li><a href="nft-search.php"><i class="fas fa-certificate"></i> Search NFT</a></li>
                     <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 <?php else: ?>
                     <li><a href="guest.html"><i class="fas fa-home"></i> Home</a></li>

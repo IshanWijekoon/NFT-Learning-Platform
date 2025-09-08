@@ -83,6 +83,23 @@ if (!isset($_FILES['courseVideo']) || $_FILES['courseVideo']['error'] !== UPLOAD
     }
 }
 
+// Validate NFT certificate upload
+if (!isset($_FILES['nftCertificate']) || $_FILES['nftCertificate']['error'] !== UPLOAD_ERR_OK) {
+    $errors[] = 'NFT certificate template is required';
+} else {
+    $certificate = $_FILES['nftCertificate'];
+    $allowedCertTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    $maxCertSize = 10 * 1024 * 1024; // 10MB
+    
+    if (!in_array($certificate['type'], $allowedCertTypes)) {
+        $errors[] = 'Certificate must be JPG or PNG format';
+    }
+    
+    if ($certificate['size'] > $maxCertSize) {
+        $errors[] = 'Certificate size must be less than 10MB';
+    }
+}
+
 if (!empty($errors)) {
     echo json_encode(['success' => false, 'message' => implode(', ', $errors)]);
     exit();
@@ -119,6 +136,19 @@ if (mysqli_num_rows($video_col_result) == 0) {
     $add_video_col = "ALTER TABLE courses ADD COLUMN video_path VARCHAR(500) DEFAULT NULL";
     if (!mysqli_query($conn, $add_video_col)) {
         echo json_encode(['success' => false, 'message' => 'Failed to add video_path column to database']);
+        exit();
+    }
+}
+
+// Check if nft_certificate_image column exists, if not, add it
+$check_cert_col = "SHOW COLUMNS FROM courses LIKE 'nft_certificate_image'";
+$cert_col_result = mysqli_query($conn, $check_cert_col);
+
+if (mysqli_num_rows($cert_col_result) == 0) {
+    // Add nft_certificate_image column to courses table
+    $add_cert_col = "ALTER TABLE courses ADD COLUMN nft_certificate_image VARCHAR(255) DEFAULT NULL";
+    if (!mysqli_query($conn, $add_cert_col)) {
+        echo json_encode(['success' => false, 'message' => 'Failed to add nft_certificate_image column to database']);
         exit();
     }
 }
@@ -165,6 +195,29 @@ if (isset($_FILES['courseVideo'])) {
     // Move uploaded video file
     if (!move_uploaded_file($video['tmp_name'], $videoPath)) {
         echo json_encode(['success' => false, 'message' => 'Failed to upload video']);
+        exit();
+    }
+}
+
+// Handle NFT certificate upload
+$certificatePath = null;
+if (isset($_FILES['nftCertificate'])) {
+    $certificate = $_FILES['nftCertificate'];
+    $certUploadDir = 'uploads/nft_certificates/';
+    
+    // Create unique filename for certificate
+    $certFileExtension = pathinfo($certificate['name'], PATHINFO_EXTENSION);
+    $uniqueCertFilename = 'cert_' . $creator_id . '_' . time() . '_' . uniqid() . '.' . $certFileExtension;
+    $certificatePath = $certUploadDir . $uniqueCertFilename;
+    
+    // Create directory if it doesn't exist
+    if (!file_exists($certUploadDir)) {
+        mkdir($certUploadDir, 0777, true);
+    }
+    
+    // Move uploaded certificate file
+    if (!move_uploaded_file($certificate['tmp_name'], $certificatePath)) {
+        echo json_encode(['success' => false, 'message' => 'Failed to upload NFT certificate']);
         exit();
     }
 }
