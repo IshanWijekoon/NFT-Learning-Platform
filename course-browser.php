@@ -42,8 +42,9 @@ if ($is_logged_in) {
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             min-height: 100vh;
+            color: #e1e5e9;
         }
 
         .navbar {
@@ -94,46 +95,54 @@ if ($is_logged_in) {
         }
 
         .page-header {
-            background: white;
+            background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
             border-radius: 15px;
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
             text-align: center;
+            border: 1px solid rgba(220, 38, 38, 0.3);
         }
 
         .page-header h1 {
-            color: #333;
+            color: #f8f9fa;
             margin-bottom: 0.5rem;
             font-size: 2.5rem;
         }
 
         .page-header p {
-            color: #666;
+            color: #d1d5db;
             font-size: 1.1rem;
         }
 
         .search-filters {
-            background: white;
+            background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
             border-radius: 15px;
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(220, 38, 38, 0.2);
         }
 
         .search-bar {
             width: 100%;
             padding: 1rem;
-            border: 2px solid #e1e5e9;
+            border: 2px solid rgba(220, 38, 38, 0.3);
             border-radius: 10px;
             font-size: 1.1rem;
             margin-bottom: 1.5rem;
             transition: border-color 0.3s;
+            background: #2a2a2a;
+            color: #e1e5e9;
         }
 
         .search-bar:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #dc2626;
+        }
+
+        .search-bar::placeholder {
+            color: #9ca3af;
         }
 
         .category-filters {
@@ -144,30 +153,34 @@ if ($is_logged_in) {
 
         .category-btn {
             padding: 0.8rem 1.5rem;
-            border: 2px solid #e1e5e9;
-            background: white;
+            border: 2px solid rgba(220, 38, 38, 0.3);
+            background: #2a2a2a;
             border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 500;
+            color: #e1e5e9;
         }
 
         .category-btn:hover,
         .category-btn.active {
-            background: #667eea;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
             color: white;
-            border-color: #667eea;
+            border-color: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
         }
 
         .courses-section {
-            background: white;
+            background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
             border-radius: 15px;
             padding: 2rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            border: 1px solid rgba(220, 38, 38, 0.2);
         }
 
         .section-title {
-            color: #333;
+            color: #f8f9fa;
             margin-bottom: 1.5rem;
             font-size: 1.8rem;
         }
@@ -179,20 +192,21 @@ if ($is_logged_in) {
         }
 
         .course-card {
-            border: 1px solid #e1e5e9;
+            border: 1px solid rgba(220, 38, 38, 0.2);
             border-radius: 15px;
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
-            background: white;
+            background: #262626;
         }
 
         .course-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            box-shadow: 0 15px 35px rgba(220, 38, 38, 0.3);
+            border-color: #dc2626;
         }
 
         .course-thumbnail {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #dc2626, #991b1b);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -217,14 +231,14 @@ if ($is_logged_in) {
         }
 
         .course-title {
-            color: #333;
+            color: #f8f9fa;
             margin-bottom: 0.8rem;
             font-size: 1.3rem;
             line-height: 1.4;
         }
 
         .course-description {
-            color: #666;
+            color: #d1d5db;
             margin-bottom: 1rem;
             line-height: 1.5;
             display: -webkit-box;
@@ -239,12 +253,12 @@ if ($is_logged_in) {
             align-items: center;
             margin-bottom: 1rem;
             font-size: 0.9rem;
-            color: #666;
+            color: #d1d5db;
         }
 
         .course-price {
             font-weight: bold;
-            color: #28a745;
+            color: #ef4444;
             font-size: 1.2rem;
         }
 
@@ -259,7 +273,7 @@ if ($is_logged_in) {
             gap: 1rem;
             margin-bottom: 1rem;
             font-size: 0.9rem;
-            color: #666;
+            color: #d1d5db;
         }
 
         .course-actions {
@@ -280,27 +294,29 @@ if ($is_logged_in) {
         }
 
         .btn-primary {
-            background: #667eea;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #5a6fd8;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
         }
 
         .btn-secondary {
-            background: #f8f9fa;
-            color: #333;
-            border: 1px solid #e1e5e9;
+            background: #374151;
+            color: #e1e5e9;
+            border: 1px solid rgba(220, 38, 38, 0.3);
         }
 
         .btn-secondary:hover {
-            background: #e9ecef;
+            background: #4b5563;
+            border-color: #dc2626;
         }
 
         .btn-enrolled {
-            background: #28a745;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: white;
             cursor: not-allowed;
         }
@@ -308,18 +324,18 @@ if ($is_logged_in) {
         .loading {
             text-align: center;
             padding: 3rem;
-            color: #666;
+            color: #d1d5db;
         }
 
         .no-courses {
             text-align: center;
             padding: 3rem;
-            color: #666;
+            color: #d1d5db;
         }
 
         .no-courses i {
             font-size: 4rem;
-            color: #ddd;
+            color: #6b7280;
             margin-bottom: 1rem;
         }
 
@@ -327,7 +343,7 @@ if ($is_logged_in) {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #28a745;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: white;
             padding: 1rem 2rem;
             border-radius: 10px;
@@ -336,6 +352,7 @@ if ($is_logged_in) {
             opacity: 0;
             transform: translateX(100%);
             transition: all 0.3s ease;
+            border: 1px solid rgba(5, 150, 105, 0.3);
         }
 
         .success-message.show {
@@ -344,11 +361,12 @@ if ($is_logged_in) {
         }
 
         .error-message {
-            background: #dc3545;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
             color: white;
             padding: 1rem;
             border-radius: 8px;
             margin-bottom: 1rem;
+            border: 1px solid rgba(220, 38, 38, 0.3);
         }
 
         @media (max-width: 768px) {
@@ -373,7 +391,7 @@ if ($is_logged_in) {
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">🎓 NFT Learning</div>
+            <div class="logo">Learnity</div>
             <ul class="nav-links">
                 <?php if ($is_logged_in && $user_role === 'learner'): ?>
                     <li><a href="home-learner.php">Home</a></li>
@@ -398,7 +416,7 @@ if ($is_logged_in) {
             <?php if ($is_logged_in && $user_role === 'learner'): ?>
                 <p>Welcome back, <?php echo htmlspecialchars($user_info['full_name'] ?? 'Learner'); ?>! Discover amazing courses and continue your learning journey.</p>
             <?php else: ?>
-                <p>Discover amazing courses created by expert instructors. <a href="login.html" style="color: #667eea;">Login</a> or <a href="register.html" style="color: #667eea;">Register</a> to enroll and start learning!</p>
+                <p>Discover amazing courses created by expert instructors. <a href="login.html" style="color: #ef4444;">Login</a> or <a href="register.html" style="color: #ef4444;">Register</a> to enroll and start learning!</p>
             <?php endif; ?>
         </div>
 
@@ -420,6 +438,11 @@ if ($is_logged_in) {
             <h2 class="section-title" id="sectionTitle">All Courses</h2>
             
            
+            <div class="loading" id="loadingIndicator" style="display: none;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: #ef4444;"></i>
+                <p>Loading courses...</p>
+            </div>
+            
             <div class="courses-grid" id="coursesGrid">
                 <!-- Courses will be loaded dynamically -->
             </div>
@@ -538,18 +561,24 @@ if ($is_logged_in) {
             }
 
             handleCategoryClick(e) {
-                console.log('Category clicked:', e.target.dataset.category);
+                e.preventDefault();
+                const selectedCategory = e.target.dataset.category;
+                console.log('Category clicked:', selectedCategory);
                 
                 // Update active state
                 document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
                 e.target.classList.add('active');
                 
-                this.currentCategory = e.target.dataset.category;
-                this.filterCourses();
+                // Update current category and filter
+                this.currentCategory = selectedCategory;
+                console.log('Updated currentCategory to:', this.currentCategory);
+                
                 this.updateSectionTitle();
+                this.filterCourses();
             }
 
             filterCourses() {
+                console.log('Filtering courses. Category:', this.currentCategory, 'Search:', this.currentSearch);
                 this.showLoading();
                 
                 setTimeout(() => {
@@ -560,9 +589,11 @@ if ($is_logged_in) {
                             course.description.toLowerCase().includes(this.currentSearch) ||
                             course.creator_name.toLowerCase().includes(this.currentSearch);
                         
+                        console.log(`Course: ${course.title}, Category: ${course.category}, Matches Category: ${matchesCategory}, Matches Search: ${matchesSearch}`);
                         return matchesCategory && matchesSearch;
                     });
 
+                    console.log('Filtered courses count:', this.filteredCourses.length);
                     this.hideLoading();
                     this.renderCourses();
                 }, 300);
@@ -608,7 +639,7 @@ if ($is_logged_in) {
                         <div class="course-thumbnail">
                             ${course.thumbnail ? 
                                 `<img src="${course.thumbnail}" alt="${this.escapeHtml(course.title)}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px;">` : 
-                                `<div style="width: 100%; height: 200px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; border-radius: 8px;">📚</div>`
+                                `<div style="width: 100%; height: 200px; background: linear-gradient(135deg, #dc2626, #991b1b); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; border-radius: 8px;">📚</div>`
                             }
                             <span class="course-category-badge">${this.escapeHtml(course.category)}</span>
                         </div>
@@ -725,7 +756,9 @@ if ($is_logged_in) {
 
             updateSectionTitle() {
                 const title = document.getElementById('sectionTitle');
-                title.textContent = this.currentCategory === 'all' ? 'All Courses' : this.currentCategory + ' Courses';
+                const newTitle = this.currentCategory === 'all' ? 'All Courses' : this.currentCategory + ' Courses';
+                title.textContent = newTitle;
+                console.log('Updated section title to:', newTitle);
             }
 
             escapeHtml(text) {
