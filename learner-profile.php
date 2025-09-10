@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'db.php';
+include 'nft_certificate_system.php';
 
 // Check if user is logged in as learner
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'learner') {
@@ -19,13 +20,33 @@ if ($result && mysqli_num_rows($result) > 0) {
     echo "<script>alert('User not found'); window.location.href='login.html';</script>";
     exit();
 }
+
+// Get statistics
+$certificates = getLearnerCertificates($user_id);
+$certificate_count = count($certificates);
+
+// Get completed courses count
+$completed_query = "SELECT COUNT(*) as count FROM enrollments WHERE learner_id = ? AND completed = 1";
+$stmt = $conn->prepare($completed_query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$completed_result = $stmt->get_result();
+$completed_courses = $completed_result->fetch_assoc()['count'];
+
+// Get total enrolled courses count
+$enrolled_query = "SELECT COUNT(*) as count FROM enrollments WHERE learner_id = ?";
+$stmt = $conn->prepare($enrolled_query);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$enrolled_result = $stmt->get_result();
+$enrolled_courses = $enrolled_result->fetch_assoc()['count'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - NFT Learning Platform</title>
+    <title>My Profile - Learnity</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -299,13 +320,14 @@ if ($result && mysqli_num_rows($result) > 0) {
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">🎓 NFT Learning</div>
+            <div class="logo">🎓 Learnity</div>
             <ul class="nav-links">
-                <li><a href="home-learner.php"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="course-browser.php"><i class="fas fa-book"></i> Courses</a></li>
-                <li><a href="learner-profile.php"><i class="fas fa-user"></i> Profile</a></li>
-                <li><a href="nft-search.html"><i class="fas fa-certificate"></i> My NFTs</a></li>
-                <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li><a href="home-learner.php">Home</a></li>
+                <li><a href="course-browser.php">Courses</a></li>
+                <li><a href="learner-profile.php">Profile</a></li>
+                <li><a href="my_certificates.php">My Certificates</a></li>
+                <li><a href="nft-search.php">Search NFT</a></li>
+                <li><a href="login.html">Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -369,20 +391,16 @@ if ($result && mysqli_num_rows($result) > 0) {
             <h2 style="margin-bottom: 2rem; color: #333;">Learning Statistics</h2>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-number">0</div>
+                    <div class="stat-number"><?php echo $completed_courses; ?></div>
                     <div class="stat-label">Courses Completed</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-number">0</div>
+                <div class="stat-card" onclick="window.location.href='my_certificates.php'" style="cursor: pointer;">
+                    <div class="stat-number"><?php echo $certificate_count; ?></div>
                     <div class="stat-label">NFT Certificates</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-number">0</div>
-                    <div class="stat-label">Hours Learned</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">0</div>
-                    <div class="stat-label">Achievements</div>
+                    <div class="stat-number"><?php echo $enrolled_courses; ?></div>
+                    <div class="stat-label">Courses Enrolled</div>
                 </div>
             </div>
         </div>

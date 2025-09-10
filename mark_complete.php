@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'db.php';
+include 'nft_certificate_system.php';
 
 header('Content-Type: application/json');
 
@@ -46,14 +47,34 @@ if ($enrollment['completed']) {
 $update_query = "UPDATE enrollments 
                 SET completed = 1, 
                     completed_at = NOW(), 
-                    progress = 100.00 
+                    progress = 100.00,
+                    completion_date = NOW()
                 WHERE learner_id = '$learner_id' AND course_id = '$course_id'";
 
 if (mysqli_query($conn, $update_query)) {
-    echo json_encode([
+    // Award NFT Certificate automatically upon course completion
+    error_log("Attempting to award NFT certificate for course_id: $course_id, learner_id: $learner_id");
+    $certificate_result = awardNFTCertificate($course_id, $learner_id);
+    error_log("Certificate result: " . json_encode($certificate_result));
+    
+    $response = [
         'success' => true, 
-        'message' => 'Course marked as completed successfully'
-    ]);
+        'message' => 'Course completed successfully!'
+    ];
+    
+    if ($certificate_result && $certificate_result['success']) {
+        $response['certificate_awarded'] = true;
+        $response['nft_key'] = $certificate_result['nft_key'];
+        $response['verification_code'] = $certificate_result['verification_code'];
+        $response['certificate_message'] = 'Congratulations! You have been awarded an NFT certificate!';
+        $response['certificate_url'] = $certificate_result['verification_url'] ?? '';
+    } else {
+        $response['certificate_awarded'] = false;
+        $response['certificate_error'] = $certificate_result['message'] ?? 'Unknown certificate error';
+        error_log("Certificate award failed: " . ($certificate_result['message'] ?? 'No error message'));
+    }
+    
+    echo json_encode($response);
 } else {
     echo json_encode([
         'success' => false, 
@@ -61,23 +82,3 @@ if (mysqli_query($conn, $update_query)) {
     ]);
 }
 ?>
-    exit();
-}
-
-// Get JSON input
-$input = json_decode(file_get_contents('php://input'), true);
-$course_id = intval($input['course_id']);
-$learner_id = intval($input['learner_id']);
-
-// Validate input
-if (!$course_id || !$learner_id) {
-    echo json_encode(['success' => false, 'message' => 'Invalid course or learner ID']);
-    exit();
-}
-
-// Verify the learner matches the session
-if ($learner_id !== $_SESSION['user_id']) {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized access']);
-    exit();
-}
-

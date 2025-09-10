@@ -522,11 +522,11 @@ if ($is_logged_in && $user_role === 'learner') {
                 <?php if ($is_logged_in && $user_role === 'learner'): ?>
                     <li><a href="home-learner.php" class="nav-link">Home</a></li>
                     <li><a href="course-browser.php" class="nav-link">Courses</a></li>
-                    <li><a href="nft-search.html" class="nav-link">Search NFT</a></li>
+                    <li><a href="nft-search.php" class="nav-link">Search NFT</a></li>
                     <li><a href="learner-profile.php" class="nav-link">Profile</a></li>
                     <li><a href="login.html" class="nav-link logout-btn">Logout</a></li>
                 <?php else: ?>
-                    <li><a href="guest.html" class="nav-link">Home</a></li>
+                    <li><a href="guest.php" class="nav-link">Home</a></li>
                     <li><a href="course-browser.php" class="nav-link">Courses</a></li>
                     <li><a href="login.html" class="nav-link">Login</a></li>
                     <li><a href="register.html" class="nav-link">Register</a></li>

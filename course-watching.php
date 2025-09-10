@@ -92,7 +92,7 @@ ob_clean();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($course['course_name']); ?> - NFT Learning Platform</title>
+    <title><?php echo htmlspecialchars($course['course_name']); ?> - Learnity</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -439,7 +439,7 @@ ob_clean();
     <nav class="navbar">
         <div class="nav-container">
             <a href="home-learner.php" class="logo">
-                <i class="fas fa-graduation-cap"></i> NFT Learning
+                <i class="fas fa-graduation-cap"></i> Learnity
             </a>
             <ul class="nav-links">
                 <li><a href="course-browser.php"><i class="fas fa-book"></i> Browse Courses</a></li>
@@ -837,6 +837,7 @@ ob_clean();
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Course completion response:', data); // Debug logging
                 if (data.success) {
                     // Update UI
                     const statusElement = document.getElementById('completionStatus');
@@ -855,16 +856,63 @@ ob_clean();
                         button.disabled = true;
                     }
                     
-                    // Show completion message
+                    // Show completion message with NFT certificate info
                     const completionMessage = document.getElementById('completionMessage');
                     if (completionMessage) {
                         completionMessage.classList.add('show');
+                        
+                        // Add NFT certificate information if awarded
+                        if (data.certificate_awarded && data.nft_key) {
+                            const certificateInfo = document.createElement('div');
+                            certificateInfo.className = 'nft-certificate-info';
+                            certificateInfo.innerHTML = `
+                                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 10px; margin-top: 1rem; text-align: center;">
+                                    <h3><i class="fas fa-certificate"></i> NFT Certificate Awarded!</h3>
+                                    <p style="margin: 1rem 0;">${data.certificate_message}</p>
+                                    <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                                        <strong>Your Unique NFT Key:</strong><br>
+                                        <code style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; display: inline-block; margin-top: 0.5rem; word-break: break-all; font-size: 0.9rem;">${data.nft_key}</code>
+                                    </div>
+                                    <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                                        <strong>Verification Code:</strong><br>
+                                        <code style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 4px; display: inline-block; margin-top: 0.5rem; font-size: 1.1rem; letter-spacing: 2px;">${data.verification_code}</code>
+                                    </div>
+                                    <div style="margin-top: 1rem;">
+                                        <a href="my_certificates.php" style="background: white; color: #667eea; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: bold; margin-right: 1rem;">
+                                            <i class="fas fa-certificate"></i> View My Certificates
+                                        </a>
+                                        <a href="verify_certificate.php?code=${data.verification_code}" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: bold;">
+                                            <i class="fas fa-external-link-alt"></i> Verify Certificate
+                                        </a>
+                                    </div>
+                                </div>
+                            `;
+                            completionMessage.appendChild(certificateInfo);
+                        } else if (data.certificate_awarded === false && data.certificate_error) {
+                            // Show certificate error message
+                            const certificateError = document.createElement('div');
+                            certificateError.className = 'nft-certificate-error';
+                            certificateError.innerHTML = `
+                                <div style="background: #e74c3c; color: white; padding: 1.5rem; border-radius: 10px; margin-top: 1rem; text-align: center;">
+                                    <h3><i class="fas fa-exclamation-triangle"></i> Certificate Issue</h3>
+                                    <p style="margin: 1rem 0;">${data.certificate_error}</p>
+                                    <p style="font-size: 0.9rem; opacity: 0.8;">Don't worry! Your course completion has been recorded. You can contact support for assistance with the certificate.</p>
+                                </div>
+                            `;
+                            completionMessage.appendChild(certificateError);
+                        }
+                        
                         completionMessage.scrollIntoView({ behavior: 'smooth' });
                     }
                     
                     // Add celebration effect
                     setTimeout(() => {
                         document.body.style.animation = 'celebration 1s ease-in-out';
+                        
+                        // Show fireworks effect for NFT certificate
+                        if (data.certificate_awarded) {
+                            showFireworks();
+                        }
                     }, 500);
                 } else {
                     alert('Error marking course as complete: ' + (data.message || 'Unknown error'));

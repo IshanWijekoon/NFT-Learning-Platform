@@ -76,52 +76,27 @@ if ($learner) {
             display: flex;
             list-style: none;
             gap: 30px;
+            align-items: center;
         }
 
-        .nav-link {
+        .nav-menu li {
+            position: relative;
+        }
+
+        .nav-menu a {
             text-decoration: none;
             color: #333;
             font-weight: 500;
-            position: relative;
-            transition: color 0.3s ease;
-            padding: 5px 0;
-        }
-
-        .nav-link:hover {
-            color: #2c5aa0;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #2c5aa0;
-            transition: width 0.3s ease;
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .logout-btn {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
+            font-size: 1rem;
+            padding: 10px 16px;
+            border-radius: 25px;
             transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
         }
 
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
-        }
-
-        .logout-btn::after {
-            display: none;
-        }
+        
 
         .hamburger {
             display: none;
@@ -390,7 +365,7 @@ if ($learner) {
                 flex-direction: column;
                 justify-content: flex-start;
                 align-items: center;
-                gap: 30px;
+                gap: 20px;
                 padding-top: 50px;
                 transition: left 0.3s ease;
                 box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
@@ -398,6 +373,19 @@ if ($learner) {
 
             .nav-menu.active {
                 left: 0;
+            }
+
+            .nav-menu a {
+                width: 80%;
+                text-align: center;
+                padding: 15px 20px;
+                font-size: 1.1rem;
+                margin: 5px 0;
+            }
+
+            .nav-menu a[href="login.html"] {
+                margin-left: 0;
+                margin-top: 20px;
             }
 
             .hamburger {
@@ -475,11 +463,12 @@ if ($learner) {
             <a href="#" class="logo">EduChain</a>
             
             <ul class="nav-menu" id="navMenu">
-                <li><a href="home-learner.php" class="nav-link">Home</a></li>
-                <li><a href="course-browser.php" class="nav-link">Courses</a></li>
-                <li><a href="nft-search.html" class="nav-link">Search NFT</a></li>
-                <li><a href="learner-profile.php" class="nav-link">Profile</a></li>
-                <li><a href="login.html" class="nav-link logout-btn">Logout</a></li>
+                <li><a href="home-learner.php">Home</a></li>
+                    <li><a href="course-browser.php">Courses</a></li>
+                    <li><a href="learner-profile.php">Profile</a></li>
+                    <li><a href="my_certificates.php" class="nav-link">My Certificates</a></li>
+                    <li><a href="nft-search.php">Search NFT</a></li>
+                    <li><a href="login.html">Logout</a></li>
             </ul>
 
             <div class="hamburger" id="hamburger">
@@ -550,88 +539,7 @@ if ($learner) {
         </section>
 
         <!-- Popular Courses Section -->
-        <section class="popular-courses" id="courses">
-            <h2 class="section-title">Popular Courses</h2>
-            <div class="courses-grid">
-                <div class="course-card">
-                    <div class="course-image">🚀</div>
-                    <div class="course-content">
-                        <h3 class="course-title">Complete Web Development Bootcamp</h3>
-                        <p class="course-instructor">By Dr. Angela Yu</p>
-                        <div class="course-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-number">4.8 (125,430)</span>
-                        </div>
-                        <div class="course-price">$89.99</div>
-                    </div>
-                </div>
-                
-                <div class="course-card">
-                    <div class="course-image">⚛️</div>
-                    <div class="course-content">
-                        <h3 class="course-title">React - The Complete Guide</h3>
-                        <p class="course-instructor">By Maximilian Schwarzmüller</p>
-                        <div class="course-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-number">4.7 (89,340)</span>
-                        </div>
-                        <div class="course-price">$94.99</div>
-                    </div>
-                </div>
-                
-                <div class="course-card">
-                    <div class="course-image">🔗</div>
-                    <div class="course-content">
-                        <h3 class="course-title">Blockchain A-Z: Build a Blockchain</h3>
-                        <p class="course-instructor">By Kirill Eremenko</p>
-                        <div class="course-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span class="rating-number">4.5 (23,567)</span>
-                        </div>
-                        <div class="course-price">$129.99</div>
-                    </div>
-                </div>
-                
-                <div class="course-card">
-                    <div class="course-image">🐍</div>
-                    <div class="course-content">
-                        <h3 class="course-title">Python for Data Science</h3>
-                        <p class="course-instructor">By Jose Portilla</p>
-                        <div class="course-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-number">4.6 (67,890)</span>
-                        </div>
-                        <div class="course-price">$79.99</div>
-                    </div>
-                </div>
-                
-                <div class="course-card">
-                    <div class="course-image">🎨</div>
-                    <div class="course-content">
-                        <h3 class="course-title">UI/UX Design Masterclass</h3>
-                        <p class="course-instructor">By Daniel Walter Scott</p>
-                        <div class="course-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span class="rating-number">4.4 (45,123)</span>
-                        </div>
-                        <div class="course-price">$99.99</div>
-                    </div>
-                </div>
-                
-                <div class="course-card">
-                    <div class="course-image">📱</div>
-                    <div class="course-content">
-                        <h3 class="course-title">Flutter & Dart Complete Guide</h3>
-                        <p class="course-instructor">By Maximilian Schwarzmüller</p>
-                        <div class="course-rating">
-                            <span class="stars">★★★★★</span>
-                            <span class="rating-number">4.7 (34,567)</span>
-                        </div>
-                        <div class="course-price">$109.99</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+       
     </main>
 
     <!-- Footer -->
@@ -659,10 +567,23 @@ if ($learner) {
         });
 
         // Close mobile menu when clicking on a link
-        document.querySelectorAll('.nav-link').forEach(link => {
+        document.querySelectorAll('.nav-menu a').forEach(link => {
             link.addEventListener('click', () => {
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
+            });
+        });
+
+        // Set active state for current page
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            
+            navLinks.forEach(link => {
+                const linkPath = new URL(link.href).pathname;
+                if (currentPath.includes(linkPath.split('/').pop()) && linkPath !== '/login.html') {
+                    link.classList.add('active');
+                }
             });
         });
 
