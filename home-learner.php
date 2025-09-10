@@ -24,7 +24,7 @@ if ($learner) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduChain - Learner Dashboard</title>
+    <title>Learner Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -35,8 +35,8 @@ if ($learner) {
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
+            color: #e1e5e9;
+            background: #1a1a1a;
         }
 
         /* Navigation Bar */
@@ -134,8 +134,8 @@ if ($learner) {
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: #f8f9fa;
             padding: 80px 20px;
             text-align: center;
         }
@@ -160,7 +160,7 @@ if ($learner) {
 
         .cta-button {
             display: inline-block;
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             color: white;
             padding: 15px 35px;
             text-decoration: none;
@@ -168,25 +168,26 @@ if ($learner) {
             font-weight: 600;
             font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
         }
 
         .cta-button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.6);
+            background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
         }
 
         /* Categories Section */
         .categories {
             padding: 80px 20px;
-            background: white;
+            background: #2d2d2d;
         }
 
         .section-title {
             text-align: center;
             font-size: 2.5rem;
             font-weight: 600;
-            color: #1e3f73;
+            color: #f8f9fa;
             margin-bottom: 50px;
         }
 
@@ -199,41 +200,42 @@ if ($learner) {
         }
 
         .category-card {
-            background: white;
+            background: #1f1f1f;
             border-radius: 15px;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border: 2px solid rgba(220, 38, 38, 0.2);
         }
 
         .category-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-            border-color: #2c5aa0;
+            box-shadow: 0 15px 40px rgba(220, 38, 38, 0.3);
+            border-color: #dc2626;
+            background: #262626;
         }
 
         .category-icon {
             font-size: 3rem;
             margin-bottom: 20px;
-            color: #2c5aa0;
+            color: #ef4444;
         }
 
         .category-card h3 {
             font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 15px;
-            color: #1e3f73;
+            color: #f8f9fa;
         }
 
         .category-card p {
-            color: #666;
+            color: #d1d5db;
             margin-bottom: 20px;
         }
 
         .explore-btn {
-            background: linear-gradient(135deg, #2c5aa0 0%, #1e3f73 100%);
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
             color: white;
             padding: 10px 20px;
             border: none;
@@ -245,13 +247,14 @@ if ($learner) {
 
         .explore-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(44, 90, 160, 0.3);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.5);
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
         }
 
         /* Popular Courses Section */
         .popular-courses {
             padding: 80px 20px;
-            background: #f8f9fa;
+            background: #1a1a1a;
         }
 
         .courses-grid {
@@ -263,26 +266,28 @@ if ($learner) {
         }
 
         .course-card {
-            background: white;
+            background: #1f1f1f;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
+            border: 1px solid rgba(220, 38, 38, 0.2);
         }
 
         .course-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 35px rgba(220, 38, 38, 0.3);
+            border-color: #dc2626;
         }
 
         .course-image {
             height: 200px;
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 3rem;
-            color: #2c5aa0;
+            color: #f8f9fa;
         }
 
         .course-content {
@@ -293,11 +298,11 @@ if ($learner) {
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 10px;
-            color: #1e3f73;
+            color: #f8f9fa;
         }
 
         .course-instructor {
-            color: #666;
+            color: #d1d5db;
             font-size: 0.9rem;
             margin-bottom: 15px;
         }
@@ -310,26 +315,27 @@ if ($learner) {
         }
 
         .stars {
-            color: #ffc107;
+            color: #fbbf24;
         }
 
         .rating-number {
-            color: #666;
+            color: #d1d5db;
             font-size: 0.9rem;
         }
 
         .course-price {
             font-size: 1.2rem;
             font-weight: 600;
-            color: #2c5aa0;
+            color: #ef4444;
         }
 
         /* Footer */
         footer {
-            background: #1e3f73;
-            color: white;
+            background: #0f0f0f;
+            color: #e1e5e9;
             text-align: center;
             padding: 40px 20px;
+            border-top: 2px solid #dc2626;
         }
 
         footer p {
@@ -344,13 +350,13 @@ if ($learner) {
         }
 
         .footer-links a {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(225, 229, 233, 0.8);
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
         .footer-links a:hover {
-            color: white;
+            color: #ef4444;
         }
 
         /* Responsive Design */
@@ -460,7 +466,7 @@ if ($learner) {
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo">EduChain</a>
+            <a href="#" class="logo">Learnity</a>
             
             <ul class="nav-menu" id="navMenu">
                 <li><a href="home-learner.php">Home</a></li>
@@ -485,7 +491,7 @@ if ($learner) {
         <section class="hero">
             <div class="hero-content">
                 <h1>Welcome back, <?php echo htmlspecialchars($user_name); ?>!</h1>
-                <p>Continue your learning journey with thousands of courses, earn blockchain certificates, and advance your career with EduChain's innovative learning platform.</p>
+                <p>Continue your learning journey with thousands of courses, earn blockchain certificates, and advance your career with Learnity's innovative learning platform.</p>
                 <a href="course-browser.php" class="cta-button">Browse Courses</a>
             </div>
         </section>
@@ -498,42 +504,42 @@ if ($learner) {
                     <div class="category-icon">💻</div>
                     <h3>Web Development</h3>
                     <p>Learn HTML, CSS, JavaScript, React, and more to build modern websites and applications.</p>
-                    <button class="explore-btn" onclick="alert('Exploring Web Development courses...')">Explore</button>
+                    <button class="explore-btn" onclick="window.location.href='course-browser.php'">Explore</button>
                 </div>
                 
                 <div class="category-card">
                     <div class="category-icon">📱</div>
                     <h3>Mobile Development</h3>
                     <p>Create iOS and Android apps using React Native, Flutter, Swift, and Kotlin.</p>
-                    <button class="explore-btn" onclick="alert('Exploring Mobile Development courses...')">Explore</button>
+                    <button class="explore-btn" onclick="window.location.href='course-browser.php'">Explore</button>
                 </div>
                 
                 <div class="category-card">
                     <div class="category-icon">🔗</div>
                     <h3>Blockchain</h3>
                     <p>Master cryptocurrency, smart contracts, DeFi, and blockchain development.</p>
-                    <button class="explore-btn" onclick="alert('Exploring Blockchain courses...')">Explore</button>
+                    <button class="explore-btn" onclick="window.location.href='course-browser.php'">Explore</button>
                 </div>
                 
                 <div class="category-card">
                     <div class="category-icon">📊</div>
                     <h3>Data Science</h3>
                     <p>Analyze data with Python, R, machine learning, and artificial intelligence.</p>
-                    <button class="explore-btn" onclick="alert('Exploring Data Science courses...')">Explore</button>
+                    <button class="explore-btn" onclick="window.location.href='course-browser.php'">Explore</button>
                 </div>
                 
                 <div class="category-card">
                     <div class="category-icon">🎨</div>
                     <h3>Design</h3>
                     <p>Learn UI/UX design, graphic design, and digital marketing strategies.</p>
-                    <button class="explore-btn" onclick="alert('Exploring Design courses...')">Explore</button>
+                    <button class="explore-btn" onclick="window.location.href='course-browser.php'">Explore</button>
                 </div>
                 
                 <div class="category-card">
                     <div class="category-icon">💼</div>
                     <h3>Business</h3>
                     <p>Develop entrepreneurship, management, and leadership skills for success.</p>
-                    <button class="explore-btn" onclick="alert('Exploring Business courses...')">Explore</button>
+                    <button class="explore-btn" onclick="window.location.href='course-browser.php'">Explore</button>
                 </div>
             </div>
         </section>

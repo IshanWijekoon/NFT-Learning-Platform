@@ -47,8 +47,9 @@ try {
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             min-height: 100vh;
+            color: #e1e5e9;
         }
 
         .navbar {
@@ -100,13 +101,18 @@ try {
 
         .header {
             text-align: center;
-            color: white;
+            color: #f8f9fa;
             margin-bottom: 3rem;
         }
 
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
+            color: #f8f9fa;
+        }
+
+        .header p {
+            color: #d1d5db;
         }
 
         .certificates-grid {
@@ -117,22 +123,24 @@ try {
         }
 
         .certificate-card {
-            background: white;
+            background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(220, 38, 38, 0.3);
         }
 
         .certificate-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 20px 40px rgba(220, 38, 38, 0.3);
+            border-color: #dc2626;
         }
 
         .certificate-image {
             width: 100%;
             height: 200px;
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -146,7 +154,7 @@ try {
         }
 
         .certificate-image .placeholder {
-            color: #999;
+            color: #f8f9fa;
             font-size: 3rem;
         }
 
@@ -157,12 +165,12 @@ try {
         .certificate-title {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #333;
+            color: #f8f9fa;
             margin-bottom: 0.5rem;
         }
 
         .certificate-course {
-            color: #667eea;
+            color: #ef4444;
             font-weight: 600;
             margin-bottom: 1rem;
         }
@@ -176,12 +184,12 @@ try {
         }
 
         .detail-label {
-            color: #666;
+            color: #d1d5db;
             font-weight: 500;
         }
 
         .detail-value {
-            color: #333;
+            color: #f8f9fa;
             font-weight: 600;
         }
 
@@ -206,23 +214,25 @@ try {
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
             color: white;
         }
 
         .btn-primary:hover {
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
         }
 
         .btn-secondary {
-            background: #f8f9fa;
-            color: #667eea;
-            border: 1px solid #667eea;
+            background: #374151;
+            color: #e1e5e9;
+            border: 1px solid rgba(220, 38, 38, 0.5);
         }
 
         .btn-secondary:hover {
-            background: #667eea;
+            background: #dc2626;
             color: white;
+            border-color: #dc2626;
         }
 
         .nft-key {
