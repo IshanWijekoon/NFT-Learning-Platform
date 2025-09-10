@@ -1,17 +1,35 @@
 <?php
+// Start output buffering to prevent any accidental output
+ob_start();
+
+// Suppress PHP errors and warnings from being output
+error_reporting(0);
+ini_set('display_errors', 0);
+
 session_start();
 include 'db.php';
 
+// Set proper headers for JSON response
 header('Content-Type: application/json');
+header('Cache-Control: no-cache, must-revalidate');
+
+// Clear any previous output
+if (ob_get_length()) {
+    ob_clean();
+}
 
 // Check if user is logged in as creator
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'creator') {
+    ob_clean();
     echo json_encode(['success' => false, 'message' => 'Not authorized']);
+    ob_end_flush();
     exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    ob_clean();
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+    ob_end_flush();
     exit();
 }
 
@@ -234,8 +252,14 @@ while ($col = mysqli_fetch_assoc($columns_result)) {
 $title_col = in_array('course_name', $columns) ? 'course_name' : 'title';
 $duration_col = in_array('duration', $columns) ? 'duration' : 'duration_hours';
 
-$sql = "INSERT INTO courses (creator_id, $title_col, description, category, price, $duration_col, thumbnail, video_path) 
-        VALUES ('$creator_id', '$courseName', '$description', '$category', '$price', '$duration', '$thumbnailPath', '$videoPath')";
+// Check if nft_certificate_image column exists and include certificate path
+if (in_array('nft_certificate_image', $columns) && $certificatePath) {
+    $sql = "INSERT INTO courses (creator_id, $title_col, description, category, price, $duration_col, thumbnail, video_path, nft_certificate_image) 
+            VALUES ('$creator_id', '$courseName', '$description', '$category', '$price', '$duration', '$thumbnailPath', '$videoPath', '$certificatePath')";
+} else {
+    $sql = "INSERT INTO courses (creator_id, $title_col, description, category, price, $duration_col, thumbnail, video_path) 
+            VALUES ('$creator_id', '$courseName', '$description', '$category', '$price', '$duration', '$thumbnailPath', '$videoPath')";
+}
 
 if (mysqli_query($conn, $sql)) {
     $course_id = mysqli_insert_id($conn);
@@ -375,6 +399,29 @@ if (isset($_FILES['courseThumbnail'])) {
     }
 }
 
+// Handle NFT certificate upload for thumbnail-only path
+$certificatePath = null;
+if (isset($_FILES['nftCertificate'])) {
+    $certificate = $_FILES['nftCertificate'];
+    $certUploadDir = 'uploads/nft_certificates/';
+    
+    // Create unique filename for certificate
+    $certFileExtension = pathinfo($certificate['name'], PATHINFO_EXTENSION);
+    $uniqueCertFilename = 'cert_' . $creator_id . '_' . time() . '_' . uniqid() . '.' . $certFileExtension;
+    $certificatePath = $certUploadDir . $uniqueCertFilename;
+    
+    // Create directory if it doesn't exist
+    if (!file_exists($certUploadDir)) {
+        mkdir($certUploadDir, 0777, true);
+    }
+    
+    // Move uploaded certificate file
+    if (!move_uploaded_file($certificate['tmp_name'], $certificatePath)) {
+        echo json_encode(['success' => false, 'message' => 'Failed to upload NFT certificate']);
+        exit();
+    }
+}
+
 // Insert course into database - using dynamic column detection
 $check_columns = "SHOW COLUMNS FROM courses";
 $columns_result = mysqli_query($conn, $check_columns);
@@ -387,8 +434,14 @@ while ($col = mysqli_fetch_assoc($columns_result)) {
 $title_col = in_array('course_name', $columns) ? 'course_name' : 'title';
 $duration_col = in_array('duration', $columns) ? 'duration' : 'duration_hours';
 
-$sql = "INSERT INTO courses (creator_id, $title_col, description, category, price, $duration_col, thumbnail, video_path) 
-        VALUES ('$creator_id', '$courseName', '$description', '$category', '$price', '$duration', '$thumbnailPath', '$videoPath')";
+// Check if nft_certificate_image column exists and include certificate path
+if (in_array('nft_certificate_image', $columns) && $certificatePath) {
+    $sql = "INSERT INTO courses (creator_id, $title_col, description, category, price, $duration_col, thumbnail, video_path, nft_certificate_image) 
+            VALUES ('$creator_id', '$courseName', '$description', '$category', '$price', '$duration', '$thumbnailPath', '$videoPath', '$certificatePath')";
+} else {
+    $sql = "INSERT INTO courses (creator_id, $title_col, description, category, price, $duration_col, thumbnail, video_path) 
+            VALUES ('$creator_id', '$courseName', '$description', '$category', '$price', '$duration', '$thumbnailPath', '$videoPath')";
+}
 
 if (mysqli_query($conn, $sql)) {
     $course_id = mysqli_insert_id($conn);
@@ -417,6 +470,11 @@ if (mysqli_query($conn, $sql)) {
     if ($videoPath && file_exists($videoPath)) {
         unlink($videoPath);
     }
+    // Clean output buffer and send JSON response
+    ob_clean();
     echo json_encode(['success' => false, 'message' => 'Database error: ' . mysqli_error($conn)]);
 }
+
+// Clean output buffer before ending
+ob_end_clean();
 ?>

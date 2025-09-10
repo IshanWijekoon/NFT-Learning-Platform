@@ -14,8 +14,8 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
+            color: #e0e0e0;
+            background: #121212;
         }
 
         /* Navigation Bar */
@@ -25,8 +25,9 @@
             left: 0;
             right: 0;
             background                    <a href="course-management.php" class="cta-btn-primary">Start Teaching Today</a> white;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 15px rgba(255, 255, 255, 0.1);
             z-index: 1000;
+            background: #ffffffff;
             padding: 0 20px;
             transition: all 0.3s ease;
         }
@@ -43,14 +44,9 @@
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #2c5aa0;
-            text-decoration: none;
-            transition: color 0.3s ease;
+            color: black;
         }
 
-        .logo:hover {
-            color: #1e3f73;
-        }
 
         .nav-menu {
             display: flex;
@@ -144,7 +140,7 @@
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             color: white;
             padding: 80px 20px;
             min-height: 90vh;
@@ -205,14 +201,14 @@
             width: 100%;
             max-width: 500px;
             height: 400px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 6rem;
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             transition: transform 0.3s ease;
         }
 
@@ -223,7 +219,7 @@
         /* Features Section */
         .features {
             padding: 100px 20px;
-            background: white;
+            background: #1e1e1e;
         }
 
         .features-container {
@@ -235,14 +231,14 @@
             text-align: center;
             font-size: 2.8rem;
             font-weight: 600;
-            color: #1e3f73;
+            color: #ffffff;
             margin-bottom: 20px;
         }
 
         .section-subtitle {
             text-align: center;
             font-size: 1.2rem;
-            color: #666;
+            color: #b0b0b0;
             margin-bottom: 60px;
             max-width: 600px;
             margin-left: auto;
@@ -256,11 +252,11 @@
         }
 
         .feature-card {
-            background: white;
+            background: #2a2a2a;
             border-radius: 20px;
             padding: 40px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
             border: 2px solid transparent;
             position: relative;
@@ -274,20 +270,20 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(135deg, #2c5aa0 0%, #1e3f73 100%);
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
         }
 
         .feature-card:hover {
             transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-            border-color: #2c5aa0;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            border-color: #4a90e2;
         }
 
         .feature-icon {
             width: 80px;
             height: 80px;
             margin: 0 auto 25px;
-            background: linear-gradient(135deg, #2c5aa0 0%, #1e3f73 100%);
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -305,11 +301,11 @@
             font-size: 1.6rem;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #1e3f73;
+            color: #ffffff;
         }
 
         .feature-card p {
-            color: #666;
+            color: #b0b0b0;
             line-height: 1.7;
             margin-bottom: 25px;
         }
@@ -335,7 +331,7 @@
 
         /* Call to Action Section */
         .cta-section {
-            background: linear-gradient(135deg, #1e3f73 0%, #2c5aa0 100%);
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
             color: white;
             padding: 80px 20px;
             text-align: center;
@@ -406,7 +402,7 @@
 
         /* Footer */
         footer {
-            background: #1e3f73;
+            background: #0a0a0a;
             color: white;
             padding: 50px 20px 30px;
         }
@@ -586,14 +582,14 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo">EduChain</a>
+              <a href="#" class="logo">Learnity</a>
             
             <ul class="nav-menu" id="navMenu">
                  <li><a href="home-creater.html" class="nav-link">Home</a></li>
                 <li><a href="course-browser-creator.php" class="nav-link">Courses</a></li>
                 <li><a href="course-management.php" class="nav-link">Course Management</a></li>
                 <li><a href="creator-profile.php" class="nav-link">Profile</a></li>
-                <li><a href="#" class="nav-link">Search NFT</a></li>
+                <li><a href="nft-search.php" class="nav-link">Search NFT</a></li>
                 <li><a href="login.html" class="nav-link logout-btn">Logout</a></li>
             </ul>
 

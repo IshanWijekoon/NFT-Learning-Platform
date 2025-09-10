@@ -13,18 +13,19 @@
 
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 20px;
+        color: #e0e0e0;
       }
 
       .login-container {
-        background: white;
+        background: #1e1e1e;
         border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         overflow: hidden;
         width: 100%;
         max-width: 450px;
@@ -37,7 +38,7 @@
       }
 
       .form-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
         color: white;
         padding: 40px 30px;
         text-align: center;
@@ -67,7 +68,7 @@
         display: block;
         margin-bottom: 8px;
         font-weight: 500;
-        color: #333;
+        color: #ffffff;
         font-size: 0.95rem;
       }
 
@@ -75,25 +76,30 @@
       .form-group select {
         width: 100%;
         padding: 12px 16px;
-        border: 2px solid #e1e5e9;
+        border: 2px solid #444444;
         border-radius: 10px;
         font-size: 1rem;
         transition: all 0.3s ease;
-        background: #f8f9fa;
+        background: #2a2a2a;
+        color: #e0e0e0;
       }
 
       .form-group input:focus,
       .form-group select:focus {
         outline: none;
-        border-color: #667eea;
-        background: white;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        border-color: #4a90e2;
+        background: #3a3a3a;
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
       }
 
       .form-group input:hover,
       .form-group select:hover {
-        border-color: #ced4da;
-        background: white;
+        border-color: #555555;
+        background: #3a3a3a;
+      }
+
+      .form-group input::placeholder {
+        color: #888888;
       }
 
       .password-input-container {
@@ -115,7 +121,7 @@
       }
 
       .password-toggle:hover {
-        color: #667eea;
+        color: #4a90e2;
       }
 
       .role-select {
@@ -130,7 +136,7 @@
       .login-btn {
         width: 100%;
         padding: 15px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
         color: white;
         border: none;
         border-radius: 10px;
@@ -144,7 +150,7 @@
 
       .login-btn:hover:not(:disabled) {
         transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 10px 20px rgba(74, 144, 226, 0.3);
       }
 
       .login-btn:disabled {
@@ -181,13 +187,13 @@
       }
 
       .error-message {
-        background: #f8d7da;
-        color: #721c24;
+        background: #b71c1c;
+        color: #ffcdd2;
         padding: 12px 16px;
         border-radius: 8px;
         margin-top: 20px;
         font-size: 0.9rem;
-        border-left: 4px solid #dc3545;
+        border-left: 4px solid #f44336;
         display: none;
         opacity: 0;
         transform: translateY(-10px);
@@ -204,11 +210,11 @@
         text-align: center;
         margin-top: 25px;
         padding-top: 25px;
-        border-top: 1px solid #e9ecef;
+        border-top: 1px solid #444444;
       }
 
       .form-links a {
-        color: #667eea;
+        color: #4a90e2;
         text-decoration: none;
         font-weight: 500;
         margin: 0 10px;
@@ -222,7 +228,7 @@
         text-align: center;
         margin-top: 20px;
         padding-top: 20px;
-        border-top: 1px solid #e9ecef;
+        border-top: 1px solid #444444;
       }
 
       .guest-btn {
@@ -244,7 +250,7 @@
       }
 
       .guest-text {
-        color: #6c757d;
+        color: #b0b0b0;
         font-size: 0.9rem;
         margin-bottom: 10px;
       }
@@ -255,30 +261,30 @@
       }
 
       .forgot-password a {
-        color: #6c757d;
+        color: #b0b0b0;
         text-decoration: none;
         font-size: 0.9rem;
       }
 
       .forgot-password a:hover {
-        color: #667eea;
+        color: #4a90e2;
         text-decoration: underline;
       }
 
       /* Field validation styles */
       .form-group input.error,
       .form-group select.error {
-        border-color: #dc3545;
-        background: #fff5f5;
+        border-color: #f44336;
+        background: #3d1a1a;
       }
 
       .form-group input.valid,
       .form-group select.valid {
-        border-color: #28a745;
+        border-color: #4caf50;
       }
 
       .field-error {
-        color: #dc3545;
+        color: #f44336;
         font-size: 0.875rem;
         margin-top: 5px;
         display: none;
@@ -433,7 +439,7 @@
 
         <div class="guest-section">
           <p class="guest-text">Want to explore without signing up?</p>
-          <a href="guest.html" class="guest-btn">🌟 Enter as Guest</a>
+          <a href="guest.php" class="guest-btn" onclick="window.location.href='guest.php'; return false;">🌟 Enter as Guest</a>
         </div>
       </div>
     </div>

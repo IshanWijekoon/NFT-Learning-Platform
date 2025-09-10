@@ -837,6 +837,7 @@ ob_clean();
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Course completion response:', data); // Debug logging
                 if (data.success) {
                     // Update UI
                     const statusElement = document.getElementById('completionStatus');
@@ -887,6 +888,18 @@ ob_clean();
                                 </div>
                             `;
                             completionMessage.appendChild(certificateInfo);
+                        } else if (data.certificate_awarded === false && data.certificate_error) {
+                            // Show certificate error message
+                            const certificateError = document.createElement('div');
+                            certificateError.className = 'nft-certificate-error';
+                            certificateError.innerHTML = `
+                                <div style="background: #e74c3c; color: white; padding: 1.5rem; border-radius: 10px; margin-top: 1rem; text-align: center;">
+                                    <h3><i class="fas fa-exclamation-triangle"></i> Certificate Issue</h3>
+                                    <p style="margin: 1rem 0;">${data.certificate_error}</p>
+                                    <p style="font-size: 0.9rem; opacity: 0.8;">Don't worry! Your course completion has been recorded. You can contact support for assistance with the certificate.</p>
+                                </div>
+                            `;
+                            completionMessage.appendChild(certificateError);
                         }
                         
                         completionMessage.scrollIntoView({ behavior: 'smooth' });

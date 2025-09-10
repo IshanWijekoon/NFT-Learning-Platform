@@ -32,25 +32,26 @@ if ($verification_code) {
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 2rem;
+            color: #e0e0e0;
         }
 
         .verification-container {
-            background: white;
+            background: #1e1e1e;
             border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             max-width: 800px;
             width: 100%;
             overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -77,25 +78,31 @@ if ($verification_code) {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 600;
-            color: #333;
+            color: #ffffff;
         }
 
         .form-group input {
             width: 100%;
             padding: 0.75rem;
-            border: 2px solid #ddd;
+            border: 2px solid #444444;
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s;
+            background: #2a2a2a;
+            color: #e0e0e0;
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #4a90e2;
+        }
+
+        .form-group input::placeholder {
+            color: #888888;
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
@@ -110,7 +117,7 @@ if ($verification_code) {
         }
 
         .certificate-display {
-            background: #f8f9fa;
+            background: #2a2a2a;
             border-radius: 10px;
             padding: 2rem;
             margin-top: 2rem;
@@ -136,43 +143,43 @@ if ($verification_code) {
         }
 
         .detail-item {
-            background: white;
+            background: #3a3a3a;
             padding: 1rem;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
 
         .detail-label {
             font-weight: 600;
-            color: #667eea;
+            color: #4a90e2;
             margin-bottom: 0.5rem;
         }
 
         .detail-value {
-            color: #333;
+            color: #ffffff;
             word-break: break-all;
         }
 
         .verification-status {
-            background: #d4edda;
-            color: #155724;
+            background: #1b5e20;
+            color: #a5d6a7;
             padding: 1rem;
             border-radius: 8px;
-            border-left: 4px solid #28a745;
+            border-left: 4px solid #4caf50;
             margin-bottom: 2rem;
         }
 
         .error-message {
-            background: #f8d7da;
-            color: #721c24;
+            background: #b71c1c;
+            color: #ffcdd2;
             padding: 1rem;
             border-radius: 8px;
-            border-left: 4px solid #dc3545;
+            border-left: 4px solid #f44336;
             margin-bottom: 2rem;
         }
 
         .blockchain-info {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
             color: white;
             padding: 1.5rem;
             border-radius: 10px;
@@ -186,8 +193,8 @@ if ($verification_code) {
         .footer {
             text-align: center;
             padding: 2rem;
-            background: #f8f9fa;
-            color: #666;
+            background: #2a2a2a;
+            color: #b0b0b0;
         }
     </style>
 </head>
@@ -275,9 +282,7 @@ if ($verification_code) {
                     </div>
                 </div>
 
-                <div style="text-align: center; margin-top: 2rem;">
-                    <a href="verify_certificate.php" class="btn">Verify Another Certificate</a>
-                </div>
+                
             <?php endif; ?>
         </div>
 

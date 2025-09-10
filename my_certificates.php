@@ -20,7 +20,16 @@ $learner_result = $stmt->get_result();
 $learner = $learner_result->fetch_assoc();
 
 // Get all certificates for this learner
-$certificates = getLearnerCertificates($learner_id);
+try {
+    $certificates = getLearnerCertificates($learner_id);
+    if ($certificates === false) {
+        $certificates = [];
+        $cert_error = "Unable to load certificates. Please try again later.";
+    }
+} catch (Exception $e) {
+    $certificates = [];
+    $cert_error = "Database error loading certificates: " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -302,11 +311,12 @@ $certificates = getLearnerCertificates($learner_id);
         <div class="nav-container">
             <div class="logo">🎓 Learnity</div>
             <div class="nav-links">
-                <a href="home-learner.php"><i class="fas fa-home"></i> Dashboard</a>
-                <a href="course-browser.php"><i class="fas fa-search"></i> Browse Courses</a>
-                <a href="my_certificates.php"><i class="fas fa-certificate"></i> My Certificates</a>
-                <a href="learner-profile.php"><i class="fas fa-user"></i> Profile</a>
-                <a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="home-learner.php">Home</a>
+                <a href="course-browser.php">Courses</a>
+                <a href="learner-profile.php">Profile</a>
+                <a href="my_certificates.php">My Certificates</a>
+                <a href="nft-search.php">Search NFT</a>
+                <a href="login.html">Logout</a>
             </div>
         </div>
     </nav>
@@ -321,14 +331,6 @@ $certificates = getLearnerCertificates($learner_id);
             <div class="stat-card">
                 <div class="stat-number"><?php echo count($certificates); ?></div>
                 <div class="stat-label">Total Certificates</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number"><?php echo count(array_filter($certificates, function($c) { return $c['status'] === 'verified'; })); ?></div>
-                <div class="stat-label">Verified Certificates</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number"><?php echo array_sum(array_column($certificates, 'verification_count')); ?></div>
-                <div class="stat-label">Total Verifications</div>
             </div>
         </div>
 
@@ -380,9 +382,7 @@ $certificates = getLearnerCertificates($learner_id);
                                     </a>
                                 <?php endif; ?>
                                 
-                                <button class="btn btn-secondary" onclick="copyToClipboard('<?php echo $cert['verification_code']; ?>')">
-                                    <i class="fas fa-copy"></i> Copy Code
-                                </button>
+                                
                                 
                                 <button class="btn btn-secondary" onclick="showNFTKey(this)" data-key="<?php echo htmlspecialchars($cert['nft_key']); ?>">
                                     <i class="fas fa-key"></i> NFT Key

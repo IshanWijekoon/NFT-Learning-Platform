@@ -81,7 +81,14 @@ function awardNFTCertificate($course_id, $learner_id) {
         // Check if course has NFT certificate template
         if (empty($course['nft_certificate_image'])) {
             $conn->rollback();
-            return ['success' => false, 'message' => 'No NFT certificate template found for this course'];
+            error_log("No NFT certificate template for course ID: $course_id");
+            return ['success' => false, 'message' => 'No NFT certificate template found for this course. Please contact the course creator.'];
+        }
+        
+        // Check if certificate template file exists
+        if (!file_exists($course['nft_certificate_image'])) {
+            error_log("Certificate template file not found: " . $course['nft_certificate_image']);
+            return ['success' => false, 'message' => 'Certificate template file is missing. Please contact the course creator.'];
         }
         
         // Generate unique identifiers
@@ -194,25 +201,44 @@ function checkCourseCompletion($course_id, $learner_id) {
 function getLearnerCertificates($learner_id) {
     global $conn;
     
-    $stmt = $conn->prepare("
-        SELECT nc.*, nv.verification_code, nv.verification_count, c.course_name, c.category
-        FROM nft_certificates nc
-        LEFT JOIN nft_verifications nv ON nc.id = nv.certificate_id
-        LEFT JOIN courses c ON nc.course_id = c.id
-        WHERE nc.learner_id = ?
-        ORDER BY nc.issued_at DESC
-    ");
-    $stmt->bind_param("i", $learner_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    $certificates = [];
-    while ($row = $result->fetch_assoc()) {
-        $certificates[] = $row;
+    try {
+        // Check if tables exist first
+        $tables_check = mysqli_query($conn, "SHOW TABLES LIKE 'nft_certificates'");
+        if (mysqli_num_rows($tables_check) == 0) {
+            error_log("NFT certificates table does not exist");
+            return [];
+        }
+        
+        $stmt = $conn->prepare("
+            SELECT nc.*, nv.verification_code, nv.verification_count, c.course_name, c.category
+            FROM nft_certificates nc
+            LEFT JOIN nft_verifications nv ON nc.id = nv.certificate_id
+            LEFT JOIN courses c ON nc.course_id = c.id
+            WHERE nc.learner_id = ?
+            ORDER BY nc.issued_at DESC
+        ");
+        
+        if (!$stmt) {
+            error_log("Failed to prepare certificate query: " . mysqli_error($conn));
+            return [];
+        }
+        
+        $stmt->bind_param("i", $learner_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $certificates = [];
+        while ($row = $result->fetch_assoc()) {
+            $certificates[] = $row;
+        }
+        
+        $stmt->close();
+        return $certificates;
+        
+    } catch (Exception $e) {
+        error_log("Error in getLearnerCertificates: " . $e->getMessage());
+        return [];
     }
-    
-    $stmt->close();
-    return $certificates;
 }
 
 /**

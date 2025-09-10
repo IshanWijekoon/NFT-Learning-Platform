@@ -376,13 +376,14 @@ if ($is_logged_in) {
             <div class="logo">🎓 NFT Learning</div>
             <ul class="nav-links">
                 <?php if ($is_logged_in && $user_role === 'learner'): ?>
-                    <li><a href="home-learner.php"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="course-browser.php"><i class="fas fa-book"></i> Courses</a></li>
-                    <li><a href="learner-profile.php"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="nft-search.php"><i class="fas fa-certificate"></i> Search NFT</a></li>
-                    <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    <li><a href="home-learner.php">Home</a></li>
+                    <li><a href="course-browser.php">Courses</a></li>
+                    <li><a href="learner-profile.php">Profile</a></li>
+                    <li><a href="my_certificates.php" class="nav-link">My Certificates</a></li>
+                    <li><a href="nft-search.php">Search NFT</a></li>
+                    <li><a href="login.html">Logout</a></li>
                 <?php else: ?>
-                    <li><a href="guest.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="guest.php"><i class="fas fa-home"></i> Home</a></li>
                     <li><a href="course-browser.php"><i class="fas fa-book"></i> Browse Courses</a></li>
                     <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
                     <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>

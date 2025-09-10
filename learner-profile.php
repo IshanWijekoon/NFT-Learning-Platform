@@ -322,11 +322,12 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
         <div class="nav-container">
             <div class="logo">🎓 Learnity</div>
             <ul class="nav-links">
-                <li><a href="home-learner.php"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="course-browser.php"><i class="fas fa-book"></i> Courses</a></li>
-                <li><a href="learner-profile.php"><i class="fas fa-user"></i> Profile</a></li>
-                <li><a href="my_certificates.php"><i class="fas fa-certificate"></i> My Certificates</a></li>
-                <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li><a href="home-learner.php">Home</a></li>
+                <li><a href="course-browser.php">Courses</a></li>
+                <li><a href="learner-profile.php">Profile</a></li>
+                <li><a href="my_certificates.php">My Certificates</a></li>
+                <li><a href="nft-search.php">Search NFT</a></li>
+                <li><a href="login.html">Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -400,10 +401,6 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
                 <div class="stat-card">
                     <div class="stat-number"><?php echo $enrolled_courses; ?></div>
                     <div class="stat-label">Courses Enrolled</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number"><?php echo $certificate_count; ?></div>
-                    <div class="stat-label">Achievements</div>
                 </div>
             </div>
         </div>

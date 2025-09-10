@@ -14,16 +14,24 @@ $admin_query = "SELECT full_name, email FROM admins WHERE id = '$admin_id'";
 $admin_result = mysqli_query($conn, $admin_query);
 $admin = mysqli_fetch_assoc($admin_result);
 
-// Get dashboard statistics
-// Total Users (Creators + Learners)
+// ==============================================
+// DASHBOARD STATISTICS CALCULATION
+// ==============================================
+
+// CREATOR MANAGEMENT: Get total number of creators
+// This query counts all registered creators in the system for dashboard display
 $creators_query = "SELECT COUNT(*) as count FROM creators";
 $creators_result = mysqli_query($conn, $creators_query);
 $creators_count = mysqli_fetch_assoc($creators_result)['count'];
 
+// LEARNER MANAGEMENT: Get total number of learners
+// This query counts all registered learners in the system for dashboard display
 $learners_query = "SELECT COUNT(*) as count FROM learners";
 $learners_result = mysqli_query($conn, $learners_query);
 $learners_count = mysqli_fetch_assoc($learners_result)['count'];
 
+// COMBINED USER STATISTICS: Calculate total platform users
+// Combines creators and learners for overall platform growth metrics
 $total_users = $creators_count + $learners_count;
 
 // Active Courses (Published courses)
@@ -31,30 +39,55 @@ $active_courses_query = "SELECT COUNT(*) as count FROM courses WHERE status = 'p
 $active_courses_result = mysqli_query($conn, $active_courses_query);
 $active_courses = mysqli_fetch_assoc($active_courses_result)['count'];
 
-// NFT Certificates (Completed enrollments)
+// ==============================================
+// NFT CERTIFICATE TRACKING
+// ==============================================
+// NFT CERTIFICATES COUNT: Total certificates issued for completed courses
+// Counts all enrollments where learner has completed the course (completed = 1)
+// This represents the total number of NFT certificates that can be issued
 $nft_certificates_query = "SELECT COUNT(*) as count FROM enrollments WHERE completed = 1";
 $nft_certificates_result = mysqli_query($conn, $nft_certificates_query);
 $nft_certificates = mysqli_fetch_assoc($nft_certificates_result)['count'];
 
-// Recent Activity (Last 20 activities) - with pagination support
+// ==============================================
+// RECENT ACTIVITY FEED MANAGEMENT
+// ==============================================
+// Provides paginated activity feed for the admin dashboard
+// Shows recent enrollments, course creations, and course completions
+
+// ACTIVITY PAGINATION: Set items per page for activity feed
 $activities_per_page = 5;
+
+// PAGE VALIDATION: Get current page number, ensure minimum value is 1
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+
+// PAGINATION OFFSET: Calculate database offset for LIMIT clause
 $offset = ($page - 1) * $activities_per_page;
 
-// Get total count for pagination
+// ==============================================
+// ACTIVITY COUNT QUERY FOR PAGINATION
+// ==============================================
+// TOTAL ACTIVITY COUNT: Count all platform activities for pagination calculation
+// Combines three types of activities:
+// 1. Course enrollments
+// 2. New course creations  
+// 3. Course completions
 $total_activities_query = "
     SELECT COUNT(*) as total FROM (
+        -- Count course enrollments
         SELECT e.enrolled_at as created_at FROM enrollments e
         JOIN learners l ON e.learner_id = l.id
         JOIN courses c ON e.course_id = c.id
         
         UNION ALL
         
+        -- Count new course creations
         SELECT c.created_at FROM courses c
         JOIN creators cr ON c.creator_id = cr.id
         
         UNION ALL
         
+        -- Count course completions (only where completion date exists)
         SELECT e.completed_at as created_at FROM enrollments e
         JOIN learners l ON e.learner_id = l.id
         JOIN courses c ON e.course_id = c.id
@@ -63,9 +96,20 @@ $total_activities_query = "
 ";
 $total_result = mysqli_query($conn, $total_activities_query);
 $total_activities = mysqli_fetch_assoc($total_result)['total'];
+
+// PAGINATION PAGES: Calculate total number of pages needed
 $total_pages = ceil($total_activities / $activities_per_page);
 
+// ==============================================
+// MAIN ACTIVITY FEED QUERY
+// ==============================================
+// ACTIVITY FEED QUERY: Retrieve recent platform activities with pagination
+// Combines three activity types with standardized output format:
+// 1. Course enrollments - learner enrolls in a course
+// 2. Course creations - creator publishes a new course
+// 3. Course completions - learner completes a course and earns certificate
 $recent_activity_query = "
+    -- ENROLLMENT ACTIVITIES: When learners enroll in courses
     SELECT 'enrollment' as action_type, 
            l.full_name as user_name, 
            c.course_name as item_name,
@@ -77,6 +121,7 @@ $recent_activity_query = "
     
     UNION ALL
     
+    -- COURSE CREATION ACTIVITIES: When creators publish new courses
     SELECT 'course_creation' as action_type,
            cr.full_name as user_name,
            c.course_name as item_name,
@@ -87,6 +132,7 @@ $recent_activity_query = "
     
     UNION ALL
     
+    -- COMPLETION ACTIVITIES: When learners complete courses (NFT certificate eligible)
     SELECT 'completion' as action_type,
            l.full_name as user_name,
            c.course_name as item_name,
@@ -97,105 +143,183 @@ $recent_activity_query = "
     JOIN courses c ON e.course_id = c.id
     WHERE e.completed = 1 AND e.completed_at IS NOT NULL
     
+    -- Sort by most recent activity first and apply pagination
     ORDER BY created_at DESC
     LIMIT $activities_per_page OFFSET $offset
 ";
+
+// ==============================================
+// EXECUTE ACTIVITY QUERY & BUILD RESULTS
+// ==============================================
+// Execute activity query and populate results array for dashboard display
 $recent_activity_result = mysqli_query($conn, $recent_activity_query);
 $recent_activities = [];
+
 if ($recent_activity_result) {
+    // POPULATE ACTIVITY ARRAY: Build array of recent activities for template rendering
     while ($row = mysqli_fetch_assoc($recent_activity_result)) {
         $recent_activities[] = $row;
     }
 }
 
-// User Management Statistics
-// Total Creators
+// ==============================================
+// USER MANAGEMENT STATISTICS & ANALYTICS
+// ==============================================
+// This section calculates key user metrics for the admin dashboard
+// Provides insights into platform usage and growth trends
+
+// CREATOR COUNT: Total number of registered creators
+// Re-uses the previously calculated creators count for dashboard display
 $total_creators = $creators_count; // Already calculated above
 
-// Total Learners
+// LEARNER COUNT: Total number of registered learners
+// Re-uses the previously calculated learners count for dashboard display
 $total_learners = $learners_count; // Already calculated above
 
-// Active Today (users with recent activity)
+// ==============================================
+// DAILY ACTIVITY TRACKING
+// ==============================================
+// ACTIVE USERS TODAY: Users who performed any action today
+// Tracks platform engagement by counting users who:
+// 1. Enrolled in courses today
+// 2. Created courses today
+// 3. Completed courses today
 $active_today_query = "
     SELECT COUNT(DISTINCT user_id) as count FROM (
+        -- Learners who enrolled in courses today
         SELECT learner_id as user_id FROM enrollments WHERE DATE(enrolled_at) = CURDATE()
         UNION
+        -- Creators who published courses today
         SELECT creator_id as user_id FROM courses WHERE DATE(created_at) = CURDATE()
         UNION
+        -- Learners who completed courses today
         SELECT learner_id as user_id FROM enrollments WHERE completed = 1 AND DATE(completed_at) = CURDATE()
     ) as active_users
 ";
 $active_today_result = mysqli_query($conn, $active_today_query);
 $active_today = mysqli_fetch_assoc($active_today_result)['count'];
 
-// New This Week (users registered in the last 7 days)
+// ==============================================
+// WEEKLY GROWTH TRACKING
+// ==============================================
+// NEW REGISTRATIONS THIS WEEK: Platform growth metric
+// Combines new creator and learner registrations from the past 7 days
+// Used to track user acquisition and platform growth trends
 $new_this_week_query = "
     SELECT COUNT(*) as count FROM (
+        -- New creators registered in the last 7 days
         SELECT created_at FROM creators WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
         UNION ALL
+        -- New learners registered in the last 7 days
         SELECT created_at FROM learners WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
     ) as new_users
 ";
 $new_this_week_result = mysqli_query($conn, $new_this_week_query);
 $new_this_week = mysqli_fetch_assoc($new_this_week_result)['count'];
 
-// Users pagination
+// ==============================================
+// USER MANAGEMENT PAGINATION & FILTERING
+// ==============================================
+// Handles displaying users in manageable chunks with filtering options
+
+// PAGINATION CONFIGURATION: Set number of users to display per page
 $users_per_page = 5;
+
+// CURRENT PAGE VALIDATION: Get and validate current page number
+// Ensures page number is always at least 1 to prevent invalid queries
 $user_page = isset($_GET['user_page']) ? max(1, intval($_GET['user_page'])) : 1;
+
+// PAGINATION OFFSET CALCULATION: Calculate database offset for LIMIT clause
 $user_offset = ($user_page - 1) * $users_per_page;
+
+// USER ROLE FILTER: Get selected filter (all users, creators only, or learners only)
 $user_filter = isset($_GET['user_filter']) ? $_GET['user_filter'] : 'all';
 
-// Build user filter conditions
+// ==============================================
+// FILTER CONDITION BUILDER
+// ==============================================
+// BUILD DYNAMIC WHERE CLAUSE: Create filter condition based on user selection
+// Allows admin to view all users, only creators, or only learners
 $user_filter_condition = "";
 if ($user_filter == 'creators') {
     $user_filter_condition = "WHERE role = 'creator'";
 } elseif ($user_filter == 'learners') {
     $user_filter_condition = "WHERE role = 'learner'";
 }
+// Note: No condition added for 'all' filter - shows all users
 
-// Get total count for users pagination
+// ==============================================
+// PAGINATION COUNT QUERY
+// ==============================================
+// TOTAL USER COUNT: Get total number of users matching current filter
+// Combines creators and learners tables, then applies filter
+// Used to calculate total number of pages needed for pagination
 $total_users_query = "
     SELECT COUNT(*) as total FROM (
+        -- Get all creators with standardized role field
         SELECT id, full_name, email, created_at, 'creator' as role FROM creators
         UNION ALL
+        -- Get all learners with standardized role field
         SELECT id, full_name, email, created_at, 'learner' as role FROM learners
     ) as all_users
     $user_filter_condition
 ";
 $total_users_result = mysqli_query($conn, $total_users_query);
 $total_users_count = mysqli_fetch_assoc($total_users_result)['total'];
+
+// PAGINATION CALCULATION: Calculate total number of pages needed
 $total_user_pages = ceil($total_users_count / $users_per_page);
 
-// Get users with pagination and filtering
+// ==============================================
+// MAIN USER LISTING QUERY WITH ACTIVITY METRICS
+// ==============================================
+// Builds different queries based on selected filter and includes activity data
+
 if ($user_filter == 'creators') {
+    // CREATORS ONLY QUERY: Show only creators with their course statistics
+    // Includes course count and last course creation activity
     $users_query = "
         SELECT id, full_name, email, created_at, 'creator' as role,
+               -- Count total courses created by this creator
                (SELECT COUNT(*) FROM courses WHERE creator_id = creators.id) as course_count,
+               -- Get timestamp of most recently created course
                (SELECT MAX(created_at) FROM courses WHERE creator_id = creators.id) as last_activity
         FROM creators
         ORDER BY created_at DESC
         LIMIT $users_per_page OFFSET $user_offset
     ";
+    
 } elseif ($user_filter == 'learners') {
+    // LEARNERS ONLY QUERY: Show only learners with their enrollment statistics
+    // Includes enrollment count and last enrollment activity
     $users_query = "
         SELECT id, full_name, email, created_at, 'learner' as role,
+               -- Count total course enrollments by this learner
                (SELECT COUNT(*) FROM enrollments WHERE learner_id = learners.id) as course_count,
+               -- Get timestamp of most recent enrollment
                (SELECT MAX(enrolled_at) FROM enrollments WHERE learner_id = learners.id) as last_activity
         FROM learners
         ORDER BY created_at DESC
         LIMIT $users_per_page OFFSET $user_offset
     ";
+    
 } else {
+    // ALL USERS QUERY: Combine both creators and learners with their respective metrics
+    // Uses UNION to merge creators (with course counts) and learners (with enrollment counts)
     $users_query = "
         SELECT id, full_name, email, created_at, 'creator' as role,
+               -- Creator activity: count of courses created
                (SELECT COUNT(*) FROM courses WHERE creator_id = creators.id) as course_count,
+               -- Creator activity: last course creation timestamp
                (SELECT MAX(created_at) FROM courses WHERE creator_id = creators.id) as last_activity
         FROM creators
         
         UNION ALL
         
         SELECT id, full_name, email, created_at, 'learner' as role,
+               -- Learner activity: count of course enrollments
                (SELECT COUNT(*) FROM enrollments WHERE learner_id = learners.id) as course_count,
+               -- Learner activity: last enrollment timestamp
                (SELECT MAX(enrolled_at) FROM enrollments WHERE learner_id = learners.id) as last_activity
         FROM learners
         
@@ -204,9 +328,15 @@ if ($user_filter == 'creators') {
     ";
 }
 
+// ==============================================
+// EXECUTE USER QUERY & BUILD RESULTS ARRAY
+// ==============================================
+// Execute the query and build array of user data for display
 $users_result = mysqli_query($conn, $users_query);
 $users_list = [];
+
 if ($users_result) {
+    // POPULATE USERS ARRAY: Fetch all matching users into array for template rendering
     while ($row = mysqli_fetch_assoc($users_result)) {
         $users_list[] = $row;
     }
@@ -2448,636 +2578,8 @@ if ($users_result) {
                 </div>
             </div>
 
-            <!-- User Activity Chart -->
-            <div class="activity-chart-section">
-                <div class="section-header">
-                    <h2 class="section-title">User Activity Overview</h2>
-                </div>
-                <div class="chart-container">
-                    <div class="chart-placeholder">
-                        <p>📊 User activity chart will be displayed here</p>
-                        <small>Integration with database required</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+             </div>
 
-                <div class="stat-card rejected">
-                    <div class="stat-header">
-                        <div class="stat-icon rejected">❌</div>
-                        <span class="trend-indicator">+0%</span>
-                    </div>
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Rejected</div>
-                </div>
-
-                <div class="stat-card published">
-                    <div class="stat-header">
-                        <div class="stat-icon published">🌟</div>
-                        <span class="trend-indicator">+0%</span>
-                    </div>
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Published</div>
-                </div>
-            </div>
-
-            <!-- Course Status Tabs -->
-            <div class="course-tabs">
-                <button class="tab-btn active" data-course-tab="all">All Courses</button>
-                <button class="tab-btn" data-course-tab="pending">Pending Review</button>
-                <button class="tab-btn" data-course-tab="approved">Approved</button>
-                <button class="tab-btn" data-course-tab="rejected">Rejected</button>
-                <button class="tab-btn" data-course-tab="published">Published</button>
-            </div>
-
-            <!-- Courses Review Section -->
-            <div class="courses-section">
-                <div class="section-header">
-                    <h2 class="section-title">Course Review Queue</h2>
-                    <div class="header-actions">
-                        <div class="search-box">
-                            <input type="text" placeholder="Search courses..." id="courseSearch">
-                            <span class="search-icon">🔍</span>
-                        </div>
-                        <select class="filter-select" id="categoryFilter">
-                            <option value="all">All Categories</option>
-                            <option value="web-development">Web Development</option>
-                            <option value="data-science">Data Science</option>
-                            <option value="mobile-development">Mobile Development</option>
-                            <option value="ui-ux-design">UI/UX Design</option>
-                            <option value="blockchain">Blockchain</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <!-- Course Cards Grid -->
-                <div class="courses-grid" id="coursesGrid">
-                    <!-- Sample Course 1 - Pending -->
-                    <div class="course-card" data-status="pending" data-category="web-development">
-                        <div class="course-image">
-                            <img src="https://via.placeholder.com/300x180/4f46e5/ffffff?text=React+Course" alt="React Fundamentals">
-                            <div class="course-status pending">Pending Review</div>
-                        </div>
-                        <div class="course-info">
-                            <h3 class="course-title">Advanced React Development</h3>
-                            <p class="course-creator">👤 John Smith</p>
-                            <p class="course-description">Learn advanced React concepts including hooks, context, and performance optimization...</p>
-                            <div class="course-meta">
-                                <span class="course-category">💻 Web Development</span>
-                                <span class="course-duration">⏱️ 8 hours</span>
-                                <span class="course-price">💰 $129.99</span>
-                            </div>
-                            <div class="course-details">
-                                <p><strong>Submitted:</strong> Aug 20, 2025</p>
-                                <p><strong>Modules:</strong> 12 modules, 45 lessons</p>
-                            </div>
-                            <div class="course-actions">
-                                <button class="btn btn-primary" onclick="reviewCourse('course-1')">📝 Review</button>
-                                <button class="btn btn-success" onclick="approveCourse('course-1')">✅ Approve</button>
-                                <button class="btn btn-danger" onclick="rejectCourse('course-1')">❌ Reject</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sample Course 2 - Approved -->
-                    <div class="course-card" data-status="approved" data-category="data-science">
-                        <div class="course-image">
-                            <img src="https://via.placeholder.com/300x180/059669/ffffff?text=Python+ML" alt="Python Machine Learning">
-                            <div class="course-status approved">Approved</div>
-                        </div>
-                        <div class="course-info">
-                            <h3 class="course-title">Python Machine Learning Mastery</h3>
-                            <p class="course-creator">👤 Sarah Johnson</p>
-                            <p class="course-description">Complete guide to machine learning with Python, scikit-learn, and TensorFlow...</p>
-                            <div class="course-meta">
-                                <span class="course-category">📊 Data Science</span>
-                                <span class="course-duration">⏱️ 15 hours</span>
-                                <span class="course-price">💰 $199.99</span>
-                            </div>
-                            <div class="course-details">
-                                <p><strong>Approved:</strong> Aug 18, 2025</p>
-                                <p><strong>Modules:</strong> 20 modules, 78 lessons</p>
-                            </div>
-                            <div class="course-actions">
-                                <button class="btn btn-primary" onclick="reviewCourse('course-2')">👁️ View</button>
-                                <button class="btn btn-success" onclick="publishCourse('course-2')">🌟 Publish</button>
-                                <button class="btn btn-warning" onclick="editCourse('course-2')">✏️ Edit</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sample Course 3 - Published -->
-                    <div class="course-card" data-status="published" data-category="ui-ux-design">
-                        <div class="course-image">
-                            <img src="https://via.placeholder.com/300x180/dc2626/ffffff?text=UI%2FUX+Design" alt="UI/UX Design">
-                            <div class="course-status published">Published</div>
-                        </div>
-                        <div class="course-info">
-                            <h3 class="course-title">Complete UI/UX Design Course</h3>
-                            <p class="course-creator">👤 Emily Davis</p>
-                            <p class="course-description">Master modern UI/UX design principles, tools, and workflows from scratch...</p>
-                            <div class="course-meta">
-                                <span class="course-category">🎨 UI/UX Design</span>
-                                <span class="course-duration">⏱️ 12 hours</span>
-                                <span class="course-price">💰 $149.99</span>
-                            </div>
-                            <div class="course-details">
-                                <p><strong>Published:</strong> Aug 15, 2025</p>
-                                <p><strong>Enrollments:</strong> 243 students</p>
-                            </div>
-                            <div class="course-actions">
-                                <button class="btn btn-primary" onclick="viewCourseStats('course-3')">📊 Analytics</button>
-                                <button class="btn btn-warning" onclick="unpublishCourse('course-3')">📥 Unpublish</button>
-                                <button class="btn btn-secondary" onclick="editCourse('course-3')">✏️ Edit</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sample Course 4 - Rejected -->
-                    <div class="course-card" data-status="rejected" data-category="blockchain">
-                        <div class="course-image">
-                            <img src="https://via.placeholder.com/300x180/7c2d12/ffffff?text=Blockchain" alt="Blockchain Basics">
-                            <div class="course-status rejected">Rejected</div>
-                        </div>
-                        <div class="course-info">
-                            <h3 class="course-title">Blockchain Development Basics</h3>
-                            <p class="course-creator">👤 Mike Chen</p>
-                            <p class="course-description">Introduction to blockchain technology and smart contract development...</p>
-                            <div class="course-meta">
-                                <span class="course-category">⛓️ Blockchain</span>
-                                <span class="course-duration">⏱️ 6 hours</span>
-                                <span class="course-price">💰 $89.99</span>
-                            </div>
-                            <div class="course-details">
-                                <p><strong>Rejected:</strong> Aug 19, 2025</p>
-                                <p><strong>Reason:</strong> Insufficient content quality</p>
-                            </div>
-                            <div class="course-actions">
-                                <button class="btn btn-primary" onclick="reviewCourse('course-4')">📝 Re-review</button>
-                                <button class="btn btn-info" onclick="provideFeedback('course-4')">💬 Feedback</button>
-                                <button class="btn btn-danger" onclick="deleteCourse('course-4')">🗑️ Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="pagination">
-                    <button class="page-btn" disabled>Previous</button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">2</button>
-                    <button class="page-btn">3</button>
-                    <button class="page-btn">Next</button>
-                </div>
-            </div>
-
-            <!-- Course Review Modal -->
-            <div class="modal" id="courseReviewModal" style="display: none;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h2>Course Review</h2>
-                        <button class="modal-close" onclick="closeReviewModal()">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="review-content">
-                            <h3 id="reviewCourseTitle">Course Title</h3>
-                            <div class="review-tabs">
-                                <button class="review-tab active" data-review-tab="overview">Overview</button>
-                                <button class="review-tab" data-review-tab="content">Content</button>
-                                <button class="review-tab" data-review-tab="quality">Quality Check</button>
-                            </div>
-                            <div class="review-tab-content">
-                                <div id="overviewTab" class="tab-pane active">
-                                    <div class="course-overview">
-                                        <p><strong>Creator:</strong> <span id="reviewCreator">John Smith</span></p>
-                                        <p><strong>Category:</strong> <span id="reviewCategory">Web Development</span></p>
-                                        <p><strong>Duration:</strong> <span id="reviewDuration">8 hours</span></p>
-                                        <p><strong>Price:</strong> <span id="reviewPrice">$129.99</span></p>
-                                        <p><strong>Description:</strong></p>
-                                        <p id="reviewDescription">Course description will appear here...</p>
-                                    </div>
-                                </div>
-                                <div id="contentTab" class="tab-pane">
-                                    <div class="content-checklist">
-                                        <h4>Content Quality Checklist:</h4>
-                                        <label><input type="checkbox"> Clear learning objectives</label>
-                                        <label><input type="checkbox"> Well-structured modules</label>
-                                        <label><input type="checkbox"> High-quality video content</label>
-                                        <label><input type="checkbox"> Practical exercises included</label>
-                                        <label><input type="checkbox"> Appropriate difficulty level</label>
-                                        <label><input type="checkbox"> Updated and relevant content</label>
-                                    </div>
-                                </div>
-                                <div id="qualityTab" class="tab-pane">
-                                    <div class="quality-assessment">
-                                        <h4>Quality Assessment:</h4>
-                                        <div class="rating-section">
-                                            <label>Content Quality:</label>
-                                            <div class="rating-stars">
-                                                <span class="star" data-rating="1">⭐</span>
-                                                <span class="star" data-rating="2">⭐</span>
-                                                <span class="star" data-rating="3">⭐</span>
-                                                <span class="star" data-rating="4">⭐</span>
-                                                <span class="star" data-rating="5">⭐</span>
-                                            </div>
-                                        </div>
-                                        <div class="feedback-section">
-                                            <label for="adminFeedback">Admin Feedback:</label>
-                                            <textarea id="adminFeedback" rows="4" placeholder="Provide detailed feedback for the course creator..."></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-success" onclick="approveCourseFromModal()">✅ Approve Course</button>
-                        <button class="btn btn-danger" onclick="rejectCourseFromModal()">❌ Reject Course</button>
-                        <button class="btn btn-secondary" onclick="closeReviewModal()">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analytics Content -->
-        <div class="content-section" id="analyticsContent" style="display: none;">
-            <div class="page-title">
-                <h1>Analytics Dashboard</h1>
-                <p>Monitor website performance, user behavior, and platform growth</p>
-            </div>
-
-            <!-- Analytics Stats Overview -->
-            <div class="stats-grid">
-                <div class="stat-card traffic">
-                    <div class="stat-header">
-                        <div class="stat-icon traffic">📈</div>
-                        <span class="trend-indicator">+0%</span>
-                    </div>
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Total Visitors</div>
-                </div>
-
-                <div class="stat-card pageviews">
-                    <div class="stat-header">
-                        <div class="stat-icon pageviews">👁️</div>
-                        <span class="trend-indicator">+0%</span>
-                    </div>
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Page Views</div>
-                </div>
-
-                <div class="stat-card sessions">
-                    <div class="stat-header">
-                        <div class="stat-icon sessions">⏱️</div>
-                        <span class="trend-indicator">+0%</span>
-                    </div>
-                    <div class="stat-value">0</div>
-                    <div class="stat-label">Avg. Session Duration</div>
-                </div>
-
-                <div class="stat-card bounce">
-                    <div class="stat-header">
-                        <div class="stat-icon bounce">📊</div>
-                        <span class="trend-indicator">+0%</span>
-                    </div>
-                    <div class="stat-value">0%</div>
-                    <div class="stat-label">Bounce Rate</div>
-                </div>
-            </div>
-
-            <!-- Analytics Time Period Selector -->
-            <div class="analytics-controls">
-                <div class="time-selector">
-                    <button class="time-btn active" data-period="7">Last 7 Days</button>
-                    <button class="time-btn" data-period="30">Last 30 Days</button>
-                    <button class="time-btn" data-period="90">Last 3 Months</button>
-                    <button class="time-btn" data-period="365">Last Year</button>
-                </div>
-                <div class="export-controls">
-                    <button class="btn btn-secondary">📊 Export Report</button>
-                    <button class="btn btn-primary">📧 Schedule Report</button>
-                </div>
-            </div>
-
-            <!-- Main Analytics Charts -->
-            <div class="analytics-grid">
-                <!-- Website Traffic Chart -->
-                <div class="analytics-card traffic-chart">
-                    <div class="card-header">
-                        <h3>Website Traffic Overview</h3>
-                        <div class="chart-controls">
-                            <select class="chart-filter">
-                                <option value="visitors">Visitors</option>
-                                <option value="pageviews">Page Views</option>
-                                <option value="sessions">Sessions</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <div class="chart-placeholder large">
-                            <div class="chart-mock">
-                                <div class="chart-bars">
-                                    <div class="bar" style="height: 20%"></div>
-                                    <div class="bar" style="height: 35%"></div>
-                                    <div class="bar" style="height: 45%"></div>
-                                    <div class="bar" style="height: 30%"></div>
-                                    <div class="bar" style="height: 60%"></div>
-                                    <div class="bar" style="height: 80%"></div>
-                                    <div class="bar" style="height: 70%"></div>
-                                </div>
-                                <p>📈 Traffic Analytics Chart</p>
-                                <small>Real-time data integration required</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- User Demographics -->
-                <div class="analytics-card demographics">
-                    <div class="card-header">
-                        <h3>User Demographics</h3>
-                    </div>
-                    <div class="demographics-content">
-                        <div class="demo-section">
-                            <h4>Top Countries</h4>
-                            <div class="country-list">
-                                <div class="country-item">
-                                    <span class="flag">🇺🇸</span>
-                                    <span class="country-name">United States</span>
-                                    <span class="country-percentage">0%</span>
-                                </div>
-                                <div class="country-item">
-                                    <span class="flag">🇬🇧</span>
-                                    <span class="country-name">United Kingdom</span>
-                                    <span class="country-percentage">0%</span>
-                                </div>
-                                <div class="country-item">
-                                    <span class="flag">🇨🇦</span>
-                                    <span class="country-name">Canada</span>
-                                    <span class="country-percentage">0%</span>
-                                </div>
-                                <div class="country-item">
-                                    <span class="flag">🇩🇪</span>
-                                    <span class="country-name">Germany</span>
-                                    <span class="country-percentage">0%</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="demo-section">
-                            <h4>Device Types</h4>
-                            <div class="device-stats">
-                                <div class="device-item">
-                                    <span class="device-icon">💻</span>
-                                    <span class="device-name">Desktop</span>
-                                    <span class="device-percentage">0%</span>
-                                </div>
-                                <div class="device-item">
-                                    <span class="device-icon">📱</span>
-                                    <span class="device-name">Mobile</span>
-                                    <span class="device-percentage">0%</span>
-                                </div>
-                                <div class="device-item">
-                                    <span class="device-icon">📟</span>
-                                    <span class="device-name">Tablet</span>
-                                    <span class="device-percentage">0%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Secondary Analytics Grid -->
-            <div class="analytics-grid-secondary">
-                <!-- Course Performance -->
-                <div class="analytics-card course-performance">
-                    <div class="card-header">
-                        <h3>Course Performance</h3>
-                    </div>
-                    <div class="performance-content">
-                        <div class="performance-metrics">
-                            <div class="metric-item">
-                                <div class="metric-icon">📚</div>
-                                <div class="metric-details">
-                                    <span class="metric-value">0</span>
-                                    <span class="metric-label">Total Enrollments</span>
-                                </div>
-                            </div>
-                            <div class="metric-item">
-                                <div class="metric-icon">✅</div>
-                                <div class="metric-details">
-                                    <span class="metric-value">0%</span>
-                                    <span class="metric-label">Completion Rate</span>
-                                </div>
-                            </div>
-                            <div class="metric-item">
-                                <div class="metric-icon">⭐</div>
-                                <div class="metric-details">
-                                    <span class="metric-value">0.0</span>
-                                    <span class="metric-label">Avg. Rating</span>
-                                </div>
-                            </div>
-                            <div class="metric-item">
-                                <div class="metric-icon">💰</div>
-                                <div class="metric-details">
-                                    <span class="metric-value">$0</span>
-                                    <span class="metric-label">Revenue</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Real-time Activity -->
-                <div class="analytics-card realtime-activity">
-                    <div class="card-header">
-                        <h3>Real-time Activity</h3>
-                        <div class="realtime-indicator">
-                            <div class="pulse-dot"></div>
-                            <span>Live</span>
-                        </div>
-                    </div>
-                    <div class="realtime-content">
-                        <div class="realtime-stats">
-                            <div class="realtime-stat">
-                                <span class="stat-number">0</span>
-                                <span class="stat-label">Active Users</span>
-                            </div>
-                            <div class="realtime-stat">
-                                <span class="stat-number">0</span>
-                                <span class="stat-label">Pages/Session</span>
-                            </div>
-                        </div>
-                        <div class="realtime-feed">
-                            <h4>Live Activity Feed</h4>
-                            <div class="activity-feed">
-                                <div class="feed-item">
-                                    <span class="feed-time">--:--</span>
-                                    <span class="feed-action">No activity</span>
-                                    <span class="feed-location">--</span>
-                                </div>
-                                <p class="no-data">Waiting for live data...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Top Pages -->
-                <div class="analytics-card top-pages">
-                    <div class="card-header">
-                        <h3>Top Pages</h3>
-                    </div>
-                    <div class="pages-content">
-                        <div class="page-list">
-                            <div class="page-item">
-                                <div class="page-info">
-                                    <span class="page-title">Home Page</span>
-                                    <span class="page-url">/</span>
-                                </div>
-                                <span class="page-views">0 views</span>
-                            </div>
-                            <div class="page-item">
-                                <div class="page-info">
-                                    <span class="page-title">Course Browser</span>
-                                    <span class="page-url">/courses</span>
-                                </div>
-                                <span class="page-views">0 views</span>
-                            </div>
-                            <div class="page-item">
-                                <div class="page-info">
-                                    <span class="page-title">Login Page</span>
-                                    <span class="page-url">/login</span>
-                                </div>
-                                <span class="page-views">0 views</span>
-                            </div>
-                            <div class="page-item">
-                                <div class="page-info">
-                                    <span class="page-title">Register Page</span>
-                                    <span class="page-url">/register</span>
-                                </div>
-                                <span class="page-views">0 views</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Traffic Sources -->
-                <div class="analytics-card traffic-sources">
-                    <div class="card-header">
-                        <h3>Traffic Sources</h3>
-                    </div>
-                    <div class="sources-content">
-                        <div class="source-list">
-                            <div class="source-item">
-                                <div class="source-info">
-                                    <span class="source-icon">🔍</span>
-                                    <span class="source-name">Organic Search</span>
-                                </div>
-                                <span class="source-percentage">0%</span>
-                            </div>
-                            <div class="source-item">
-                                <div class="source-info">
-                                    <span class="source-icon">🔗</span>
-                                    <span class="source-name">Direct</span>
-                                </div>
-                                <span class="source-percentage">0%</span>
-                            </div>
-                            <div class="source-item">
-                                <div class="source-info">
-                                    <span class="source-icon">📱</span>
-                                    <span class="source-name">Social Media</span>
-                                </div>
-                                <span class="source-percentage">0%</span>
-                            </div>
-                            <div class="source-item">
-                                <div class="source-info">
-                                    <span class="source-icon">📧</span>
-                                    <span class="source-name">Email</span>
-                                </div>
-                                <span class="source-percentage">0%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Detailed Analytics Table -->
-            <div class="analytics-table-section">
-                <div class="section-header">
-                    <h2 class="section-title">Detailed Analytics</h2>
-                    <div class="table-controls">
-                        <select class="table-filter">
-                            <option value="pages">Pages</option>
-                            <option value="users">Users</option>
-                            <option value="courses">Courses</option>
-                            <option value="events">Events</option>
-                        </select>
-                        <button class="btn btn-secondary">📊 Export Data</button>
-                    </div>
-                </div>
-                
-                <table class="analytics-table">
-                    <thead>
-                        <tr>
-                            <th>Page/Item</th>
-                            <th>Views</th>
-                            <th>Unique Visitors</th>
-                            <th>Avg. Time</th>
-                            <th>Bounce Rate</th>
-                            <th>Conversion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="table-item">
-                                    <span class="item-title">Home Page</span>
-                                    <span class="item-url">/</span>
-                                </div>
-                            </td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0:00</td>
-                            <td>0%</td>
-                            <td>0%</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="table-item">
-                                    <span class="item-title">Course Browser</span>
-                                    <span class="item-url">/courses</span>
-                                </div>
-                            </td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0:00</td>
-                            <td>0%</td>
-                            <td>0%</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="table-item">
-                                    <span class="item-title">Login Page</span>
-                                    <span class="item-url">/login</span>
-                                </div>
-                            </td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0:00</td>
-                            <td>0%</td>
-                            <td>0%</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <div class="pagination">
-                    <button class="page-btn" disabled>Previous</button>
-                    <button class="page-btn active">1</button>
-                    <button class="page-btn">2</button>
-                    <button class="page-btn">3</button>
-                    <button class="page-btn">Next</button>
-                </div>
-            </div>
         </div>
     </main>
 

@@ -56,8 +56,8 @@ if ($_POST && isset($_POST['nft_key'])) {
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #e0e0e0;
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
             min-height: 100vh;
         }
 
@@ -83,46 +83,61 @@ if ($_POST && isset($_POST['nft_key'])) {
             height: 70px;
         }
 
+        
+
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-menu li {
+            position: relative;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 10px 16px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+       
         .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: #667eea;
+            color: #333;
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
         .logo:hover {
-            color: #764ba2;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s ease;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-        }
-
-        .nav-link:hover {
             color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
         }
 
-        .logout-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .nav-menu a[href="login.html"] {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             color: white !important;
+            font-weight: 600;
+            margin-left: 10px;
         }
 
-        .logout-btn:hover {
+        .nav-menu a[href="login.html"]:hover {
+            background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .nav-menu a[href="login.html"]::before {
+            display: none;
         }
 
         /* Main Content */
@@ -138,31 +153,31 @@ if ($_POST && isset($_POST['nft_key'])) {
             text-align: center;
             margin-bottom: 3rem;
             padding: 2rem;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(30, 30, 30, 0.95);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
         }
 
         .page-header h1 {
             font-size: 2.5rem;
-            color: #333;
+            color: #ffffff;
             margin-bottom: 1rem;
             font-weight: 700;
         }
 
         .page-header p {
             font-size: 1.1rem;
-            color: #666;
+            color: #b0b0b0;
             line-height: 1.6;
         }
 
         /* Search Section */
         .search-section {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(30, 30, 30, 0.95);
             border-radius: 20px;
             padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
             margin-bottom: 2rem;
         }
@@ -181,29 +196,30 @@ if ($_POST && isset($_POST['nft_key'])) {
 
         .search-group label {
             font-weight: 600;
-            color: #333;
+            color: #ffffff;
             font-size: 1.1rem;
         }
 
         .search-input {
             padding: 1rem 1.5rem;
             font-size: 1rem;
-            border: 2px solid #e0e6ed;
+            border: 2px solid #444444;
             border-radius: 12px;
-            background: white;
+            background: #2a2a2a;
+            color: #e0e0e0;
             transition: all 0.3s ease;
             font-family: 'Courier New', monospace;
         }
 
         .search-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2);
             transform: translateY(-2px);
         }
 
         .search-input::placeholder {
-            color: #999;
+            color: #888888;
         }
 
         .search-buttons {
@@ -226,23 +242,24 @@ if ($_POST && isset($_POST['nft_key'])) {
         }
 
         .search-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
             color: white;
         }
 
         .search-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 25px rgba(74, 144, 226, 0.4);
         }
 
         .reset-btn {
-            background: #f8f9fa;
-            color: #666;
-            border: 2px solid #e0e6ed;
+            background: #2a2a2a;
+            color: #b0b0b0;
+            border: 2px solid #444444;
         }
 
         .reset-btn:hover {
-            background: #e9ecef;
+            background: #3a3a3a;
+            color: #ffffff;
             transform: translateY(-2px);
         }
 
@@ -255,28 +272,28 @@ if ($_POST && isset($_POST['nft_key'])) {
         }
 
         .alert-error {
-            background: #fee;
-            color: #c53030;
-            border: 1px solid #fed7d7;
+            background: #b71c1c;
+            color: #ffcdd2;
+            border: 1px solid #f44336;
         }
 
         .alert-success {
-            background: #f0fff4;
-            color: #2f855a;
-            border: 1px solid #c6f6d5;
+            background: #1b5e20;
+            color: #a5d6a7;
+            border: 1px solid #4caf50;
         }
 
         /* Instructions */
         .instructions {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(30, 30, 30, 0.95);
             border-radius: 20px;
             padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
         }
 
         .instructions h3 {
-            color: #333;
+            color: #ffffff;
             margin-bottom: 1rem;
             font-size: 1.3rem;
         }
@@ -288,7 +305,7 @@ if ($_POST && isset($_POST['nft_key'])) {
 
         .instructions li {
             padding: 0.5rem 0;
-            color: #666;
+            color: #b0b0b0;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -296,14 +313,77 @@ if ($_POST && isset($_POST['nft_key'])) {
 
         .instructions li::before {
             content: "✓";
-            color: #667eea;
+            color: #4a90e2;
             font-weight: bold;
+        }
+
+        /* Mobile Navigation */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-menu {
-                display: none;
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 20px;
+                padding-top: 50px;
+                transition: left 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-menu a {
+                width: 80%;
+                text-align: center;
+                padding: 15px 20px;
+                font-size: 1.1rem;
+                margin: 5px 0;
+            }
+
+            .nav-menu a[href="login.html"] {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+
+            .hamburger {
+                display: flex;
             }
 
             .page-header h1 {
@@ -324,20 +404,36 @@ if ($_POST && isset($_POST['nft_key'])) {
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo"><i class="fas fa-graduation-cap"></i> Learnity</a>
+            <a href="#" class="logo">Learnity</a>
             
-            <ul class="nav-menu">
+            <ul class="nav-menu" id="navMenu">
                 <?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'learner'): ?>
-                    <li><a href="home-learner.php" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="course-browser.php" class="nav-link"><i class="fas fa-book"></i> Courses</a></li>
-                    <li><a href="my_certificates.php" class="nav-link"><i class="fas fa-certificate"></i> My Certificates</a></li>
-                    <li><a href="learner-profile.php" class="nav-link"><i class="fas fa-user"></i> Profile</a></li>
-                    <li><a href="login.html" class="nav-link logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                   <li><a href="home-learner.php">Home</a></li>
+                    <li><a href="course-browser.php">Courses</a></li>
+                    <li><a href="learner-profile.php">Profile</a></li>
+                    <li><a href="my_certificates.php">My Certificates</a></li>
+                    <li><a href="nft-search.php" class="active">Search NFT</a></li>
+                    <li><a href="login.html">Logout</a></li>
+                <?php elseif (isset($_SESSION['user_id']) && $_SESSION['role'] === 'creator'): ?>
+                    <li><a href="home-creator.php">Home</a></li>
+                    <li><a href="course-browser-creator.php">Courses</a></li>
+                    <li><a href="course-management.php">Course Management</a></li>
+                    <li><a href="creator-profile.php">Profile</a></li>
+                    <li><a href="nft-search.php" class="active">Search NFT</a></li>
+                    <li><a href="login.html">Logout</a></li>
                 <?php else: ?>
-                    <li><a href="login.html" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                    <li><a href="register.html" class="nav-link"><i class="fas fa-user-plus"></i> Register</a></li>
+                    <li><a href="guest.php">Home</a></li>
+                    <li><a href="nft-search.php" class="active">Search NFT</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
                 <?php endif; ?>
             </ul>
+
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
 
@@ -411,6 +507,43 @@ if ($_POST && isset($_POST['nft_key'])) {
         document.getElementById('nft_key').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\s/g, '').toUpperCase();
             e.target.value = value;
+        });
+
+        // Mobile menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navMenu = document.getElementById('navMenu');
+
+        if (hamburger && navMenu) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+
+            // Close mobile menu when clicking on a link
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            });
+        }
+
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 10) {
+                navbar.style.boxShadow = '0 2px 30px rgba(0, 0, 0, 0.2)';
+            } else {
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            }
         });
     </script>
 </body>

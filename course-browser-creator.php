@@ -31,18 +31,18 @@ $creator = mysqli_fetch_assoc($creator_result);
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         line-height: 1.6;
-        color: #333;
-        background: #f8f9fa;
+        color: #e0e0e0;
+        background: #121212;
       }
 
       /* Navigation Bar */
       .navbar {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 1rem 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         position: sticky;
         top: 0;
-        background: white;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        padding: 0 20px;
+        z-index: 100;
       }
 
       .nav-container {
@@ -56,36 +56,25 @@ $creator = mysqli_fetch_assoc($creator_result);
 
       .logo {
         font-size: 1.8rem;
-        font-weight: 700;
-        color: #2c5aa0;
-        text-decoration: none;
-        transition: color 0.3s ease;
+        font-weight: bold;
+        color: #333;
       }
 
-      .logo:hover {
-        color: #1e3f73;
-      }
-
-      .nav-menu {
+      .nav-links {
         display: flex;
         list-style: none;
-        gap: 25px;
-        align-items: center;
+        gap: 2rem;
       }
 
-      .nav-link {
+      .nav-links a {
         text-decoration: none;
         color: #333;
         font-weight: 500;
-        position: relative;
-        transition: color 0.3s ease;
-        padding: 8px 16px;
-        border-radius: 20px;
+        transition: color 0.3s;
       }
 
-      .nav-link:hover {
-        color: #2c5aa0;
-        background: rgba(44, 90, 160, 0.1);
+      .nav-links a:hover {
+        color: #667eea;
       }
 
       .nav-link.active {
@@ -94,6 +83,7 @@ $creator = mysqli_fetch_assoc($creator_result);
         font-weight: 600;
       }
 
+      
       .logout-btn {
         background: linear-gradient(
           135deg,
@@ -157,38 +147,44 @@ $creator = mysqli_fetch_assoc($creator_result);
       .page-title {
         font-size: 2.5rem;
         font-weight: 600;
-        color: #1e3f73;
+        color: #ffffff;
         margin-bottom: 10px;
       }
 
       .page-subtitle {
-        color: #666;
+        color: #b0b0b0;
         font-size: 1.2rem;
       }
 
       /* Search and Filter Section */
       .filter-section {
-        background: white;
+        background: #1e1e1e;
         border-radius: 15px;
         padding: 30px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         margin-bottom: 40px;
       }
 
       .search-bar {
         width: 100%;
         padding: 15px 20px;
-        border: 2px solid #e9ecef;
+        border: 2px solid #444444;
         border-radius: 25px;
         font-size: 1.1rem;
         margin-bottom: 25px;
         transition: all 0.3s ease;
+        background: #2a2a2a;
+        color: #e0e0e0;
       }
 
       .search-bar:focus {
         outline: none;
-        border-color: #2c5aa0;
-        box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+      }
+
+      .search-bar::placeholder {
+        color: #888888;
       }
 
       .category-filters {
@@ -200,24 +196,24 @@ $creator = mysqli_fetch_assoc($creator_result);
 
       .category-btn {
         padding: 10px 20px;
-        border: 2px solid #e9ecef;
-        background: white;
+        border: 2px solid #444444;
+        background: #2a2a2a;
         border-radius: 25px;
         cursor: pointer;
         transition: all 0.3s ease;
         font-weight: 500;
-        color: #666;
+        color: #b0b0b0;
       }
 
       .category-btn:hover {
-        background: #f8f9fa;
-        color: #333;
+        background: #3a3a3a;
+        color: #ffffff;
       }
 
       .category-btn.active {
-        background: #2c5aa0;
+        background: #4a90e2;
         color: white;
-        border-color: #2c5aa0;
+        border-color: #4a90e2;
       }
 
       /* Course Grid */
@@ -228,7 +224,7 @@ $creator = mysqli_fetch_assoc($creator_result);
       .section-title {
         font-size: 1.8rem;
         font-weight: 600;
-        color: #1e3f73;
+        color: #ffffff;
         margin-bottom: 25px;
       }
 
@@ -239,23 +235,23 @@ $creator = mysqli_fetch_assoc($creator_result);
       }
 
       .course-card {
-        background: white;
+        background: #2a2a2a;
         border-radius: 15px;
         overflow: hidden;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         transition: all 0.3s ease;
         border: 2px solid transparent;
       }
 
       .course-card:hover {
         transform: translateY(-8px);
-        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        border-color: #2c5aa0;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        border-color: #4a90e2;
       }
 
       .course-thumbnail {
         height: 200px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -268,8 +264,8 @@ $creator = mysqli_fetch_assoc($creator_result);
         position: absolute;
         top: 15px;
         right: 15px;
-        background: rgba(255, 255, 255, 0.9);
-        color: #2c5aa0;
+        background: rgba(74, 144, 226, 0.9);
+        color: white;
         padding: 5px 12px;
         border-radius: 15px;
         font-size: 0.8rem;
@@ -284,12 +280,12 @@ $creator = mysqli_fetch_assoc($creator_result);
         font-size: 1.3rem;
         font-weight: 600;
         margin-bottom: 10px;
-        color: #1e3f73;
+        color: #ffffff;
         line-height: 1.4;
       }
 
       .course-description {
-        color: #666;
+        color: #b0b0b0;
         margin-bottom: 15px;
         line-height: 1.5;
         display: -webkit-box;
@@ -304,7 +300,7 @@ $creator = mysqli_fetch_assoc($creator_result);
         align-items: center;
         margin-bottom: 20px;
         font-size: 0.9rem;
-        color: #666;
+        color: #b0b0b0;
       }
 
       .course-price {
@@ -332,23 +328,23 @@ $creator = mysqli_fetch_assoc($creator_result);
       }
 
       .btn-primary {
-        background: linear-gradient(135deg, #2c5aa0 0%, #1e3f73 100%);
+        background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
         color: white;
       }
 
       .btn-primary:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(44, 90, 160, 0.3);
+        box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
       }
 
       .btn-secondary {
-        background: white;
-        color: #2c5aa0;
-        border: 2px solid #2c5aa0;
+        background: #2a2a2a;
+        color: #4a90e2;
+        border: 2px solid #4a90e2;
       }
 
       .btn-secondary:hover {
-        background: #2c5aa0;
+        background: #4a90e2;
         color: white;
       }
 
@@ -365,7 +361,7 @@ $creator = mysqli_fetch_assoc($creator_result);
       .no-results {
         text-align: center;
         padding: 60px 20px;
-        color: #666;
+        color: #b0b0b0;
       }
 
       .no-results h3 {
@@ -377,12 +373,12 @@ $creator = mysqli_fetch_assoc($creator_result);
       .loading {
         text-align: center;
         padding: 40px;
-        color: #666;
+        color: #b0b0b0;
       }
 
       .spinner {
-        border: 3px solid #f3f3f3;
-        border-top: 3px solid #2c5aa0;
+        border: 3px solid #444444;
+        border-top: 3px solid #4a90e2;
         border-radius: 50%;
         width: 40px;
         height: 40px;
@@ -524,33 +520,16 @@ $creator = mysqli_fetch_assoc($creator_result);
     <!-- Navigation -->
     <nav class="navbar">
       <div class="nav-container">
-        <a href="#" class="logo">EduChain</a>
+        <a href="#" class="logo">Learnity</a>
 
-        <ul class="nav-menu" id="navMenu">
-          <li><a href="home-creator.php" class="nav-link">Home</a></li>
-          <li>
-            <a href="course-browser-creator.php" class="nav-link active">Courses</a>
-          </li>
-          <li>
-            <a href="course-management.php" class="nav-link"
-              >Course Management</a
-            >
-          </li>
-          <li>
-            <a href="creator-profile.php" class="nav-link">Profile</a>
-          </li>
-          <li><a href="login.html" class="nav-link logout-btn">Logout</a></li>
+        <ul class="nav-links">
+          <li><a href="home-creator.php"><i class="fas fa-home"></i> Home</a></li>
+          <li><a href="course-browser-creator.php"><i class="fas fa-book"></i> Courses</a></li>
+          <li><a href="course-management.php"><i class="fas fa-plus"></i> Course Management</a></li>
+          <li><a href="creator-profile.php"><i class="fas fa-user"></i> Profile</a></li>
+          <li><a href="nft-search.php" class="nav-link">Search NFT</a></li>
+          <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
-
-        <button
-          class="hamburger"
-          id="hamburger"
-          aria-label="Toggle navigation menu"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
       </div>
     </nav>
 

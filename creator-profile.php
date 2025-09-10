@@ -37,8 +37,9 @@ if ($result && mysqli_num_rows($result) > 0) {
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
             min-height: 100vh;
+            color: #e0e0e0;
         }
 
         .navbar {
@@ -89,10 +90,10 @@ if ($result && mysqli_num_rows($result) > 0) {
         }
 
         .profile-card {
-            background: white;
+            background: #1e1e1e;
             border-radius: 20px;
             padding: 3rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             margin-bottom: 2rem;
         }
 
@@ -107,7 +108,7 @@ if ($result && mysqli_num_rows($result) > 0) {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #4a90e2, #357abd);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -156,7 +157,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
         .profile-info h1 {
             font-size: 2.5rem;
-            color: #333;
+            color: #ffffff;
             margin-bottom: 0.5rem;
         }
 
@@ -180,15 +181,15 @@ if ($result && mysqli_num_rows($result) > 0) {
         }
 
         .detail-item {
-            background: #f8f9fa;
+            background: #2a2a2a;
             padding: 1.5rem;
             border-radius: 10px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #4a90e2;
         }
 
         .detail-label {
             font-weight: bold;
-            color: #666;
+            color: #b0b0b0;
             font-size: 0.9rem;
             text-transform: uppercase;
             margin-bottom: 0.5rem;
@@ -196,15 +197,15 @@ if ($result && mysqli_num_rows($result) > 0) {
 
         .detail-value {
             font-size: 1.1rem;
-            color: #333;
+            color: #ffffff;
             word-break: break-all;
         }
 
         .stats-section {
-            background: white;
+            background: #1e1e1e;
             border-radius: 20px;
             padding: 2rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
         .stats-grid {
@@ -216,7 +217,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         .stat-card {
             text-align: center;
             padding: 2rem;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #4a90e2, #357abd);
             color: white;
             border-radius: 15px;
         }
@@ -233,10 +234,10 @@ if ($result && mysqli_num_rows($result) > 0) {
         }
 
         .bio-section {
-            background: white;
+            background: #1e1e1e;
             border-radius: 20px;
             padding: 2rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             margin-bottom: 2rem;
         }
 
@@ -248,7 +249,7 @@ if ($result && mysqli_num_rows($result) > 0) {
 
         .social-link {
             padding: 0.5rem 1rem;
-            background: #667eea;
+            background: #4a90e2;
             color: white;
             text-decoration: none;
             border-radius: 5px;
@@ -256,7 +257,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         }
 
         .social-link:hover {
-            background: #5a6fd8;
+            background: #357abd;
         }
 
         #profilePictureInput {
@@ -282,13 +283,14 @@ if ($result && mysqli_num_rows($result) > 0) {
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">🎓 NFT Learning - Creator</div>
+              <a href="#" class="logo">Learnity</a>
             <ul class="nav-links">
-                <li><a href="home-creator.php"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="course-management.html"><i class="fas fa-plus"></i> Create Course</a></li>
-                <li><a href="course-browser-creator.html"><i class="fas fa-book"></i> My Courses</a></li>
-                <li><a href="creator-profile.php"><i class="fas fa-user"></i> Profile</a></li>
-                <li><a href="login.html"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li><a href="home-creator.php">Home</a></li>
+                <li><a href="course-browser-creator.php">Courses</a></li>
+                <li><a href="course-management.php">Course Management</a></li>
+                <li><a href="creator-profile.php">Profile</a></li>
+                <li><a href="nft-search.php" class="nav-link">Search NFT</a></li>
+                <li><a href="login.html">Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -308,7 +310,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                 </div>
                 <div class="profile-info">
                     <h1><?php echo htmlspecialchars($creator['full_name']); ?></h1>
-                    <p style="color: #666; font-size: 1.1rem;">Course Creator</p>
+                    <p style="color: #b0b0b0; font-size: 1.1rem;">Course Creator</p>
                     <?php if ($creator['is_verified']): ?>
                         <div class="verified-badge">
                             <i class="fas fa-check-circle"></i>
@@ -336,7 +338,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                         if (!empty($creator['expertise'])) {
                             echo htmlspecialchars($creator['expertise']);
                         } else {
-                            echo '<span style="color: #999; font-style: italic;">Not specified</span>';
+                            echo '<span style="color: #888888; font-style: italic;">Not specified</span>';
                         }
                         ?>
                     </div>
@@ -349,7 +351,7 @@ if ($result && mysqli_num_rows($result) > 0) {
                         if (!empty($creator['wallet_address'])) {
                             echo htmlspecialchars($creator['wallet_address']);
                         } else {
-                            echo '<span style="color: #999; font-style: italic;">Not Connected</span>';
+                            echo '<span style="color: #888888; font-style: italic;">Not Connected</span>';
                         }
                         ?>
                     </div>
@@ -374,8 +376,8 @@ if ($result && mysqli_num_rows($result) > 0) {
 
         <?php if (!empty($creator['bio'])): ?>
         <div class="bio-section">
-            <h2 style="margin-bottom: 1rem; color: #333;">About Me</h2>
-            <p style="color: #666; line-height: 1.6;"><?php echo nl2br(htmlspecialchars($creator['bio'])); ?></p>
+            <h2 style="margin-bottom: 1rem; color: #ffffff;">About Me</h2>
+            <p style="color: #b0b0b0; line-height: 1.6;"><?php echo nl2br(htmlspecialchars($creator['bio'])); ?></p>
             
             <?php if (!empty($creator['social_linkedin']) || !empty($creator['social_twitter']) || !empty($creator['social_website'])): ?>
             <div class="social-links">
@@ -400,7 +402,7 @@ if ($result && mysqli_num_rows($result) > 0) {
         <?php endif; ?>
 
         <div class="stats-section">
-            <h2 style="margin-bottom: 2rem; color: #333;">Teaching Statistics</h2>
+            <h2 style="margin-bottom: 2rem; color: #ffffff;">Teaching Statistics</h2>
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-number"><?php echo $creator['total_courses']; ?></div>
@@ -409,14 +411,6 @@ if ($result && mysqli_num_rows($result) > 0) {
                 <div class="stat-card">
                     <div class="stat-number"><?php echo $creator['total_students']; ?></div>
                     <div class="stat-label">Students Taught</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">$<?php echo number_format($creator['total_revenue'], 2); ?></div>
-                    <div class="stat-label">Total Revenue</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number"><?php echo number_format($creator['rating'], 1); ?>/5</div>
-                    <div class="stat-label">Average Rating</div>
                 </div>
             </div>
         </div>

@@ -53,21 +53,25 @@ $update_query = "UPDATE enrollments
 
 if (mysqli_query($conn, $update_query)) {
     // Award NFT Certificate automatically upon course completion
+    error_log("Attempting to award NFT certificate for course_id: $course_id, learner_id: $learner_id");
     $certificate_result = awardNFTCertificate($course_id, $learner_id);
+    error_log("Certificate result: " . json_encode($certificate_result));
     
     $response = [
         'success' => true, 
         'message' => 'Course completed successfully!'
     ];
     
-    if ($certificate_result['success']) {
+    if ($certificate_result && $certificate_result['success']) {
         $response['certificate_awarded'] = true;
         $response['nft_key'] = $certificate_result['nft_key'];
         $response['verification_code'] = $certificate_result['verification_code'];
         $response['certificate_message'] = 'Congratulations! You have been awarded an NFT certificate!';
+        $response['certificate_url'] = $certificate_result['verification_url'] ?? '';
     } else {
         $response['certificate_awarded'] = false;
-        $response['certificate_error'] = $certificate_result['message'];
+        $response['certificate_error'] = $certificate_result['message'] ?? 'Unknown certificate error';
+        error_log("Certificate award failed: " . ($certificate_result['message'] ?? 'No error message'));
     }
     
     echo json_encode($response);
