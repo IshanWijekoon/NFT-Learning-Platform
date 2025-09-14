@@ -57,8 +57,9 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
             min-height: 100vh;
+            color: #e1e5e9;
         }
 
         .navbar {
@@ -109,11 +110,12 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
         }
 
         .profile-card {
-            background: white;
+            background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
             border-radius: 20px;
             padding: 3rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             margin-bottom: 2rem;
+            border: 1px solid rgba(220, 38, 38, 0.3);
         }
 
         .profile-header {
@@ -127,7 +129,7 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #dc2626, #991b1b);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -137,6 +139,7 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
             overflow: hidden;
             cursor: pointer;
             transition: transform 0.3s ease;
+            border: 3px solid rgba(220, 38, 38, 0.5);
         }
 
         .profile-avatar:hover {
@@ -176,7 +179,7 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
 
         .profile-info h1 {
             font-size: 2.5rem;
-            color: #333;
+            color: #f8f9fa;
             margin-bottom: 0.5rem;
         }
 
@@ -188,15 +191,16 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
         }
 
         .detail-item {
-            background: #f8f9fa;
+            background: #2a2a2a;
             padding: 1.5rem;
             border-radius: 10px;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #dc2626;
+            border: 1px solid rgba(220, 38, 38, 0.2);
         }
 
         .detail-label {
             font-weight: bold;
-            color: #666;
+            color: #d1d5db;
             font-size: 0.9rem;
             text-transform: uppercase;
             margin-bottom: 0.5rem;
@@ -204,15 +208,16 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
 
         .detail-value {
             font-size: 1.1rem;
-            color: #333;
+            color: #f8f9fa;
             word-break: break-all;
         }
 
         .stats-section {
-            background: white;
+            background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
             border-radius: 20px;
             padding: 2rem;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            border: 1px solid rgba(220, 38, 38, 0.3);
         }
 
         .stats-grid {
@@ -224,9 +229,16 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
         .stat-card {
             text-align: center;
             padding: 2rem;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #dc2626, #991b1b);
             color: white;
             border-radius: 15px;
+            border: 1px solid rgba(220, 38, 38, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.4);
         }
 
         .stat-number {
@@ -262,8 +274,8 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
         .loading-spinner {
             width: 50px;
             height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #667eea;
+            border: 5px solid #374151;
+            border-top: 5px solid #ef4444;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -289,11 +301,13 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
         }
 
         .message.success {
-            background: #28a745;
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            border: 1px solid rgba(5, 150, 105, 0.3);
         }
 
         .message.error {
-            background: #dc3545;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            border: 1px solid rgba(220, 38, 38, 0.3);
         }
 
         .message.show {
@@ -347,7 +361,7 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
                 </div>
                 <div class="profile-info">
                     <h1><?php echo htmlspecialchars($learner['full_name']); ?></h1>
-                    <p style="color: #666; font-size: 1.1rem;">Student Profile</p>
+                    <p style="color: #d1d5db; font-size: 1.1rem;">Student Profile</p>
                 </div>
             </div>
 
@@ -369,7 +383,7 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
                         if (!empty($learner['wallet_address'])) {
                             echo htmlspecialchars($learner['wallet_address']);
                         } else {
-                            echo '<span style="color: #999; font-style: italic;">Not Connected</span>';
+                            echo '<span style="color: #9ca3af; font-style: italic;">Not Connected</span>';
                         }
                         ?>
                     </div>
@@ -388,7 +402,7 @@ $enrolled_courses = $enrolled_result->fetch_assoc()['count'];
         </div>
 
         <div class="stats-section">
-            <h2 style="margin-bottom: 2rem; color: #333;">Learning Statistics</h2>
+            <h2 style="margin-bottom: 2rem; color: #f8f9fa;">Learning Statistics</h2>
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-number"><?php echo $completed_courses; ?></div>

@@ -16,7 +16,8 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #e1e5e9;
+            background: #1a1a1a;
             overflow-x: hidden;
         }
 
@@ -128,16 +129,16 @@
 
         .section {
             padding: 80px 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #2d1b69 0%, #11998e 100%);
+            color: #e1e5e9;
             min-height: 100vh;
             display: flex;
             align-items: center;
         }
 
         .section:nth-child(even) {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            color: #333;
+            background: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+            color: #e1e5e9;
         }
 
         .container {
@@ -155,6 +156,7 @@
             font-weight: 700;
             margin-bottom: 1.5rem;
             line-height: 1.2;
+            color: #f8f9fa;
         }
 
         .content h2 {
@@ -162,6 +164,7 @@
             font-weight: 700;
             margin-bottom: 1.5rem;
             line-height: 1.2;
+            color: #f8f9fa;
         }
 
         .content p {
@@ -169,31 +172,33 @@
             margin-bottom: 2rem;
             line-height: 1.8;
             opacity: 0.9;
+            color: #d1d5db;
         }
 
         .cta-button {
             display: inline-block;
             padding: 1rem 2rem;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
+            background: rgba(255, 255, 255, 0.15);
+            color: #e1e5e9;
             text-decoration: none;
             border-radius: 50px;
             font-weight: 600;
             font-size: 1.1rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .section:nth-child(even) .cta-button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: 2px solid transparent;
+            color: white;
         }
 
         .cta-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            background: rgba(255, 255, 255, 0.25);
         }
 
         .section:nth-child(even) .cta-button:hover {
@@ -228,23 +233,25 @@
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             padding: 2rem;
             border-radius: 20px;
             text-align: center;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: transform 0.3s ease;
         }
 
         .section:nth-child(even) .feature-card {
-            background: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .feature-card:hover {
             transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
         .feature-icon {
@@ -257,19 +264,22 @@
             font-size: 1.5rem;
             margin-bottom: 1rem;
             font-weight: 600;
+            color: #f8f9fa;
         }
 
         .feature-card p {
             opacity: 0.8;
             line-height: 1.6;
+            color: #d1d5db;
         }
 
         /* Footer */
         footer {
-            background: #1a1a1a;
-            color: white;
+            background: #0f0f0f;
+            color: #e1e5e9;
             text-align: center;
             padding: 2rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* Responsive Design */
@@ -325,8 +335,8 @@
             
             <ul class="nav-menu" id="navMenu">
                 <li><a href="guest.php" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="course-browser.php" class="nav-link"><i class="fas fa-book"></i> Courses</a></li>
-                <li><a href="nft-search.php" class="nav-link"><i class="fas fa-search"></i> Search NFT</a></li>
+                <li><a href="course-browser-guest.php" class="nav-link"><i class="fas fa-book"></i> Courses</a></li>
+                <li><a href="nft-search-guest.php" class="nav-link"><i class="fas fa-search"></i> Search NFT</a></li>
                 <li><a href="login.html" class="nav-link cta"><i class="fas fa-sign-in-alt"></i> Login/Register</a></li>
             </ul>
 
@@ -363,7 +373,7 @@
                 <div class="content">
                     <h2>Discover Unlimited Learning Opportunities</h2>
                     <p>Explore courses created by expert instructors from around the world. From programming to design, business to personal development - find your passion and master new skills.</p>
-                    <a href="course-browser.php" class="cta-button"><i class="fas fa-search"></i> Browse Courses</a>
+                    <a href="course-browser-guest.php" class="cta-button"><i class="fas fa-search"></i> Browse Courses</a>
                 </div>
             </div>
         </section>
@@ -374,7 +384,7 @@
                 <div class="content">
                     <h2>Earn Verified NFT Certificates</h2>
                     <p>Complete courses and receive blockchain-verified NFT certificates that prove your achievements. These certificates are permanently stored on the blockchain and can be verified anywhere, anytime.</p>
-                    <a href="nft-search.php" class="cta-button"><i class="fas fa-certificate"></i> Verify Certificates</a>
+                    <a href="nft-search-guest.php" class="cta-button"><i class="fas fa-certificate"></i> Verify Certificates</a>
                 </div>
                 <div class="image-container">
                     <div class="placeholder-image">🏆</div>
