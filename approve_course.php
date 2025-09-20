@@ -56,31 +56,65 @@ switch ($action) {
         $enrollment_count = mysqli_fetch_assoc($enrollment_result)['count'];
         
         if ($enrollment_count > 0) {
-            echo json_encode(['success' => false, 'message' => 'Cannot delete course with existing enrollments']);
+            echo json_encode([
+                'success' => false, 
+                'message' => "Cannot delete course: $enrollment_count learner(s) are enrolled. Please contact learners to withdraw first."
+            ]);
             exit();
         }
         
-        // Delete course files if they exist
-        $course_data = mysqli_fetch_assoc(mysqli_query($conn, "SELECT thumbnail FROM courses WHERE id = $course_id"));
-        if ($course_data['thumbnail'] && file_exists($course_data['thumbnail'])) {
-            unlink($course_data['thumbnail']);
+        // Get course details for logging
+        $course_detail_query = "SELECT course_name, thumbnail FROM courses WHERE id = $course_id";
+        $course_detail_result = mysqli_query($conn, $course_detail_query);
+        $course_detail = mysqli_fetch_assoc($course_detail_result);
+        
+        if (!$course_detail) {
+            echo json_encode(['success' => false, 'message' => 'Course not found']);
+            exit();
         }
         
-        // Delete course videos
-        $video_query = "SELECT video_path FROM course_videos WHERE course_id = $course_id";
-        $video_result = mysqli_query($conn, $video_query);
-        while ($video = mysqli_fetch_assoc($video_result)) {
-            if (file_exists($video['video_path'])) {
-                unlink($video['video_path']);
+        $course_name = $course_detail['course_name'];
+        $files_deleted = 0;
+        $deletion_errors = [];
+        
+        // Delete course thumbnail if it exists
+        if ($course_detail['thumbnail'] && file_exists($course_detail['thumbnail'])) {
+            if (unlink($course_detail['thumbnail'])) {
+                $files_deleted++;
+            } else {
+                $deletion_errors[] = "Failed to delete thumbnail: " . $course_detail['thumbnail'];
             }
         }
         
-        // Delete course videos records
-        mysqli_query($conn, "DELETE FROM course_videos WHERE course_id = $course_id");
+        // Delete course videos and their records
+        $video_query = "SELECT video_path FROM course_videos WHERE course_id = $course_id";
+        $video_result = mysqli_query($conn, $video_query);
+        $video_count = 0;
+        
+        while ($video = mysqli_fetch_assoc($video_result)) {
+            $video_count++;
+            if (file_exists($video['video_path'])) {
+                if (unlink($video['video_path'])) {
+                    $files_deleted++;
+                } else {
+                    $deletion_errors[] = "Failed to delete video: " . $video['video_path'];
+                }
+            }
+        }
+        
+        // Delete course videos records from database
+        $video_delete_result = mysqli_query($conn, "DELETE FROM course_videos WHERE course_id = $course_id");
+        if (!$video_delete_result) {
+            $deletion_errors[] = "Failed to delete video records from database";
+        }
         
         // Delete the course
         $update_query = "DELETE FROM courses WHERE id = $course_id";
-        $success_message = "Course deleted successfully";
+        $success_message = "Course '$course_name' deleted successfully. $files_deleted file(s) removed.";
+        
+        if (!empty($deletion_errors)) {
+            $success_message .= " Warning: " . implode("; ", $deletion_errors);
+        }
         break;
         
     default:

@@ -1354,11 +1354,18 @@ if ($users_result) {
         /* Courses Section Styles */
         .course-tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 8px;
+            margin-bottom: 20px;
             border-bottom: 1px solid #444;
             padding-bottom: 0;
             overflow-x: auto;
+            justify-content: center;
+        }
+
+        .course-tabs .tab-btn {
+            padding: 8px 16px;
+            font-size: 12px;
+            border-radius: 6px 6px 0 0;
         }
 
         .courses-section {
@@ -1371,13 +1378,89 @@ if ($users_result) {
         }
 
         .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            display: flex;
             gap: 25px;
             margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+        .courses-slider-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .courses-slider {
+            display: flex;
+            transition: transform 0.3s ease;
+            gap: 25px;
         }
 
         .course-card {
+            min-width: calc(33.333% - 17px);
+            flex-shrink: 0;
+        }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(220, 53, 69, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .slider-nav:hover {
+            background: #dc3545;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-nav.prev {
+            left: -20px;
+        }
+
+        .slider-nav.next {
+            right: -20px;
+        }
+
+        .slider-nav:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(1);
+        }
+
+        .slider-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .slider-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #555;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: #dc3545;
+            transform: scale(1.2);
+        }
+
+        .course-card {
+            min-width: calc(33.333% - 17px);
+            flex-shrink: 0;
             background: #3d3d3d;
             border: 1px solid #555;
             border-radius: 12px;
@@ -1387,9 +1470,10 @@ if ($users_result) {
         }
 
         .course-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px) scale(1.02);
             box-shadow: 0 8px 25px rgba(220, 53, 69, 0.2);
             border-color: #dc3545;
+            z-index: 5;
         }
 
         .course-image {
@@ -1803,7 +1887,11 @@ if ($users_result) {
         /* Responsive adjustments for courses */
         @media (max-width: 768px) {
             .courses-grid {
-                grid-template-columns: 1fr;
+                padding: 0 10px;
+            }
+            
+            .course-card {
+                min-width: calc(50% - 12.5px);
             }
             
             .course-actions {
@@ -1822,6 +1910,26 @@ if ($users_result) {
             .course-tabs {
                 overflow-x: auto;
                 white-space: nowrap;
+            }
+            
+            .slider-nav {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .course-card {
+                min-width: 100%;
+            }
+            
+            .slider-nav.prev {
+                left: -15px;
+            }
+            
+            .slider-nav.next {
+                right: -15px;
             }
         }
 
@@ -2698,7 +2806,118 @@ if ($users_result) {
                 <p>Review, approve, and manage courses from creators</p>
             </div>
 
-            <!-- Course Stats -->
+            <!-- Quick Approval Actions Section (Moved to Top) -->
+            <div class="courses-section">
+                <div class="section-header">
+                    <h3 class="section-title">Course Management Actions</h3>
+                    <div class="header-actions">
+                        <select class="filter-select" id="courseStatusFilter">
+                            <option value="pending">Pending</option>
+                            <option value="published">Approved</option>
+                            <option value="rejected">Rejected</option>
+                            <option value="">All Status</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="courses-slider-container">
+                    <button class="slider-nav prev" onclick="slideLeft()" id="prevBtn">❮</button>
+                    <div class="courses-grid" id="coursesGrid">
+                        <div class="courses-slider" id="coursesSlider">
+                            <?php
+                            // Get courses for approval
+                            $courses_query = "
+                                SELECT c.*, cr.full_name as creator_name, cr.email as creator_email
+                                FROM courses c
+                                JOIN creators cr ON c.creator_id = cr.id
+                                ORDER BY c.created_at DESC
+                            ";
+                            $courses_result = mysqli_query($conn, $courses_query);
+                            $all_courses = [];
+
+                            if (mysqli_num_rows($courses_result) > 0):
+                                while ($course = mysqli_fetch_assoc($courses_result)) {
+                                    $all_courses[] = $course;
+                                }
+                                
+                                foreach ($all_courses as $course):
+                            ?>
+                            <div class="course-card" data-status="<?php echo $course['status']; ?>">
+                                <div class="course-image">
+                                    <?php if (!empty($course['thumbnail'])): ?>
+                                        <img src="<?php echo htmlspecialchars($course['thumbnail']); ?>" alt="Course Thumbnail">
+                                    <?php else: ?>
+                                        <div style="height: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
+                                            📚
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="course-status <?php echo $course['status']; ?>">
+                                        <?php echo ucfirst($course['status']); ?>
+                                    </div>
+                                </div>
+                                
+                                <div class="course-info">
+                                    <h3 class="course-title"><?php echo htmlspecialchars($course['course_name']); ?></h3>
+                                    <p class="course-creator">by <?php echo htmlspecialchars($course['creator_name']); ?></p>
+                                    <p class="course-description"><?php echo htmlspecialchars(substr($course['description'], 0, 120)) . '...'; ?></p>
+                                    
+                                    <div class="course-meta">
+                                        <span>📅 <?php echo date('M j, Y', strtotime($course['created_at'])); ?></span>
+                                        <span>⏱️ <?php echo $course['duration']; ?></span>
+                                        <span>🏷️ <?php echo htmlspecialchars($course['category']); ?></span>
+                                    </div>
+
+                                    <div class="course-details">
+                                        <p><strong>Creator Email:</strong> <?php echo htmlspecialchars($course['creator_email']); ?></p>
+                                        <p><strong>NFT Rewards:</strong> <?php echo $course['nft_reward'] ? 'Yes' : 'No'; ?></p>
+                                        <p><strong>Difficulty:</strong> <?php echo ucfirst($course['difficulty']); ?></p>
+                                    </div>
+
+                                    <div class="course-actions">
+                                        <?php if ($course['status'] == 'pending'): ?>
+                                            <button class="btn btn-success" onclick="approveCourse(<?php echo $course['id']; ?>)">
+                                                ✅ Approve
+                                            </button>
+                                            <button class="btn btn-danger" onclick="rejectCourse(<?php echo $course['id']; ?>)">
+                                                ❌ Reject
+                                            </button>
+                                        <?php endif; ?>
+                                        
+                                        <button class="btn btn-info" onclick="viewCourseDetails(<?php echo $course['id']; ?>)">
+                                            👁️ View Details
+                                        </button>
+                                        
+                                        <?php if ($course['status'] == 'published'): ?>
+                                            <button class="btn btn-warning" onclick="suspendCourse(<?php echo $course['id']; ?>)">
+                                                ⏸️ Suspend
+                                            </button>
+                                        <?php endif; ?>
+                                        
+                                        <button class="btn btn-secondary" onclick="deleteCourse(<?php echo $course['id']; ?>)">
+                                            🗑️ Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php 
+                                endforeach;
+                            else:
+                            ?>
+                            <div class="no-data">
+                                <p>No courses found.</p>
+                            </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <button class="slider-nav next" onclick="slideRight()" id="nextBtn">❯</button>
+                </div>
+                
+                <div class="slider-indicators" id="sliderIndicators">
+                    <!-- Indicators will be generated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Course Stats (Moved to Bottom) -->
             <div class="stats-grid">
                 <div class="stat-card pending">
                     <div class="stat-header">
@@ -2761,109 +2980,12 @@ if ($users_result) {
                 </div>
             </div>
 
-            <!-- Course Approval Tabs -->
+            <!-- Course Filter Tabs (Moved to Bottom) -->
             <div class="course-tabs">
                 <button class="tab-btn active" data-course-tab="pending">Pending Approval</button>
                 <button class="tab-btn" data-course-tab="approved">Approved</button>
                 <button class="tab-btn" data-course-tab="rejected">Rejected</button>
                 <button class="tab-btn" data-course-tab="all">All Courses</button>
-            </div>
-
-            <!-- Courses Grid -->
-            <div class="courses-section">
-                <div class="section-header">
-                    <h3 class="section-title">Course List</h3>
-                    <div class="header-actions">
-                        <select class="filter-select" id="courseStatusFilter">
-                            <option value="pending">Pending</option>
-                            <option value="published">Approved</option>
-                            <option value="rejected">Rejected</option>
-                            <option value="">All Status</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="courses-grid" id="coursesGrid">
-                    <?php
-                    // Get courses for approval
-                    $courses_query = "
-                        SELECT c.*, cr.full_name as creator_name, cr.email as creator_email
-                        FROM courses c
-                        JOIN creators cr ON c.creator_id = cr.id
-                        ORDER BY c.created_at DESC
-                        LIMIT 20
-                    ";
-                    $courses_result = mysqli_query($conn, $courses_query);
-
-                    if (mysqli_num_rows($courses_result) > 0):
-                        while ($course = mysqli_fetch_assoc($courses_result)):
-                    ?>
-                    <div class="course-card" data-status="<?php echo $course['status']; ?>">
-                        <div class="course-image">
-                            <?php if (!empty($course['thumbnail'])): ?>
-                                <img src="<?php echo htmlspecialchars($course['thumbnail']); ?>" alt="Course Thumbnail">
-                            <?php else: ?>
-                                <div style="height: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
-                                    📚
-                                </div>
-                            <?php endif; ?>
-                            <div class="course-status <?php echo $course['status']; ?>">
-                                <?php echo ucfirst($course['status']); ?>
-                            </div>
-                        </div>
-                        
-                        <div class="course-info">
-                            <h3 class="course-title"><?php echo htmlspecialchars($course['course_name']); ?></h3>
-                            <p class="course-creator">by <?php echo htmlspecialchars($course['creator_name']); ?></p>
-                            <p class="course-description"><?php echo htmlspecialchars(substr($course['description'], 0, 120)) . '...'; ?></p>
-                            
-                            <div class="course-meta">
-                                <span>📅 <?php echo date('M j, Y', strtotime($course['created_at'])); ?></span>
-                                <span>⏱️ <?php echo $course['duration']; ?></span>
-                                <span>🏷️ <?php echo htmlspecialchars($course['category']); ?></span>
-                            </div>
-
-                            <div class="course-details">
-                                <p><strong>Creator Email:</strong> <?php echo htmlspecialchars($course['creator_email']); ?></p>
-                                <p><strong>NFT Rewards:</strong> <?php echo $course['nft_reward'] ? 'Yes' : 'No'; ?></p>
-                                <p><strong>Difficulty:</strong> <?php echo ucfirst($course['difficulty']); ?></p>
-                            </div>
-
-                            <div class="course-actions">
-                                <?php if ($course['status'] == 'pending'): ?>
-                                    <button class="btn btn-success" onclick="approveCourse(<?php echo $course['id']; ?>)">
-                                        ✅ Approve
-                                    </button>
-                                    <button class="btn btn-danger" onclick="rejectCourse(<?php echo $course['id']; ?>)">
-                                        ❌ Reject
-                                    </button>
-                                <?php endif; ?>
-                                
-                                <button class="btn btn-info" onclick="viewCourseDetails(<?php echo $course['id']; ?>)">
-                                    👁️ View Details
-                                </button>
-                                
-                                <?php if ($course['status'] == 'published'): ?>
-                                    <button class="btn btn-warning" onclick="suspendCourse(<?php echo $course['id']; ?>)">
-                                        ⏸️ Suspend
-                                    </button>
-                                <?php endif; ?>
-                                
-                                <button class="btn btn-secondary" onclick="deleteCourse(<?php echo $course['id']; ?>)">
-                                    🗑️ Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <?php 
-                        endwhile;
-                    else:
-                    ?>
-                    <div class="no-data">
-                        <p>No courses found.</p>
-                    </div>
-                    <?php endif; ?>
-                </div>
             </div>
         </div>
     </main>
@@ -3841,6 +3963,101 @@ if ($users_result) {
             }
         }
 
+        // Course slider functionality
+        let currentSlide = 0;
+        const coursesPerPage = 3;
+        let totalCourses = 0;
+        let totalSlides = 0;
+
+        function initializeSlider() {
+            const coursesSlider = document.getElementById('coursesSlider');
+            if (!coursesSlider) return;
+            
+            const courses = coursesSlider.querySelectorAll('.course-card');
+            totalCourses = courses.length;
+            totalSlides = Math.ceil(totalCourses / coursesPerPage);
+            
+            // Create indicators
+            createSliderIndicators();
+            
+            // Update navigation state
+            updateNavigationState();
+            
+            // Show only first 3 courses initially
+            updateSliderPosition();
+        }
+
+        function createSliderIndicators() {
+            const indicatorsContainer = document.getElementById('sliderIndicators');
+            if (!indicatorsContainer) return;
+            
+            indicatorsContainer.innerHTML = '';
+            
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = `slider-dot ${i === 0 ? 'active' : ''}`;
+                dot.onclick = () => goToSlide(i);
+                indicatorsContainer.appendChild(dot);
+            }
+        }
+
+        function updateSliderPosition() {
+            const coursesSlider = document.getElementById('coursesSlider');
+            if (!coursesSlider) return;
+            
+            const translateX = -(currentSlide * 100);
+            coursesSlider.style.transform = `translateX(${translateX}%)`;
+        }
+
+        function updateNavigationState() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            if (prevBtn) prevBtn.disabled = currentSlide === 0;
+            if (nextBtn) nextBtn.disabled = currentSlide >= totalSlides - 1;
+            
+            // Update indicators
+            const dots = document.querySelectorAll('.slider-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function slideLeft() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSliderPosition();
+                updateNavigationState();
+            }
+        }
+
+        function slideRight() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSliderPosition();
+                updateNavigationState();
+            }
+        }
+
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            updateSliderPosition();
+            updateNavigationState();
+        }
+
+        // Initialize slider when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSlider();
+        });
+
+        // Re-initialize slider when switching tabs or filtering
+        function reinitializeSlider() {
+            setTimeout(() => {
+                currentSlide = 0;
+                initializeSlider();
+            }, 100);
+        }
+
         function deleteCourse(courseId) {
             // Enhanced confirmation dialog
             const confirmMessage = `⚠️ WARNING: Are you sure you want to permanently delete this course?
@@ -3934,11 +4151,14 @@ Type 'DELETE' to confirm:`;
                 const cardStatus = card.getAttribute('data-status');
                 
                 if (status === 'all' || status === '' || cardStatus === status) {
-                    card.style.display = 'block';
+                    card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
             });
+            
+            // Re-initialize slider after filtering
+            reinitializeSlider();
         }
     </script>
 </body>
