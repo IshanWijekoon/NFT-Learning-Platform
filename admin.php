@@ -2356,7 +2356,7 @@ if ($users_result) {
             <li class="nav-item">
                 <a href="#" class="nav-link" data-tab="courses">
                     <span class="nav-icon">📚</span>
-                    Course Approval
+                    Manage Courses
                 </a>
             </li>
             <li class="nav-item">
@@ -2691,11 +2691,11 @@ if ($users_result) {
 
         </div>
 
-        <!-- Course Approval Content -->
+        <!-- Manage Courses Content -->
         <div class="content-section" id="coursesContent" style="display: none;">
             <div class="page-title">
-                <h1>Course Approval</h1>
-                <p>Review and approve submitted courses from creators</p>
+                <h1>Manage Courses</h1>
+                <p>Review, approve, and manage courses from creators</p>
             </div>
 
             <!-- Course Stats -->
@@ -3574,14 +3574,6 @@ if ($users_result) {
             }
         }
 
-        function deleteCourse(courseId) {
-            if (confirm('Are you sure you want to permanently delete this course?')) {
-                const courseCard = document.querySelector(`[onclick*="${courseId}"]`).closest('.course-card');
-                courseCard.remove();
-                alert('Course deleted successfully!');
-            }
-        }
-
         // Close modal when clicking outside
         document.addEventListener('click', (e) => {
             const modal = document.getElementById('courseReviewModal');
@@ -3850,7 +3842,26 @@ if ($users_result) {
         }
 
         function deleteCourse(courseId) {
-            if (confirm('Are you sure you want to permanently delete this course? This action cannot be undone.')) {
+            // Enhanced confirmation dialog
+            const confirmMessage = `⚠️ WARNING: Are you sure you want to permanently delete this course?
+
+This action will:
+• Remove the course from the platform
+• Delete all associated files and videos
+• Remove course data permanently
+• This action CANNOT be undone
+
+Type 'DELETE' to confirm:`;
+            
+            const confirmation = prompt(confirmMessage);
+            
+            if (confirmation === 'DELETE') {
+                // Show loading state
+                const deleteBtn = document.querySelector(`button[onclick*="deleteCourse(${courseId})"]`);
+                const originalText = deleteBtn.innerHTML;
+                deleteBtn.innerHTML = '⏳ Deleting...';
+                deleteBtn.disabled = true;
+                
                 fetch('approve_course.php', {
                     method: 'POST',
                     headers: {
@@ -3864,17 +3875,50 @@ if ($users_result) {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert('Course deleted successfully!');
-                        location.reload();
+                        // Show success message
+                        alert('✅ Course deleted successfully!');
+                        
+                        // Remove the course card with animation
+                        const courseCard = deleteBtn.closest('.course-card');
+                        if (courseCard) {
+                            courseCard.style.transition = 'all 0.3s ease';
+                            courseCard.style.transform = 'scale(0.8)';
+                            courseCard.style.opacity = '0';
+                            
+                            setTimeout(() => {
+                                courseCard.remove();
+                                // Update stats if needed
+                                updateCourseStats();
+                            }, 300);
+                        } else {
+                            location.reload(); // Fallback refresh
+                        }
                     } else {
-                        alert('Error deleting course: ' + data.message);
+                        alert('❌ Error deleting course: ' + data.message);
+                        // Restore button state
+                        deleteBtn.innerHTML = originalText;
+                        deleteBtn.disabled = false;
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred while deleting the course');
+                    alert('❌ An error occurred while deleting the course. Please try again.');
+                    // Restore button state
+                    deleteBtn.innerHTML = originalText;
+                    deleteBtn.disabled = false;
                 });
+            } else if (confirmation !== null) {
+                alert('❌ Deletion cancelled. You must type "DELETE" exactly to confirm.');
             }
+        }
+
+        // Helper function to update course statistics after deletion
+        function updateCourseStats() {
+            // You can implement this to update the stats cards without full page reload
+            // For now, we'll do a simple reload after a delay
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
         }
 
         function viewCourseDetails(courseId) {
