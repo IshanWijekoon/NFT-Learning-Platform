@@ -1378,108 +1378,85 @@ if ($users_result) {
         }
 
         .courses-grid {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 25px;
             margin-bottom: 30px;
-            overflow: hidden;
-            position: relative;
-            scroll-behavior: smooth;
-        }
-
-        .courses-slider-container {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .courses-slider {
-            display: flex;
-            transition: transform 0.3s ease;
-            gap: 25px;
-        }
-
-        .course-card {
-            min-width: calc(33.333% - 17px);
-            flex-shrink: 0;
-        }
-
-        .slider-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(220, 53, 69, 0.8);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 10;
-        }
-
-        .slider-nav:hover {
-            background: #dc3545;
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .slider-nav.prev {
-            left: -20px;
-        }
-
-        .slider-nav.next {
-            right: -20px;
-        }
-
-        .slider-nav:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: translateY(-50%) scale(1);
-        }
-
-        .slider-indicators {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .slider-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #555;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .slider-dot.active {
-            background: #dc3545;
-            transform: scale(1.2);
-        }
-
-        .course-card {
-            min-width: calc(33.333% - 17px);
-            flex-shrink: 0;
-            background: #3d3d3d;
-            border: 1px solid #555;
+            padding: 20px;
+            background: #f8f9fa;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        #coursesGrid {
+            display: block !important;
+            width: 100%;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            border: none;
+            width: 100%;
+            max-width: none;
         }
 
         .course-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.2);
-            border-color: #dc3545;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .course-card:hover .course-image::before {
+            opacity: 0.6;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
             z-index: 5;
         }
 
         .course-image {
             position: relative;
-            height: 180px;
+            height: 120px;
             overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .course-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%);
+            background-size: 20px 20px;
+        }
+
+        /* Colorful gradient backgrounds for different courses */
+        .course-card[data-status="pending"] .course-image {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        .course-card[data-status="approved"] .course-image {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+        }
+
+        .course-card[data-status="rejected"] .course-image {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+        }
+
+        .course-card[data-status="published"] .course-image {
+            background: linear-gradient(135deg, #a8caba 0%, #5d4e75 100%);
         }
 
         .course-image img {
@@ -1488,89 +1465,159 @@ if ($users_result) {
             object-fit: cover;
         }
 
+        .course-avatar {
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        }
+
         .course-status {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 15px;
+            right: 15px;
             padding: 6px 12px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            color: #333;
         }
 
         .course-status.pending {
-            background: #fff3cd;
+            background: rgba(255, 193, 7, 0.9);
             color: #856404;
         }
 
         .course-status.approved {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(40, 167, 69, 0.9);
+            color: white;
         }
 
         .course-status.rejected {
-            background: #f8d7da;
-            color: #721c24;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
         }
 
         .course-status.published {
-            background: #d1ecf1;
-            color: #0c5460;
+            background: rgba(23, 162, 184, 0.9);
+            color: white;
         }
 
         .course-info {
-            padding: 20px;
+            padding: 25px 16px 16px 16px;
+            text-align: center;
+            background: white;
         }
 
         .course-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            color: #e0e0e0;
+            color: #2c3e50;
             margin-bottom: 8px;
             line-height: 1.3;
+            min-height: 2.6em;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .course-creator {
+            font-size: 13px;
+            color: #6c757d;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .course-rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 2px;
+        }
+
+        .star {
+            color: #ffc107;
             font-size: 14px;
-            color: #aaa;
-            margin-bottom: 12px;
+        }
+
+        .star.empty {
+            color: #e9ecef;
+        }
+
+        .rating-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .course-students {
+            font-size: 13px;
+            color: #6c757d;
+            margin-bottom: 20px;
+            font-weight: 500;
         }
 
         .course-description {
-            font-size: 14px;
-            color: #bbb;
+            font-size: 13px;
+            color: #6c757d;
             line-height: 1.5;
             margin-bottom: 15px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
-            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            text-align: center;
         }
 
         .course-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 8px;
             margin-bottom: 15px;
+            justify-content: center;
         }
 
         .course-meta span {
-            font-size: 12px;
-            color: #aaa;
-            background: #4d4d4d;
+            font-size: 11px;
+            color: #6c757d;
+            background: #f8f9fa;
             padding: 4px 8px;
-            border-radius: 6px;
-            border: 1px solid #555;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
         }
 
         .course-details {
-            font-size: 13px;
-            color: #aaa;
+            font-size: 12px;
+            color: #6c757d;
             margin-bottom: 20px;
             line-height: 1.4;
+            text-align: center;
         }
 
         .course-details p {
@@ -1579,34 +1626,38 @@ if ($users_result) {
 
         .course-actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn {
-            padding: 8px 16px;
+            padding: 6px 12px;
             border: none;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .btn-primary {
-            background: #dc3545;
+            background: #667eea;
             color: white;
-            border: 1px solid #dc3545;
+            border: 1px solid #667eea;
         }
 
         .btn-primary:hover {
-            background: #a71e2a;
-            border-color: #a71e2a;
-            box-shadow: 0 0 10px rgba(220, 53, 69, 0.4);
+            background: #5a67d8;
+            border-color: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
 
         .btn-success {
@@ -1887,11 +1938,9 @@ if ($users_result) {
         /* Responsive adjustments for courses */
         @media (max-width: 768px) {
             .courses-grid {
-                padding: 0 10px;
-            }
-            
-            .course-card {
-                min-width: calc(50% - 12.5px);
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 15px;
+                padding: 15px;
             }
             
             .course-actions {
@@ -1910,26 +1959,20 @@ if ($users_result) {
             .course-tabs {
                 overflow-x: auto;
                 white-space: nowrap;
-            }
-            
-            .slider-nav {
-                width: 35px;
-                height: 35px;
-                font-size: 16px;
+                gap: 5px;
             }
         }
 
         @media (max-width: 480px) {
-            .course-card {
-                min-width: 100%;
+            .courses-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 10px;
             }
             
-            .slider-nav.prev {
-                left: -15px;
-            }
-            
-            .slider-nav.next {
-                right: -15px;
+            .course-tabs .tab-btn {
+                padding: 6px 12px;
+                font-size: 11px;
             }
         }
 
@@ -2808,112 +2851,106 @@ if ($users_result) {
 
             <!-- Quick Approval Actions Section (Moved to Top) -->
             <div class="courses-section">
+                <!-- Course Filter Tabs (Moved to Top of Slider) -->
+                <div class="course-tabs">
+                    <button class="tab-btn" data-course-tab="pending">Pending Approval</button>
+                    <button class="tab-btn" data-course-tab="approved">Approved</button>
+                    <button class="tab-btn" data-course-tab="rejected">Rejected</button>
+                    <button class="tab-btn active" data-course-tab="all">All Courses</button>
+                </div>
+
                 <div class="section-header">
                     <h3 class="section-title">Course Management Actions</h3>
-                    <div class="header-actions">
-                        <select class="filter-select" id="courseStatusFilter">
-                            <option value="pending">Pending</option>
-                            <option value="published">Approved</option>
-                            <option value="rejected">Rejected</option>
-                            <option value="">All Status</option>
-                        </select>
-                    </div>
                 </div>
 
-                <div class="courses-slider-container">
-                    <button class="slider-nav prev" onclick="slideLeft()" id="prevBtn">❮</button>
-                    <div class="courses-grid" id="coursesGrid">
-                        <div class="courses-slider" id="coursesSlider">
-                            <?php
-                            // Get courses for approval
-                            $courses_query = "
-                                SELECT c.*, cr.full_name as creator_name, cr.email as creator_email
-                                FROM courses c
-                                JOIN creators cr ON c.creator_id = cr.id
-                                ORDER BY c.created_at DESC
-                            ";
-                            $courses_result = mysqli_query($conn, $courses_query);
-                            $all_courses = [];
+                <div class="courses-grid" id="coursesGrid">
+                    <?php
+                    // Get courses for approval
+                    $courses_query = "
+                        SELECT c.*, cr.full_name as creator_name, cr.email as creator_email
+                        FROM courses c
+                        JOIN creators cr ON c.creator_id = cr.id
+                        ORDER BY c.created_at DESC
+                    ";
+                    $courses_result = mysqli_query($conn, $courses_query);
+                    $all_courses = [];
 
-                            if (mysqli_num_rows($courses_result) > 0):
-                                while ($course = mysqli_fetch_assoc($courses_result)) {
-                                    $all_courses[] = $course;
-                                }
-                                
-                                foreach ($all_courses as $course):
-                            ?>
-                            <div class="course-card" data-status="<?php echo $course['status']; ?>">
-                                <div class="course-image">
-                                    <?php if (!empty($course['thumbnail'])): ?>
-                                        <img src="<?php echo htmlspecialchars($course['thumbnail']); ?>" alt="Course Thumbnail">
-                                    <?php else: ?>
-                                        <div style="height: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
-                                            📚
-                                        </div>
-                                    <?php endif; ?>
-                                    <div class="course-status <?php echo $course['status']; ?>">
-                                        <?php echo ucfirst($course['status']); ?>
-                                    </div>
+                    if (mysqli_num_rows($courses_result) > 0):
+                        while ($course = mysqli_fetch_assoc($courses_result)) {
+                            $all_courses[] = $course;
+                        }
+                        
+                        // Debug: Show how many courses were found
+                        echo "<!-- DEBUG: Found " . count($all_courses) . " courses -->";
+                        
+                        foreach ($all_courses as $course):
+                    ?>
+                    <div class="course-card" data-status="<?php echo $course['status']; ?>">
+                        <div class="course-image">
+                            <?php if (!empty($course['thumbnail'])): ?>
+                                <img src="<?php echo htmlspecialchars($course['thumbnail']); ?>" alt="Course Thumbnail">
+                            <?php else: ?>
+                                <div style="height: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
+                                    📚
                                 </div>
-                                
-                                <div class="course-info">
-                                    <h3 class="course-title"><?php echo htmlspecialchars($course['course_name']); ?></h3>
-                                    <p class="course-creator">by <?php echo htmlspecialchars($course['creator_name']); ?></p>
-                                    <p class="course-description"><?php echo htmlspecialchars(substr($course['description'], 0, 120)) . '...'; ?></p>
-                                    
-                                    <div class="course-meta">
-                                        <span>📅 <?php echo date('M j, Y', strtotime($course['created_at'])); ?></span>
-                                        <span>⏱️ <?php echo $course['duration']; ?></span>
-                                        <span>🏷️ <?php echo htmlspecialchars($course['category']); ?></span>
-                                    </div>
-
-                                    <div class="course-details">
-                                        <p><strong>Creator Email:</strong> <?php echo htmlspecialchars($course['creator_email']); ?></p>
-                                        <p><strong>NFT Rewards:</strong> <?php echo $course['nft_reward'] ? 'Yes' : 'No'; ?></p>
-                                        <p><strong>Difficulty:</strong> <?php echo ucfirst($course['difficulty']); ?></p>
-                                    </div>
-
-                                    <div class="course-actions">
-                                        <?php if ($course['status'] == 'pending'): ?>
-                                            <button class="btn btn-success" onclick="approveCourse(<?php echo $course['id']; ?>)">
-                                                ✅ Approve
-                                            </button>
-                                            <button class="btn btn-danger" onclick="rejectCourse(<?php echo $course['id']; ?>)">
-                                                ❌ Reject
-                                            </button>
-                                        <?php endif; ?>
-                                        
-                                        <button class="btn btn-info" onclick="viewCourseDetails(<?php echo $course['id']; ?>)">
-                                            👁️ View Details
-                                        </button>
-                                        
-                                        <?php if ($course['status'] == 'published'): ?>
-                                            <button class="btn btn-warning" onclick="suspendCourse(<?php echo $course['id']; ?>)">
-                                                ⏸️ Suspend
-                                            </button>
-                                        <?php endif; ?>
-                                        
-                                        <button class="btn btn-secondary" onclick="deleteCourse(<?php echo $course['id']; ?>)">
-                                            🗑️ Delete
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php 
-                                endforeach;
-                            else:
-                            ?>
-                            <div class="no-data">
-                                <p>No courses found.</p>
-                            </div>
                             <?php endif; ?>
+                            <div class="course-status <?php echo $course['status']; ?>">
+                                <?php echo ucfirst($course['status']); ?>
+                            </div>
+                        </div>
+                        
+                        <div class="course-info">
+                            <h3 class="course-title"><?php echo htmlspecialchars($course['course_name']); ?></h3>
+                            <p class="course-creator">by <?php echo htmlspecialchars($course['creator_name']); ?></p>
+                            <p class="course-description"><?php echo htmlspecialchars(substr($course['description'], 0, 120)) . '...'; ?></p>
+                            
+                            <div class="course-meta">
+                                <span>📅 <?php echo date('M j, Y', strtotime($course['created_at'])); ?></span>
+                                <span>⏱️ <?php echo $course['duration']; ?></span>
+                                <span>🏷️ <?php echo htmlspecialchars($course['category']); ?></span>
+                            </div>
+
+                            <div class="course-details">
+                                <p><strong>Creator Email:</strong> <?php echo htmlspecialchars($course['creator_email']); ?></p>
+                                <p><strong>NFT Rewards:</strong> <?php echo $course['nft_reward'] ? 'Yes' : 'No'; ?></p>
+                                <p><strong>Difficulty:</strong> <?php echo ucfirst($course['difficulty']); ?></p>
+                            </div>
+
+                            <div class="course-actions">
+                                <?php if ($course['status'] == 'pending'): ?>
+                                    <button class="btn btn-success" onclick="approveCourse(<?php echo $course['id']; ?>)">
+                                        ✅ Approve
+                                    </button>
+                                    <button class="btn btn-danger" onclick="rejectCourse(<?php echo $course['id']; ?>)">
+                                        ❌ Reject
+                                    </button>
+                                <?php endif; ?>
+                                
+                                <button class="btn btn-info" onclick="viewCourseDetails(<?php echo $course['id']; ?>)">
+                                    👁️ View Details
+                                </button>
+                                
+                                <?php if ($course['status'] == 'published'): ?>
+                                    <button class="btn btn-warning" onclick="suspendCourse(<?php echo $course['id']; ?>)">
+                                        ⏸️ Suspend
+                                    </button>
+                                <?php endif; ?>
+                                
+                                <button class="btn btn-secondary" onclick="deleteCourse(<?php echo $course['id']; ?>)">
+                                    🗑️ Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <button class="slider-nav next" onclick="slideRight()" id="nextBtn">❯</button>
-                </div>
-                
-                <div class="slider-indicators" id="sliderIndicators">
-                    <!-- Indicators will be generated by JavaScript -->
+                    <?php 
+                        endforeach;
+                    else:
+                    ?>
+                    <!-- DEBUG: No courses found in database -->
+                    <div class="no-data">
+                        <p>No courses found.</p>
+                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -2978,14 +3015,6 @@ if ($users_result) {
                     </div>
                     <div class="stat-label">Total Courses</div>
                 </div>
-            </div>
-
-            <!-- Course Filter Tabs (Moved to Bottom) -->
-            <div class="course-tabs">
-                <button class="tab-btn active" data-course-tab="pending">Pending Approval</button>
-                <button class="tab-btn" data-course-tab="approved">Approved</button>
-                <button class="tab-btn" data-course-tab="rejected">Rejected</button>
-                <button class="tab-btn" data-course-tab="all">All Courses</button>
             </div>
         </div>
     </main>
@@ -3360,6 +3389,14 @@ if ($users_result) {
         document.addEventListener('DOMContentLoaded', () => {
             initUserTabs();
             initUserSearch();
+            initCourseTabs();
+            
+            // Debug: Check how many course cards exist
+            const courseCards = document.querySelectorAll('.course-card');
+            console.log('DEBUG: Found', courseCards.length, 'course cards on page load');
+            
+            // Show all courses by default
+            filterCourses('all');
         });
 
         // Course Management Functions
@@ -3389,7 +3426,7 @@ if ($users_result) {
                 const cardStatus = card.getAttribute('data-status');
                 
                 if (status === 'all' || cardStatus === status) {
-                    card.style.display = 'block';
+                    card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
@@ -3866,14 +3903,6 @@ if ($users_result) {
                     filterCourses(status);
                 });
             });
-
-            // Course status filter
-            const courseStatusFilter = document.getElementById('courseStatusFilter');
-            if (courseStatusFilter) {
-                courseStatusFilter.addEventListener('change', (e) => {
-                    filterCourses(e.target.value);
-                });
-            }
         });
 
         // Course approval functions
@@ -3963,99 +3992,56 @@ if ($users_result) {
             }
         }
 
-        // Course slider functionality
-        let currentSlide = 0;
-        const coursesPerPage = 3;
-        let totalCourses = 0;
-        let totalSlides = 0;
+        // Initialize course tabs and filtering
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize course tabs
+            initCourseTabs();
+            
+            // Show all courses by default
+            filterCourses('all');
+            
+            console.log('JS Debug: Course management initialized');
+        });
 
-        function initializeSlider() {
-            const coursesSlider = document.getElementById('coursesSlider');
-            if (!coursesSlider) return;
+        function initCourseTabs() {
+            const tabButtons = document.querySelectorAll('[data-course-tab]');
             
-            const courses = coursesSlider.querySelectorAll('.course-card');
-            totalCourses = courses.length;
-            totalSlides = Math.ceil(totalCourses / coursesPerPage);
-            
-            // Create indicators
-            createSliderIndicators();
-            
-            // Update navigation state
-            updateNavigationState();
-            
-            // Show only first 3 courses initially
-            updateSliderPosition();
-        }
-
-        function createSliderIndicators() {
-            const indicatorsContainer = document.getElementById('sliderIndicators');
-            if (!indicatorsContainer) return;
-            
-            indicatorsContainer.innerHTML = '';
-            
-            for (let i = 0; i < totalSlides; i++) {
-                const dot = document.createElement('div');
-                dot.className = `slider-dot ${i === 0 ? 'active' : ''}`;
-                dot.onclick = () => goToSlide(i);
-                indicatorsContainer.appendChild(dot);
-            }
-        }
-
-        function updateSliderPosition() {
-            const coursesSlider = document.getElementById('coursesSlider');
-            if (!coursesSlider) return;
-            
-            const translateX = -(currentSlide * 100);
-            coursesSlider.style.transform = `translateX(${translateX}%)`;
-        }
-
-        function updateNavigationState() {
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            
-            if (prevBtn) prevBtn.disabled = currentSlide === 0;
-            if (nextBtn) nextBtn.disabled = currentSlide >= totalSlides - 1;
-            
-            // Update indicators
-            const dots = document.querySelectorAll('.slider-dot');
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const status = this.getAttribute('data-course-tab');
+                    filterCourses(status);
+                });
             });
         }
 
-        function slideLeft() {
-            if (currentSlide > 0) {
-                currentSlide--;
-                updateSliderPosition();
-                updateNavigationState();
+        function filterCourses(status) {
+            const courseCards = document.querySelectorAll('#coursesGrid .course-card');
+            let visibleCount = 0;
+            
+            console.log(`JS Debug: filterCourses called with status: ${status}`);
+            console.log(`JS Debug: Found ${courseCards.length} course cards`);
+            
+            // Filter courses
+            courseCards.forEach(card => {
+                const cardStatus = card.getAttribute('data-status');
+                const shouldShow = status === 'all' || status === '' || cardStatus === status;
+                
+                if (shouldShow) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Update tab visual feedback
+            const activeTab = document.querySelector(`[data-course-tab="${status}"]`);
+            if (activeTab) {
+                document.querySelectorAll('[data-course-tab]').forEach(tab => tab.classList.remove('active'));
+                activeTab.classList.add('active');
             }
-        }
-
-        function slideRight() {
-            if (currentSlide < totalSlides - 1) {
-                currentSlide++;
-                updateSliderPosition();
-                updateNavigationState();
-            }
-        }
-
-        function goToSlide(slideIndex) {
-            currentSlide = slideIndex;
-            updateSliderPosition();
-            updateNavigationState();
-        }
-
-        // Initialize slider when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            initializeSlider();
-        });
-
-        // Re-initialize slider when switching tabs or filtering
-        function reinitializeSlider() {
-            setTimeout(() => {
-                currentSlide = 0;
-                initializeSlider();
-            }, 100);
+            
+            console.log(`JS Debug: Filtered courses: ${visibleCount} visible for status "${status}"`);
         }
 
         function deleteCourse(courseId) {
@@ -4156,9 +4142,6 @@ Type 'DELETE' to confirm:`;
                     card.style.display = 'none';
                 }
             });
-            
-            // Re-initialize slider after filtering
-            reinitializeSlider();
         }
     </script>
 </body>
