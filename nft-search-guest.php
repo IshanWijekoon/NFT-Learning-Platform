@@ -406,10 +406,13 @@ if ($_POST && isset($_POST['nft_key'])) {
         <div class="nav-container">
             <a href="#" class="logo">Learnity</a>
             
-            <ul class="nav-menu" id="navMenu">           
+            <ul class="nav-menu" id="navMenu">
+               
                    <li><a href="guest.php">Home</a></li>
                     <li><a href="course-browser-guest.php">Courses</a></li>
+            
                     <li><a href="nft-search.php" class="active">Search NFT</a></li>
+                
             </ul>
 
             <div class="hamburger" id="hamburger">

@@ -369,6 +369,96 @@ if ($is_logged_in) {
             border: 1px solid rgba(220, 38, 38, 0.3);
         }
 
+        /* Web3 Wallet Styles */
+        .wallet-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .wallet-connect-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .wallet-connect-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .wallet-info {
+            display: none;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .wallet-address {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .wallet-disconnect-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .wallet-disconnect-btn:hover {
+            background: #991b1b;
+        }
+
+        .btn-web3 {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border: 2px solid transparent;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-web3:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-web3:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .web3-icon {
+            width: 20px;
+            height: 20px;
+        }
+
         @media (max-width: 768px) {
             .courses-grid {
                 grid-template-columns: 1fr;
@@ -384,6 +474,16 @@ if ($is_logged_in) {
             
             .course-actions {
                 flex-direction: column;
+            }
+
+            .wallet-section {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .wallet-info {
+                flex-direction: column;
+                text-align: center;
             }
         }
     </style>
@@ -403,10 +503,30 @@ if ($is_logged_in) {
                 <?php else: ?>
                     <li><a href="guest.php"><i class="fas fa-home"></i> Home</a></li>
                     <li><a href="course-browser.php"><i class="fas fa-book"></i> Browse Courses</a></li>
+                    <li><a href="web3-guide.html"><i class="fab fa-ethereum"></i> Web3 Guide</a></li>
                     <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a></li>
                     <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
                 <?php endif; ?>
             </ul>
+            
+            <!-- Web3 Wallet Section -->
+            <div class="wallet-section">
+                <button id="walletConnectBtn" class="wallet-connect-btn">
+                    <i class="fab fa-ethereum"></i>
+                    Connect Wallet
+                </button>
+                
+                <div id="walletInfo" class="wallet-info">
+                    <i class="fab fa-ethereum"></i>
+                    <span id="walletAddress" class="wallet-address"></span>
+                    <a href="wallet-dashboard.php" style="color: #667eea; text-decoration: none; margin: 0 0.5rem;">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                    <button id="walletDisconnectBtn" class="wallet-disconnect-btn">
+                        Disconnect
+                    </button>
+                </div>
+            </div>
         </div>
     </nav>
 
@@ -770,7 +890,33 @@ if ($is_logged_in) {
 
         // Initialize the course browser
         document.addEventListener('DOMContentLoaded', () => {
-            new CourseBrowser();
+            window.courseBrowser = new CourseBrowser();
+        });
+    </script>
+    
+    <!-- Web3 Wallet Integration -->
+    <script src="web3-wallet.js"></script>
+    <script>
+        // Connect wallet button event listener
+        document.addEventListener('DOMContentLoaded', () => {
+            const connectBtn = document.getElementById('walletConnectBtn');
+            const disconnectBtn = document.getElementById('walletDisconnectBtn');
+            
+            if (connectBtn) {
+                connectBtn.addEventListener('click', async () => {
+                    if (window.web3Wallet) {
+                        await window.web3Wallet.connectWallet();
+                    }
+                });
+            }
+            
+            if (disconnectBtn) {
+                disconnectBtn.addEventListener('click', async () => {
+                    if (window.web3Wallet) {
+                        await window.web3Wallet.disconnectWallet();
+                    }
+                });
+            }
         });
     </script>
 </body>
