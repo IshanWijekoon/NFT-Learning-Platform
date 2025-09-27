@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web3 Integration Guide - NFT Learning Platform</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        min-height: 100vh;
+        color: #e1e5e9;
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        border: 1px solid rgba(102, 126, 234, 0.3);
+      }
+
+      .header h1 {
+        color: #f8f9fa;
+        margin-bottom: 0.5rem;
+        font-size: 2.5rem;
+      }
+
+      .header p {
+        color: #d1d5db;
+        font-size: 1.1rem;
+      }
+
+      .guide-section {
+        background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(102, 126, 234, 0.3);
+      }
+
+      .guide-section h2 {
+        color: #667eea;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .guide-section h3 {
+        color: #f8f9fa;
+        margin: 1.5rem 0 0.5rem 0;
+      }
+
+      .guide-section p,
+      .guide-section li {
+        color: #d1d5db;
+        margin-bottom: 0.5rem;
+      }
+
+      .guide-section ol,
+      .guide-section ul {
+        margin-left: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .code-block {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+        font-family: "Courier New", monospace;
+        overflow-x: auto;
+      }
+
+      .highlight {
+        background: rgba(102, 126, 234, 0.1);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        color: #a5b4fc;
+      }
+
+      .warning {
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+
+      .warning h4 {
+        color: #fbbf24;
+        margin-bottom: 0.5rem;
+      }
+
+      .warning p {
+        color: #fcd34d;
+      }
+
+      .success {
+        background: rgba(5, 150, 105, 0.1);
+        border: 1px solid rgba(5, 150, 105, 0.3);
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+      }
+
+      .success h4 {
+        color: #10b981;
+        margin-bottom: 0.5rem;
+      }
+
+      .success p {
+        color: #6ee7b7;
+      }
+
+      .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        margin: 0.5rem 0;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+      }
+
+      .feature-card {
+        background: #262626;
+        border: 1px solid rgba(102, 126, 234, 0.2);
+        border-radius: 8px;
+        padding: 1.5rem;
+      }
+
+      .feature-card h4 {
+        color: #667eea;
+        margin-bottom: 0.5rem;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 1rem;
+        }
+
+        .feature-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1><i class="fab fa-ethereum"></i> Web3 Integration Guide</h1>
+        <p>
+          Learn how to use blockchain wallets with our NFT Learning Platform
+        </p>
+      </div>
+
+      <div class="guide-section">
+        <h2><i class="fas fa-rocket"></i> Getting Started</h2>
+        <p>
+          Our platform now supports Web3 wallet integration, allowing you to
+          enroll in courses using your blockchain wallet and receive NFT
+          certificates upon completion.
+        </p>
+
+        <h3>What You Need</h3>
+        <ul>
+          <li>
+            A Web3 wallet like <strong>MetaMask</strong> installed in your
+            browser
+          </li>
+          <li>
+            Some ETH or other supported cryptocurrency (for future paid courses)
+          </li>
+          <li>Basic understanding of blockchain and wallet security</li>
+        </ul>
+
+        <div class="warning">
+          <h4>
+            <i class="fas fa-exclamation-triangle"></i> Important Security
+            Notice
+          </h4>
+          <p>
+            Never share your wallet's private key or seed phrase with anyone. We
+            will never ask for these details.
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h2><i class="fas fa-wallet"></i> Setting Up Your Wallet</h2>
+
+        <h3>Step 1: Install MetaMask</h3>
+        <ol>
+          <li>
+            Visit
+            <a href="https://metamask.io" target="_blank" style="color: #667eea"
+              >metamask.io</a
+            >
+            and download the browser extension
+          </li>
+          <li>Create a new wallet or import an existing one</li>
+          <li>Secure your seed phrase in a safe location</li>
+          <li>Add some test ETH if you're using a testnet</li>
+        </ol>
+
+        <h3>Step 2: Connect to Our Platform</h3>
+        <ol>
+          <li>
+            Navigate to the
+            <a href="course-browser.php" class="highlight">Course Browser</a>
+          </li>
+          <li>
+            Click the <span class="highlight">"Connect Wallet"</span> button in
+            the top navigation
+          </li>
+          <li>Approve the connection request in MetaMask</li>
+          <li>Your wallet address will appear once connected</li>
+        </ol>
+
+        <div class="success">
+          <h4><i class="fas fa-check-circle"></i> Success!</h4>
+          <p>
+            Once connected, you'll see Web3 enrollment options on course pages
+            and can access your wallet dashboard.
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h2><i class="fas fa-graduation-cap"></i> Web3 Course Enrollment</h2>
+
+        <p>
+          With your wallet connected, you can enroll in courses using blockchain
+          technology:
+        </p>
+
+        <h3>How It Works</h3>
+        <ol>
+          <li>Browse available courses on our platform</li>
+          <li>
+            Click the <span class="highlight">"Enroll with Web3"</span> button
+            (appears when wallet is connected)
+          </li>
+          <li>Sign the enrollment transaction in your wallet</li>
+          <li>Your enrollment is recorded on the blockchain</li>
+          <li>Access your course content immediately</li>
+        </ol>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h4><i class="fas fa-shield-alt"></i> Secure</h4>
+            <p>Your enrollment is cryptographically signed and verified</p>
+          </div>
+          <div class="feature-card">
+            <h4><i class="fas fa-globe"></i> Decentralized</h4>
+            <p>No central authority controls your learning records</p>
+          </div>
+          <div class="feature-card">
+            <h4><i class="fas fa-certificate"></i> NFT Certificates</h4>
+            <p>Receive verifiable NFT certificates upon completion</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h2><i class="fas fa-tachometer-alt"></i> Wallet Dashboard</h2>
+
+        <p>
+          Access your personalized Web3 dashboard to manage your blockchain
+          learning profile:
+        </p>
+
+        <h3>Dashboard Features</h3>
+        <ul>
+          <li>
+            <strong>Profile Management:</strong> Set your display name, email,
+            and bio
+          </li>
+          <li>
+            <strong>Enrollment History:</strong> View all your Web3 course
+            enrollments
+          </li>
+          <li>
+            <strong>NFT Certificates:</strong> Track and verify your blockchain
+            certificates
+          </li>
+          <li>
+            <strong>Wallet Info:</strong> See your connected wallet address and
+            status
+          </li>
+        </ul>
+
+        <p>
+          Access your dashboard by clicking the
+          <span class="highlight">"Dashboard"</span> link next to your wallet
+          address.
+        </p>
+
+        <a href="wallet-dashboard.php" class="btn">
+          <i class="fas fa-external-link-alt"></i> Open Wallet Dashboard
+        </a>
+      </div>
+
+      <div class="guide-section">
+        <h2><i class="fas fa-coins"></i> NFT Certificates</h2>
+
+        <p>
+          Upon successful course completion, you'll receive an NFT certificate
+          that proves your achievement:
+        </p>
+
+        <h3>Certificate Benefits</h3>
+        <ul>
+          <li>
+            <strong>Permanent Record:</strong> Stored permanently on the
+            blockchain
+          </li>
+          <li>
+            <strong>Verifiable:</strong> Anyone can verify the authenticity
+          </li>
+          <li>
+            <strong>Portable:</strong> Owned by you, independent of our platform
+          </li>
+          <li>
+            <strong>Tradeable:</strong> Can be transferred or sold (if desired)
+          </li>
+        </ul>
+
+        <div class="code-block">
+          Certificate Metadata Example: { "name": "Web Development Fundamentals
+          Certificate", "description": "Completed by [Your Name] on [Date]",
+          "course_id": "123", "completion_date": "2025-09-27", "wallet_address":
+          "0x...", "issuer": "NFT Learning Platform" }
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h2><i class="fas fa-question-circle"></i> Troubleshooting</h2>
+
+        <h3>Common Issues</h3>
+        <ul>
+          <li>
+            <strong>Wallet won't connect:</strong> Make sure MetaMask is
+            unlocked and try refreshing the page
+          </li>
+          <li>
+            <strong>Transaction failed:</strong> Check you have enough gas fees
+            and try again
+          </li>
+          <li>
+            <strong>Enrollment not showing:</strong> Wait a few minutes for
+            blockchain confirmation
+          </li>
+          <li>
+            <strong>Wrong network:</strong> Make sure you're on the correct
+            blockchain network
+          </li>
+        </ul>
+
+        <h3>Need Help?</h3>
+        <p>If you encounter any issues with the Web3 features:</p>
+        <ul>
+          <li>Check the browser console for error messages</li>
+          <li>Ensure your wallet has sufficient funds for gas fees</li>
+          <li>Try disconnecting and reconnecting your wallet</li>
+          <li>
+            Contact our support team with your wallet address and error details
+          </li>
+        </ul>
+      </div>
+
+      <div class="guide-section">
+        <h2><i class="fas fa-arrow-right"></i> Get Started Now</h2>
+
+        <p>
+          Ready to experience blockchain-powered learning? Start by connecting
+          your wallet and exploring our courses!
+        </p>
+
+        <div style="text-align: center; margin-top: 2rem">
+          <a href="course-browser.php" class="btn">
+            <i class="fab fa-ethereum"></i> Start Learning with Web3
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

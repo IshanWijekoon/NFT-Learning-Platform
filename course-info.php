@@ -66,7 +66,7 @@ if ($is_logged_in && $user_role === 'learner') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($course['title']); ?> - EduChain</title>
+    <title><?php echo htmlspecialchars($course['title']); ?> - Learnity</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -516,7 +516,7 @@ if ($is_logged_in && $user_role === 'learner') {
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo">EduChain</a>
+            <a href="#" class="logo">Learnity</a>
             
             <ul class="nav-menu" id="navMenu">
                 <?php if ($is_logged_in && $user_role === 'learner'): ?>

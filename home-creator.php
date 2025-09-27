@@ -628,21 +628,21 @@
                         <div class="feature-icon">📚</div>
                         <h3>Manage Your Courses</h3>
                         <p>Create engaging content with our intuitive course builder. Upload videos, documents, and interactive materials. Track student progress and engagement with detailed analytics.</p>
-                        <a href="#" class="feature-button" onclick="alert('Course management functionality would open here')">Get Started</a>
+                        
                     </div>
 
                     <div class="feature-card">
                         <div class="feature-icon">📊</div>
                         <h3>Track Your Earnings & Students</h3>
                         <p>Monitor your revenue growth, student enrollments, and course performance with comprehensive dashboards. Get insights to optimize your teaching strategy and maximize earnings.</p>
-                        <a href="#" class="feature-button" onclick="alert('Analytics dashboard would open here')">View Analytics</a>
+                        
                     </div>
 
                     <div class="feature-card">
                         <div class="feature-icon">🏆</div>
                         <h3>Get Certified with NFT Badges</h3>
                         <p>Issue blockchain-verified NFT certificates to your students upon course completion. These tamper-proof credentials enhance your courses' value and students' career prospects.</p>
-                        <a href="#" class="feature-button" onclick="alert('NFT certification info would open here')">Learn More</a>
+                        
                     </div>
                 </div>
             </div>
@@ -655,7 +655,7 @@
                 <p>Join our community of passionate educators and start building your teaching empire today. Your expertise can change the world, one student at a time.</p>
                 <div class="cta-buttons">
                     <a href="course-management.php" class="cta-btn-primary">Start Teaching Today</a>
-                    <a href="#" class="cta-btn-secondary" onclick="alert('Instructor guide would open here')">Learn How It Works</a>
+                    
                 </div>
             </div>
         </section>

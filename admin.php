@@ -357,8 +357,8 @@ if ($users_result) {
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #1a1a1a;
-            color: #e0e0e0;
+            background: #f8f9fa;
+            color: #333;
             overflow-x: hidden;
         }
 
@@ -369,11 +369,10 @@ if ($users_result) {
             left: 0;
             width: 260px;
             height: 100vh;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b2e 100%);
-            border-right: 2px solid #dc3545;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             transition: transform 0.3s ease;
             z-index: 1000;
-            box-shadow: 4px 0 15px rgba(220, 53, 69, 0.3);
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar.collapsed {
@@ -383,19 +382,18 @@ if ($users_result) {
         .sidebar-header {
             padding: 20px;
             text-align: center;
-            border-bottom: 1px solid rgba(220, 53, 69, 0.4);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .sidebar-header h2 {
-            color: #dc3545;
+            color: white;
             font-size: 1.5rem;
-            font-weight: 600;
+            font-weight: 300;
             margin-bottom: 5px;
-            text-shadow: 0 0 10px rgba(220, 53, 69, 0.5);
         }
 
         .sidebar-header p {
-            color: rgba(224, 224, 224, 0.8);
+            color: rgba(255, 255, 255, 0.8);
             font-size: 0.9rem;
         }
 
@@ -411,7 +409,7 @@ if ($users_result) {
             display: flex;
             align-items: center;
             padding: 15px 20px;
-            color: rgba(224, 224, 224, 0.9);
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             transition: all 0.3s ease;
             border-left: 3px solid transparent;
@@ -419,10 +417,9 @@ if ($users_result) {
 
         .nav-link:hover,
         .nav-link.active {
-            background: rgba(220, 53, 69, 0.2);
-            border-left-color: #dc3545;
-            color: #dc3545;
-            box-shadow: inset 0 0 10px rgba(220, 53, 69, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: #fff;
+            color: white;
         }
 
         .nav-icon {
@@ -437,9 +434,8 @@ if ($users_result) {
             left: 260px;
             right: 0;
             height: 70px;
-            background: #2d2d2d;
-            border-bottom: 2px solid #dc3545;
-            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.2);
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -457,7 +453,7 @@ if ($users_result) {
             background: none;
             border: none;
             font-size: 1.5rem;
-            color: #dc3545;
+            color: #667eea;
             cursor: pointer;
             padding: 5px;
         }
@@ -465,8 +461,7 @@ if ($users_result) {
         .search-box {
             display: flex;
             align-items: center;
-            background: #3d3d3d;
-            border: 1px solid #555;
+            background: #f8f9fa;
             border-radius: 25px;
             padding: 8px 20px;
             width: 300px;
@@ -474,9 +469,8 @@ if ($users_result) {
         }
 
         .search-box:focus-within {
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.3);
-            background: #4d4d4d;
-            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: white;
         }
 
         .search-box input {
@@ -486,15 +480,10 @@ if ($users_result) {
             flex: 1;
             padding: 5px 10px;
             font-size: 0.9rem;
-            color: #e0e0e0;
-        }
-
-        .search-box input::placeholder {
-            color: #aaa;
         }
 
         .search-icon {
-            color: #dc3545;
+            color: #666;
             margin-right: 10px;
         }
 
@@ -509,7 +498,7 @@ if ($users_result) {
             background: none;
             border: none;
             font-size: 1.3rem;
-            color: #aaa;
+            color: #666;
             cursor: pointer;
             padding: 8px;
             border-radius: 50%;
@@ -517,8 +506,8 @@ if ($users_result) {
         }
 
         .notification:hover {
-            background: #3d3d3d;
-            color: #dc3545;
+            background: #f8f9fa;
+            color: #667eea;
         }
 
         .notification-badge {
@@ -538,10 +527,10 @@ if ($users_result) {
             right: 0;
             width: 380px;
             max-height: 500px;
-            background: #2d2d2d;
+            background: white;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(220, 53, 69, 0.3);
-            border: 1px solid #dc3545;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e0e0e0;
             z-index: 1000;
             display: none;
             overflow: hidden;
@@ -723,20 +712,18 @@ if ($users_result) {
         .admin-avatar {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
-            border: 2px solid #dc3545;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 600;
-            box-shadow: 0 0 10px rgba(220, 53, 69, 0.4);
         }
 
         .admin-name {
             font-weight: 500;
-            color: #e0e0e0;
+            color: #333;
         }
 
         /* Main Content Styles */
@@ -755,9 +742,8 @@ if ($users_result) {
         .page-title {
             font-size: 2rem;
             font-weight: 300;
-            color: #e0e0e0;
+            color: #333;
             margin-bottom: 30px;
-            text-shadow: 0 0 10px rgba(220, 53, 69, 0.3);
         }
 
         /* Stats Cards */
@@ -769,51 +755,33 @@ if ($users_result) {
         }
 
         .stat-card {
-            background: #2d2d2d;
-            border: 1px solid #444;
+            background: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 5px 20px rgba(220, 53, 69, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             border-left: 4px solid transparent;
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(220, 53, 69, 0.3);
-            border-color: #dc3545;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
 
         .stat-card.users {
-            border-left-color: #dc3545;
+            border-left-color: #667eea;
         }
 
         .stat-card.courses {
-            border-left-color: #dc3545;
+            border-left-color: #28a745;
         }
 
         .stat-card.nfts {
-            border-left-color: #dc3545;
+            border-left-color: #ffc107;
         }
 
         .stat-card.completion {
-            border-left-color: #dc3545;
-        }
-
-        .stat-card.pending {
-            border-left-color: #dc3545;
-        }
-
-        .stat-card.approved {
-            border-left-color: #dc3545;
-        }
-
-        .stat-card.rejected {
-            border-left-color: #dc3545;
-        }
-
-        .stat-card.published {
-            border-left-color: #dc3545;
+            border-left-color: #17a2b8;
         }
 
         .stat-header {
@@ -853,13 +821,12 @@ if ($users_result) {
         .stat-value {
             font-size: 2.2rem;
             font-weight: 600;
-            color: #dc3545;
+            color: #333;
             margin-bottom: 5px;
-            text-shadow: 0 0 10px rgba(220, 53, 69, 0.3);
         }
 
         .stat-label {
-            color: #aaa;
+            color: #666;
             font-size: 0.9rem;
         }
 
@@ -868,28 +835,27 @@ if ($users_result) {
             align-items: center;
             gap: 5px;
             font-size: 0.8rem;
-            color: #dc3545;
+            color: #28a745;
             margin-top: 5px;
         }
 
         /* Activity Table */
         .activity-section {
-            background: #2d2d2d;
-            border: 1px solid #444;
+            background: white;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(220, 53, 69, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
         .section-header {
             padding: 25px 30px;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid #e9ecef;
         }
 
         .section-title {
             font-size: 1.3rem;
             font-weight: 500;
-            color: #e0e0e0;
+            color: #333;
         }
 
         .activity-table {
@@ -901,31 +867,31 @@ if ($users_result) {
         .activity-table td {
             padding: 15px 30px;
             text-align: left;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid #f1f3f4;
         }
 
         .activity-table th {
-            background: #3d3d3d;
+            background: #f8f9fa;
             font-weight: 600;
-            color: #dc3545;
+            color: #333;
             font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .activity-table td {
-            color: #aaa;
+            color: #666;
         }
 
         .activity-table tbody tr:hover {
-            background: #3d3d3d;
+            background: #f8f9fa;
         }
 
         .user-avatar {
             width: 35px;
             height: 35px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -933,7 +899,6 @@ if ($users_result) {
             font-weight: 500;
             font-size: 0.8rem;
             margin-right: 10px;
-            border: 1px solid #dc3545;
         }
 
         .user-info {
@@ -973,9 +938,9 @@ if ($users_result) {
 
         .page-btn {
             padding: 8px 12px;
-            border: 1px solid #555;
-            background: #2d2d2d;
-            color: #dc3545;
+            border: 1px solid #dee2e6;
+            background: white;
+            color: #667eea;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -984,10 +949,9 @@ if ($users_result) {
 
         .page-btn:hover,
         .page-btn.active {
-            background: #dc3545;
+            background: #667eea;
             color: white;
-            border-color: #dc3545;
-            box-shadow: 0 0 10px rgba(220, 53, 69, 0.4);
+            border-color: #667eea;
         }
 
         .page-btn:disabled {
@@ -1106,7 +1070,7 @@ if ($users_result) {
             display: flex;
             gap: 10px;
             margin-bottom: 30px;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid #e0e0e0;
             padding-bottom: 0;
         }
 
@@ -1114,7 +1078,7 @@ if ($users_result) {
             padding: 12px 24px;
             background: none;
             border: none;
-            color: #aaa;
+            color: #666;
             cursor: pointer;
             font-weight: 500;
             border-bottom: 3px solid transparent;
@@ -1122,22 +1086,21 @@ if ($users_result) {
         }
 
         .tab-btn:hover {
-            color: #dc3545;
-            background: rgba(220, 53, 69, 0.1);
+            color: #2c5aa0;
+            background: rgba(44, 90, 160, 0.05);
         }
 
         .tab-btn.active {
-            color: #dc3545;
-            border-bottom-color: #dc3545;
-            background: rgba(220, 53, 69, 0.2);
+            color: #2c5aa0;
+            border-bottom-color: #2c5aa0;
+            background: rgba(44, 90, 160, 0.1);
         }
 
         .users-section {
-            background: #2d2d2d;
-            border: 1px solid #444;
+            background: white;
             border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             margin-bottom: 30px;
         }
 
@@ -1156,18 +1119,12 @@ if ($users_result) {
 
         .filter-select {
             padding: 8px 12px;
-            border: 1px solid #555;
+            border: 1px solid #ddd;
             border-radius: 6px;
-            background: #3d3d3d;
-            color: #e0e0e0;
+            background: white;
             font-size: 14px;
+            color: #333;
             cursor: pointer;
-        }
-
-        .filter-select:focus {
-            outline: none;
-            border-color: #dc3545;
-            box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2);
         }
 
         .users-table {
@@ -1180,23 +1137,18 @@ if ($users_result) {
         .users-table td {
             padding: 15px 12px;
             text-align: left;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .users-table th {
-            background: #3d3d3d;
+            background: #f8f9fa;
             font-weight: 600;
-            color: #dc3545;
+            color: #333;
             font-size: 14px;
         }
 
         .users-table td {
             font-size: 14px;
-            color: #aaa;
-        }
-
-        .users-table tbody tr:hover {
-            background: #3d3d3d;
         }
 
         .user-details {
@@ -1206,13 +1158,13 @@ if ($users_result) {
 
         .user-name {
             font-weight: 600;
-            color: #e0e0e0;
+            color: #333;
             margin-bottom: 2px;
         }
 
         .user-email {
             font-size: 12px;
-            color: #aaa;
+            color: #666;
         }
 
         .role-badge {
@@ -1354,26 +1306,18 @@ if ($users_result) {
         /* Courses Section Styles */
         .course-tabs {
             display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #444;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e0e0e0;
             padding-bottom: 0;
             overflow-x: auto;
-            justify-content: center;
-        }
-
-        .course-tabs .tab-btn {
-            padding: 8px 16px;
-            font-size: 12px;
-            border-radius: 6px 6px 0 0;
         }
 
         .courses-section {
-            background: #2d2d2d;
-            border: 1px solid #444;
+            background: white;
             border-radius: 12px;
             padding: 25px;
-            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
             margin-bottom: 30px;
         }
 
@@ -1382,81 +1326,25 @@ if ($users_result) {
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 25px;
             margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        #coursesGrid {
-            display: block !important;
-            width: 100%;
         }
 
         .course-card {
             background: white;
-            border-radius: 16px;
+            border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
-            border: none;
-            width: 100%;
-            max-width: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .course-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
-        }
-
-        .course-card:hover .course-image::before {
-            opacity: 0.6;
-        }
-
-        .course-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-            z-index: 5;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
         }
 
         .course-image {
             position: relative;
-            height: 120px;
+            height: 180px;
             overflow: hidden;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px 12px 0 0;
-        }
-
-        .course-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.1) 75%);
-            background-size: 20px 20px;
-        }
-
-        /* Colorful gradient backgrounds for different courses */
-        .course-card[data-status="pending"] .course-image {
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        }
-
-        .course-card[data-status="approved"] .course-image {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-        }
-
-        .course-card[data-status="rejected"] .course-image {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-        }
-
-        .course-card[data-status="published"] .course-image {
-            background: linear-gradient(135deg, #a8caba 0%, #5d4e75 100%);
         }
 
         .course-image img {
@@ -1465,159 +1353,88 @@ if ($users_result) {
             object-fit: cover;
         }
 
-        .course-avatar {
-            position: absolute;
-            bottom: -18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
-        }
-
         .course-status {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 12px;
+            right: 12px;
             padding: 6px 12px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            color: #333;
         }
 
         .course-status.pending {
-            background: rgba(255, 193, 7, 0.9);
+            background: #fff3cd;
             color: #856404;
         }
 
         .course-status.approved {
-            background: rgba(40, 167, 69, 0.9);
-            color: white;
+            background: #d4edda;
+            color: #155724;
         }
 
         .course-status.rejected {
-            background: rgba(220, 53, 69, 0.9);
-            color: white;
+            background: #f8d7da;
+            color: #721c24;
         }
 
         .course-status.published {
-            background: rgba(23, 162, 184, 0.9);
-            color: white;
+            background: #d1ecf1;
+            color: #0c5460;
         }
 
         .course-info {
-            padding: 25px 16px 16px 16px;
-            text-align: center;
-            background: white;
+            padding: 20px;
         }
 
         .course-title {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 700;
-            color: #2c3e50;
+            color: #333;
             margin-bottom: 8px;
             line-height: 1.3;
-            min-height: 2.6em;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
         }
 
         .course-creator {
-            font-size: 13px;
-            color: #6c757d;
-            margin-bottom: 15px;
-            font-weight: 500;
-        }
-
-        .course-rating {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .star-rating {
-            display: flex;
-            gap: 2px;
-        }
-
-        .star {
-            color: #ffc107;
             font-size: 14px;
-        }
-
-        .star.empty {
-            color: #e9ecef;
-        }
-
-        .rating-text {
-            font-size: 14px;
-            font-weight: 600;
-            color: #495057;
-        }
-
-        .course-students {
-            font-size: 13px;
-            color: #6c757d;
-            margin-bottom: 20px;
-            font-weight: 500;
+            color: #666;
+            margin-bottom: 12px;
         }
 
         .course-description {
-            font-size: 13px;
-            color: #6c757d;
+            font-size: 14px;
+            color: #555;
             line-height: 1.5;
             margin-bottom: 15px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            text-align: center;
         }
 
         .course-meta {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 12px;
             margin-bottom: 15px;
-            justify-content: center;
         }
 
         .course-meta span {
-            font-size: 11px;
-            color: #6c757d;
+            font-size: 12px;
+            color: #666;
             background: #f8f9fa;
             padding: 4px 8px;
-            border-radius: 12px;
-            border: 1px solid #e9ecef;
+            border-radius: 6px;
         }
 
         .course-details {
-            font-size: 12px;
-            color: #6c757d;
+            font-size: 13px;
+            color: #666;
             margin-bottom: 20px;
             line-height: 1.4;
-            text-align: center;
         }
 
         .course-details p {
@@ -1626,146 +1443,92 @@ if ($users_result) {
 
         .course-actions {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             flex-wrap: wrap;
-            justify-content: center;
         }
 
         .btn {
-            padding: 6px 12px;
+            padding: 8px 16px;
             border: none;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .btn-primary {
-            background: #667eea;
+            background: #2c5aa0;
             color: white;
-            border: 1px solid #667eea;
         }
 
         .btn-primary:hover {
-            background: #5a67d8;
-            border-color: #5a67d8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            background: #1e3f73;
         }
 
         .btn-success {
             background: #28a745;
             color: white;
-            border: 1px solid #28a745;
         }
 
         .btn-success:hover {
             background: #1e7e34;
-            border-color: #1e7e34;
-            box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
         }
 
         .btn-danger {
             background: #dc3545;
             color: white;
-            border: 1px solid #dc3545;
         }
 
         .btn-danger:hover {
-            background: #a71e2a;
-            border-color: #a71e2a;
-            box-shadow: 0 0 10px rgba(220, 53, 69, 0.4);
+            background: #c82333;
         }
 
         .btn-warning {
             background: #ffc107;
             color: #212529;
-            border: 1px solid #ffc107;
         }
 
         .btn-warning:hover {
             background: #e0a800;
-            border-color: #e0a800;
-            box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
         }
 
         .btn-info {
             background: #17a2b8;
             color: white;
-            border: 1px solid #17a2b8;
         }
 
         .btn-info:hover {
             background: #138496;
-            border-color: #138496;
-            box-shadow: 0 0 10px rgba(23, 162, 184, 0.4);
         }
 
         .btn-secondary {
             background: #6c757d;
             color: white;
-            border: 1px solid #6c757d;
         }
 
         .btn-secondary:hover {
             background: #545b62;
-            border-color: #545b62;
-            box-shadow: 0 0 10px rgba(108, 117, 125, 0.4);
         }
 
         .stat-icon.pending {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
+            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
         }
 
         .stat-icon.approved {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
+            background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
         }
 
         .stat-icon.rejected {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
         }
 
         .stat-icon.published {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
-        }
-
-        .stat-icon.users {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
-        }
-
-        .stat-icon.courses {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
-        }
-
-        .stat-icon.nfts {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
-        }
-
-        .stat-icon.completion {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
-        }
-
-        .stat-icon.creators {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
-        }
-
-        .stat-icon.learners {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
-        }
-
-        .stat-icon.active {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
-        }
-
-        .stat-icon.new {
-            background: linear-gradient(135deg, #dc3545 0%, #a71e2a 100%);
+            background: linear-gradient(135deg, #6f42c1 0%, #59359a 100%);
         }
 
         /* Modal Styles */
@@ -1775,7 +1538,7 @@ if ($users_result) {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 9999;
             display: flex;
             align-items: center;
@@ -1784,8 +1547,7 @@ if ($users_result) {
         }
 
         .modal-content {
-            background: #2d2d2d;
-            border: 1px solid #dc3545;
+            background: white;
             border-radius: 12px;
             max-width: 800px;
             width: 100%;
@@ -1938,9 +1700,7 @@ if ($users_result) {
         /* Responsive adjustments for courses */
         @media (max-width: 768px) {
             .courses-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                gap: 15px;
-                padding: 15px;
+                grid-template-columns: 1fr;
             }
             
             .course-actions {
@@ -1959,20 +1719,6 @@ if ($users_result) {
             .course-tabs {
                 overflow-x: auto;
                 white-space: nowrap;
-                gap: 5px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .courses-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-                padding: 10px;
-            }
-            
-            .course-tabs .tab-btn {
-                padding: 6px 12px;
-                font-size: 11px;
             }
         }
 
@@ -2505,12 +2251,6 @@ if ($users_result) {
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link" data-tab="courses">
-                    <span class="nav-icon">📚</span>
-                    Manage Courses
-                </a>
-            </li>
-            <li class="nav-item">
                 <a href="login.html" class="nav-link">
                     <span class="nav-icon">🚪</span>
                     Logout
@@ -2840,182 +2580,6 @@ if ($users_result) {
 
              </div>
 
-        </div>
-
-        <!-- Manage Courses Content -->
-        <div class="content-section" id="coursesContent" style="display: none;">
-            <div class="page-title">
-                <h1>Manage Courses</h1>
-                <p>Review, approve, and manage courses from creators</p>
-            </div>
-
-            <!-- Quick Approval Actions Section (Moved to Top) -->
-            <div class="courses-section">
-                <!-- Course Filter Tabs (Moved to Top of Slider) -->
-                <div class="course-tabs">
-                    <button class="tab-btn" data-course-tab="pending">Pending Approval</button>
-                    <button class="tab-btn" data-course-tab="approved">Approved</button>
-                    <button class="tab-btn" data-course-tab="rejected">Rejected</button>
-                    <button class="tab-btn active" data-course-tab="all">All Courses</button>
-                </div>
-
-                <div class="section-header">
-                    <h3 class="section-title">Course Management Actions</h3>
-                </div>
-
-                <div class="courses-grid" id="coursesGrid">
-                    <?php
-                    // Get courses for approval
-                    $courses_query = "
-                        SELECT c.*, cr.full_name as creator_name, cr.email as creator_email
-                        FROM courses c
-                        JOIN creators cr ON c.creator_id = cr.id
-                        ORDER BY c.created_at DESC
-                    ";
-                    $courses_result = mysqli_query($conn, $courses_query);
-                    $all_courses = [];
-
-                    if (mysqli_num_rows($courses_result) > 0):
-                        while ($course = mysqli_fetch_assoc($courses_result)) {
-                            $all_courses[] = $course;
-                        }
-                        
-                        // Debug: Show how many courses were found
-                        echo "<!-- DEBUG: Found " . count($all_courses) . " courses -->";
-                        
-                        foreach ($all_courses as $course):
-                    ?>
-                    <div class="course-card" data-status="<?php echo $course['status']; ?>">
-                        <div class="course-image">
-                            <?php if (!empty($course['thumbnail'])): ?>
-                                <img src="<?php echo htmlspecialchars($course['thumbnail']); ?>" alt="Course Thumbnail">
-                            <?php else: ?>
-                                <div style="height: 180px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 48px;">
-                                    📚
-                                </div>
-                            <?php endif; ?>
-                            <div class="course-status <?php echo $course['status']; ?>">
-                                <?php echo ucfirst($course['status']); ?>
-                            </div>
-                        </div>
-                        
-                        <div class="course-info">
-                            <h3 class="course-title"><?php echo htmlspecialchars($course['course_name']); ?></h3>
-                            <p class="course-creator">by <?php echo htmlspecialchars($course['creator_name']); ?></p>
-                            <p class="course-description"><?php echo htmlspecialchars(substr($course['description'], 0, 120)) . '...'; ?></p>
-                            
-                            <div class="course-meta">
-                                <span>📅 <?php echo date('M j, Y', strtotime($course['created_at'])); ?></span>
-                                <span>⏱️ <?php echo $course['duration']; ?></span>
-                                <span>🏷️ <?php echo htmlspecialchars($course['category']); ?></span>
-                            </div>
-
-                            <div class="course-details">
-                                <p><strong>Creator Email:</strong> <?php echo htmlspecialchars($course['creator_email']); ?></p>
-                                <p><strong>NFT Rewards:</strong> <?php echo $course['nft_reward'] ? 'Yes' : 'No'; ?></p>
-                                <p><strong>Difficulty:</strong> <?php echo ucfirst($course['difficulty']); ?></p>
-                            </div>
-
-                            <div class="course-actions">
-                                <?php if ($course['status'] == 'pending'): ?>
-                                    <button class="btn btn-success" onclick="approveCourse(<?php echo $course['id']; ?>)">
-                                        ✅ Approve
-                                    </button>
-                                    <button class="btn btn-danger" onclick="rejectCourse(<?php echo $course['id']; ?>)">
-                                        ❌ Reject
-                                    </button>
-                                <?php endif; ?>
-                                
-                                <button class="btn btn-info" onclick="viewCourseDetails(<?php echo $course['id']; ?>)">
-                                    👁️ View Details
-                                </button>
-                                
-                                <?php if ($course['status'] == 'published'): ?>
-                                    <button class="btn btn-warning" onclick="suspendCourse(<?php echo $course['id']; ?>)">
-                                        ⏸️ Suspend
-                                    </button>
-                                <?php endif; ?>
-                                
-                                <button class="btn btn-secondary" onclick="deleteCourse(<?php echo $course['id']; ?>)">
-                                    🗑️ Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <?php 
-                        endforeach;
-                    else:
-                    ?>
-                    <!-- DEBUG: No courses found in database -->
-                    <div class="no-data">
-                        <p>No courses found.</p>
-                    </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-
-            <!-- Course Stats (Moved to Bottom) -->
-            <div class="stats-grid">
-                <div class="stat-card pending">
-                    <div class="stat-header">
-                        <div class="stat-icon pending">⏳</div>
-                    </div>
-                    <div class="stat-value">
-                        <?php
-                        $pending_courses_query = "SELECT COUNT(*) as count FROM courses WHERE status = 'pending'";
-                        $pending_courses_result = mysqli_query($conn, $pending_courses_query);
-                        $pending_courses = mysqli_fetch_assoc($pending_courses_result)['count'];
-                        echo $pending_courses;
-                        ?>
-                    </div>
-                    <div class="stat-label">Pending Approval</div>
-                </div>
-
-                <div class="stat-card approved">
-                    <div class="stat-header">
-                        <div class="stat-icon approved">✅</div>
-                    </div>
-                    <div class="stat-value">
-                        <?php
-                        $approved_courses_query = "SELECT COUNT(*) as count FROM courses WHERE status = 'published'";
-                        $approved_courses_result = mysqli_query($conn, $approved_courses_query);
-                        $approved_courses = mysqli_fetch_assoc($approved_courses_result)['count'];
-                        echo $approved_courses;
-                        ?>
-                    </div>
-                    <div class="stat-label">Approved Courses</div>
-                </div>
-
-                <div class="stat-card rejected">
-                    <div class="stat-header">
-                        <div class="stat-icon rejected">❌</div>
-                    </div>
-                    <div class="stat-value">
-                        <?php
-                        $rejected_courses_query = "SELECT COUNT(*) as count FROM courses WHERE status = 'rejected'";
-                        $rejected_courses_result = mysqli_query($conn, $rejected_courses_query);
-                        $rejected_courses = mysqli_fetch_assoc($rejected_courses_result)['count'];
-                        echo $rejected_courses;
-                        ?>
-                    </div>
-                    <div class="stat-label">Rejected Courses</div>
-                </div>
-
-                <div class="stat-card published">
-                    <div class="stat-header">
-                        <div class="stat-icon published">🚀</div>
-                    </div>
-                    <div class="stat-value">
-                        <?php
-                        $total_courses_query = "SELECT COUNT(*) as count FROM courses";
-                        $total_courses_result = mysqli_query($conn, $total_courses_query);
-                        $total_courses = mysqli_fetch_assoc($total_courses_result)['count'];
-                        echo $total_courses;
-                        ?>
-                    </div>
-                    <div class="stat-label">Total Courses</div>
-                </div>
-            </div>
         </div>
     </main>
 
@@ -3389,14 +2953,6 @@ if ($users_result) {
         document.addEventListener('DOMContentLoaded', () => {
             initUserTabs();
             initUserSearch();
-            initCourseTabs();
-            
-            // Debug: Check how many course cards exist
-            const courseCards = document.querySelectorAll('.course-card');
-            console.log('DEBUG: Found', courseCards.length, 'course cards on page load');
-            
-            // Show all courses by default
-            filterCourses('all');
         });
 
         // Course Management Functions
@@ -3426,7 +2982,7 @@ if ($users_result) {
                 const cardStatus = card.getAttribute('data-status');
                 
                 if (status === 'all' || cardStatus === status) {
-                    card.style.display = 'flex';
+                    card.style.display = 'block';
                 } else {
                     card.style.display = 'none';
                 }
@@ -3733,6 +3289,14 @@ if ($users_result) {
             }
         }
 
+        function deleteCourse(courseId) {
+            if (confirm('Are you sure you want to permanently delete this course?')) {
+                const courseCard = document.querySelector(`[onclick*="${courseId}"]`).closest('.course-card');
+                courseCard.remove();
+                alert('Course deleted successfully!');
+            }
+        }
+
         // Close modal when clicking outside
         document.addEventListener('click', (e) => {
             const modal = document.getElementById('courseReviewModal');
@@ -3889,260 +3453,7 @@ if ($users_result) {
             if (tableExportBtn) {
                 tableExportBtn.addEventListener('click', exportAnalyticsReport);
             }
-
-            // Course approval tab functionality
-            const courseTabBtns = document.querySelectorAll('[data-course-tab]');
-            courseTabBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // Remove active class from all tabs
-                    courseTabBtns.forEach(tab => tab.classList.remove('active'));
-                    // Add active class to clicked tab
-                    btn.classList.add('active');
-                    
-                    const status = btn.getAttribute('data-course-tab');
-                    filterCourses(status);
-                });
-            });
         });
-
-        // Course approval functions
-        function approveCourse(courseId) {
-            if (confirm('Are you sure you want to approve this course?')) {
-                fetch('approve_course.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        course_id: courseId,
-                        action: 'approve'
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Course approved successfully!');
-                        location.reload(); // Refresh to show updated status
-                    } else {
-                        alert('Error approving course: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while approving the course');
-                });
-            }
-        }
-
-        function rejectCourse(courseId) {
-            const reason = prompt('Please provide a reason for rejection:');
-            if (reason && reason.trim()) {
-                fetch('approve_course.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        course_id: courseId,
-                        action: 'reject',
-                        reason: reason
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Course rejected successfully!');
-                        location.reload(); // Refresh to show updated status
-                    } else {
-                        alert('Error rejecting course: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while rejecting the course');
-                });
-            }
-        }
-
-        function suspendCourse(courseId) {
-            if (confirm('Are you sure you want to suspend this course?')) {
-                fetch('approve_course.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        course_id: courseId,
-                        action: 'suspend'
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Course suspended successfully!');
-                        location.reload();
-                    } else {
-                        alert('Error suspending course: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while suspending the course');
-                });
-            }
-        }
-
-        // Initialize course tabs and filtering
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize course tabs
-            initCourseTabs();
-            
-            // Show all courses by default
-            filterCourses('all');
-            
-            console.log('JS Debug: Course management initialized');
-        });
-
-        function initCourseTabs() {
-            const tabButtons = document.querySelectorAll('[data-course-tab]');
-            
-            tabButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const status = this.getAttribute('data-course-tab');
-                    filterCourses(status);
-                });
-            });
-        }
-
-        function filterCourses(status) {
-            const courseCards = document.querySelectorAll('#coursesGrid .course-card');
-            let visibleCount = 0;
-            
-            console.log(`JS Debug: filterCourses called with status: ${status}`);
-            console.log(`JS Debug: Found ${courseCards.length} course cards`);
-            
-            // Filter courses
-            courseCards.forEach(card => {
-                const cardStatus = card.getAttribute('data-status');
-                const shouldShow = status === 'all' || status === '' || cardStatus === status;
-                
-                if (shouldShow) {
-                    card.style.display = 'flex';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-            
-            // Update tab visual feedback
-            const activeTab = document.querySelector(`[data-course-tab="${status}"]`);
-            if (activeTab) {
-                document.querySelectorAll('[data-course-tab]').forEach(tab => tab.classList.remove('active'));
-                activeTab.classList.add('active');
-            }
-            
-            console.log(`JS Debug: Filtered courses: ${visibleCount} visible for status "${status}"`);
-        }
-
-        function deleteCourse(courseId) {
-            // Enhanced confirmation dialog
-            const confirmMessage = `⚠️ WARNING: Are you sure you want to permanently delete this course?
-
-This action will:
-• Remove the course from the platform
-• Delete all associated files and videos
-• Remove course data permanently
-• This action CANNOT be undone
-
-Type 'DELETE' to confirm:`;
-            
-            const confirmation = prompt(confirmMessage);
-            
-            if (confirmation === 'DELETE') {
-                // Show loading state
-                const deleteBtn = document.querySelector(`button[onclick*="deleteCourse(${courseId})"]`);
-                const originalText = deleteBtn.innerHTML;
-                deleteBtn.innerHTML = '⏳ Deleting...';
-                deleteBtn.disabled = true;
-                
-                fetch('approve_course.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        course_id: courseId,
-                        action: 'delete'
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Show success message
-                        alert('✅ Course deleted successfully!');
-                        
-                        // Remove the course card with animation
-                        const courseCard = deleteBtn.closest('.course-card');
-                        if (courseCard) {
-                            courseCard.style.transition = 'all 0.3s ease';
-                            courseCard.style.transform = 'scale(0.8)';
-                            courseCard.style.opacity = '0';
-                            
-                            setTimeout(() => {
-                                courseCard.remove();
-                                // Update stats if needed
-                                updateCourseStats();
-                            }, 300);
-                        } else {
-                            location.reload(); // Fallback refresh
-                        }
-                    } else {
-                        alert('❌ Error deleting course: ' + data.message);
-                        // Restore button state
-                        deleteBtn.innerHTML = originalText;
-                        deleteBtn.disabled = false;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('❌ An error occurred while deleting the course. Please try again.');
-                    // Restore button state
-                    deleteBtn.innerHTML = originalText;
-                    deleteBtn.disabled = false;
-                });
-            } else if (confirmation !== null) {
-                alert('❌ Deletion cancelled. You must type "DELETE" exactly to confirm.');
-            }
-        }
-
-        // Helper function to update course statistics after deletion
-        function updateCourseStats() {
-            // You can implement this to update the stats cards without full page reload
-            // For now, we'll do a simple reload after a delay
-            setTimeout(() => {
-                location.reload();
-            }, 1000);
-        }
-
-        function viewCourseDetails(courseId) {
-            // This could open a modal or navigate to a detailed view
-            // For now, let's show an alert with the course ID
-            window.open(`course-info.php?id=${courseId}`, '_blank');
-        }
-
-        function filterCourses(status) {
-            const courseCards = document.querySelectorAll('.course-card');
-            
-            courseCards.forEach(card => {
-                const cardStatus = card.getAttribute('data-status');
-                
-                if (status === 'all' || status === '' || cardStatus === status) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
     </script>
 </body>
 </html>
